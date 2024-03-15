@@ -1,44 +1,24 @@
-{
+%{
   open Ast
-
-}
+%}
 
 
 %token EOF
+%token PLUS
+%token <int> INT
 
 %start program
+%type <Ast.command> program
 
-%type <Ast.program> program
-
+%left PLUS
 %%
 
-%inline binop:
-| PLUS  { Badd }
-| MINUS { Bsub }
-| TIMES { Bmul }
-| DIV   { Bdiv }
-| MOD   { Bmod }
-| c=CMP { c    }
-| AND   { Band }
-| OR    { Bor  }
-;
 
 program:
-  | EOF { Ast.Program [] }
-  | stmt program { Ast.Program ($1 :: $2) }
-
-stmt:
-  | "print" expr ";" { Ast.Print $2 }
-  | "let" ID "=" expr ";" { Ast.Let ($2, $4) }
+  | e = expr EOF { Cexpr e }
+; 
 
 expr:
-  | INT { Ast.Int $1 }
-  | ID { Ast.Id $1 }
-  | expr "+" expr { Ast.Add ($1, $3) }
-  | expr "-" expr { Ast.Sub ($1, $3) }
-  | expr "*" expr { Ast.Mul ($1, $3) }
-  | expr "/" expr { Ast.Div ($1, $3) }
-  | "(" expr ")" { $2 }
-
-
-
+  | n = INT { Ecst(Cint(n)) }
+  | e1 = expr PLUS e2 = expr { Ebinop(Badd, e1, e2) }
+;

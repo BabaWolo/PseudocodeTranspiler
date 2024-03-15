@@ -1,48 +1,49 @@
-(* Define the types for arithmetic expressions and variables *)
-type location = Lexing.position * Lexing.position
-
-type ident = { loc: location; id: string; }
-
-type token =
-  | PLUS
-  | MINUS
-  | TIMES
-  | DIV
-  | EQUAL
-  | MOD
-  | LP
-  | RP
-  | LSQ
-  | RSQ
-  | COMMA
-  | COLON
-  | NEWLINE
-  | ID of string
-  | INT of int
-  | EOF
-
 type expr =
   | Ecst of constant               (* Constant *)
   | Ebinop of binop * expr * expr  (* Binary operation *)
-  | Eunop of unop * expr  (* Unary operation *)
-  | Eident of ident       (* Identifier *)
-  | Elist of expr list (* [e1,e2,...] *)
-  | Eget of expr * expr (* e1[e2] *)
+
+and command = 
+  | Cexpr of expr
   
 and constant =
-  | Cnone
-  | Cbool of bool
-  | Cstring of string
-  | Cint of int64
-
-and unop =
-  | Uneg (* -e *)
-  | Unot (* not e *)
+  | Cint of int
 
 (* Define the types for binary operators *)
 and binop =
-  | Badd         (* Addition *)
-  | Bsub         (* Subtraction *)
+  | Badd
+
+
+
+(* Define the types for arithmetic expressions and variables *)
+(* type location = Lexing.position * Lexing.position
+
+type ident = { loc: location; id: string; } *)
+(* 
+type expr =
+  | Ecst of constant               (* Constant *)
+  | Ebinop of binop * expr * expr  (* Binary operation *)
+(*   | Eunop of unop * expr  (* Unary operation *)
+  | Eident of ident       (* Identifier *)
+  | Elist of expr list (* [e1,e2,...] *)
+  | Eget of expr * expr (* e1[e2] *) *)
+
+and command = 
+  | Cexpr of expr
+  
+and constant =
+  (* | Cnone
+  | Cbool of bool
+  | Cstring of string *)
+  | Cint of int
+
+(* and unop =
+  | Uneg (* -e *)
+  | Unot not e *)
+
+(* Define the types for binary operators *)
+and binop =
+  | Badd         Addition *)
+(*   | Bsub         (* Subtraction *)
   | Bmul         (* Multiplication *)
   | Bdiv         (* Division *)
   | Bmod         (* Modulo *)
@@ -54,8 +55,8 @@ and binop =
   | Bge         (* >= *)
   | Band        (* and *)
   | Bor         (* or *)
-
-and stmt =
+ *)
+(* and stmt =
   | Sif of expr * stmt * stmt
   | Sreturn of expr
   | Sassign of ident * expr
@@ -63,11 +64,11 @@ and stmt =
   | Sblock of stmt list
   | Sfor of ident * expr * stmt
   | Seval of expr
-  | Sset of expr * expr * expr (* e1[e2] = e3 *)
+  | Sset of expr * expr * expr (* e1[e2] = e3 *) *)
 
-and def = ident * ident list * stmt
+(* and def = ident * ident list * stmt
 
-and file = def list * stmt
+and file = def list * stmt *)
   (*
      
 (* Abstract Syntax of Mini-Python *)

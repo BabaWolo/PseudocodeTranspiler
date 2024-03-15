@@ -1,44 +1,41 @@
 {
-  open Lexing
-  open Ast
-
-  exception Lexing_error of string
-
+  open Parser
+  (* exception Lexing_error of string *)
 }
 
-let letter = ['a'-'z' 'A'-'Z']
+(* let letter = ['a'-'z' 'A'-'Z'] *)
 let digit = ['0'-'9']
-let ident = (letter | '_') (letter | digit | '_')*
+(* let ident = (letter | '_') (letter | digit | '_')* *)
 let integer = '0' | ['1'-'9'] digit*
-let space = ' ' | '\t'
-let comment = "//" [^'\n']* '\n'    
-let newLine = '\n'
+(* let space = ' ' | '\t' *)
+(* let comment = "//" [^'\n']* '\n'    
+let newLine = '\n' *)
 
 
 rule token = parse 
-    | comment { Lexing.new_line lexbuf; token lexbuf } (* Single line comment *)
-    | '+'     { [PLUS] }
-    | '-'     { [MINUS] }
+   (*  | comment { Lexing.new_line lexbuf; token lexbuf } (* Single line comment *) *)
+    | '+'     { PLUS }
+    (* | '-'     { [MINUS] }
     | '*'     { [TIMES] }
     | "/"     { [DIV] }
     | '='     { [EQUAL] }
-    (* | "=="    { [CMP Beq] }
-    | "!="    { [CMP Bneq] } *)
+    | "=="    { [CMP Beq] }
+    | "!="    { [CMP Bneq] }
     | "mod"   { [MOD] }
-    (* | "<"     { [CMP Blt] }
+    | "<"     { [CMP Blt] }
     | "<="    { [CMP Ble] }
     | ">"     { [CMP Bgt] }
-    | ">="    { [CMP Bge] } *)
+    | ">="    { [CMP Bge] }
     | '('     { [LP] } 
     | ')'     { [RP] }
     | '['     { [LSQ] }
     | ']'     { [RSQ] }
     | ','     { [COMMA] }
     | ':'     { [COLON] }
-    | '\n'    { Lexing.new_line lexbuf; [NEWLINE] }
+    | '\n'    { Lexing.new_line lexbuf; [NEWLINE] } *)
     (* | ident as id { ID(id) }     *)
-    (* | digit+ as num { INT(int_of_string num) }  *)
-    | eof           { [EOF] }  
+    | digit+ { INT(int_of_string (Lexing.lexeme lexbuf)) }
+    | eof           { EOF }  
 
 
 (* 
