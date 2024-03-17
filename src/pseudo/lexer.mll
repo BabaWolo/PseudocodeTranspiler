@@ -3,10 +3,10 @@
   (* exception Lexing_error of string *)
 }
 
-(* let letter = ['a'-'z' 'A'-'Z'] *)
 let digit = ['0'-'9']
-(* let ident = (letter | '_') (letter | digit | '_')* *)
 let integer = '0' | ['1'-'9'] digit*
+(* let letter = ['a'-'z' 'A'-'Z'] *)
+(* let ident = (letter | '_') (letter | digit | '_')* *)
 (* let space = ' ' | '\t' *)
 (* let comment = "//" [^'\n']* '\n'    
 let newLine = '\n' *)
