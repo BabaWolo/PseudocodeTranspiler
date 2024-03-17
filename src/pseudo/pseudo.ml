@@ -23,8 +23,8 @@ let () =
   let ast = Parser.program Lexer.token lexbuf in
 
   match ast with
-  | Cexpr(Ebinop((Badd, Ecst(Cint(x)), Ecst(Cint(y)))))  ->
+  | Cexpr(Ebinop((Badd, Cint(x), Cint(y))))  ->
     let result = x + y in
     print_endline (string_of_int result)
-  | _ ->
-    print_endline "Unexpected expression"
+(*   | _ ->
+    print_endline "Unexpected expression" *)

@@ -9,6 +9,7 @@
 
 %start program
 %type <Ast.command> program
+%type <Ast.constant> const
 
 %left PLUS
 %%
@@ -19,6 +20,8 @@ program:
 ; 
 
 expr:
-  | n = INT { Ecst(Cint(n)) }
-  | e1 = expr PLUS e2 = expr { Ebinop(Badd, e1, e2) }
+  | e1 = const PLUS e2 = const { Ebinop(Badd, e1, e2) }
 ;
+
+const:
+  | n = INT { Cint(n) }

@@ -1,6 +1,5 @@
 type expr =
-  | Ecst of constant               (* Constant *)
-  | Ebinop of binop * expr * expr  (* Binary operation *)
+  | Ebinop of binop * constant * constant  (* Binary operation *)
 
 and command = 
   | Cexpr of expr
