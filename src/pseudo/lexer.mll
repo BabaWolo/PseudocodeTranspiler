@@ -1,5 +1,34 @@
 {
   open Parser
+}
+
+let digit = ['0'-'9']
+let integer = '0' | ['1'-'9'] digit*
+let space = ' ' | '\t'
+let letter = ['a'-'z' 'A'-'Z']
+
+rule token = parse 
+  | space { token lexbuf }
+  | '+'     { ADD }
+  | '-'     { SUB }
+  | '*'     { MUL }
+  | '/'     { DIV }
+  | '%'     { MOD }
+  | '('     { LPAREN }
+  | ')'     { RPAREN }
+  | "and"   { AND }
+  | "or"    { OR }
+  | "=="    { EQUAL }
+  | "!="    { NOTEQUAL }
+  | "<"     { LESS }
+  | "<="    { LESSEQUAL }
+  | ">"     { GREATER }
+  | ">="    { GREATEREQUAL }
+  | digit+ { INT(int_of_string (Lexing.lexeme lexbuf)) }
+  | eof           { EOF }  
+
+(* {
+  open Parser
   (* exception Lexing_error of string *)
 }
 
@@ -7,13 +36,14 @@ let digit = ['0'-'9']
 let integer = '0' | ['1'-'9'] digit*
 (* let letter = ['a'-'z' 'A'-'Z'] *)
 (* let ident = (letter | '_') (letter | digit | '_')* *)
-(* let space = ' ' | '\t' *)
+let space = ' ' | '\t'
 (* let comment = "//" [^'\n']* '\n'    
 let newLine = '\n' *)
 
 
 rule token = parse 
    (*  | comment { Lexing.new_line lexbuf; token lexbuf } (* Single line comment *) *)
+    | space { token lexbuf }
     | '+'     { PLUS }
     (* | '-'     { [MINUS] }
     | '*'     { [TIMES] }
@@ -35,7 +65,7 @@ rule token = parse
     | '\n'    { Lexing.new_line lexbuf; [NEWLINE] } *)
     (* | ident as id { ID(id) }     *)
     | digit+ { INT(int_of_string (Lexing.lexeme lexbuf)) }
-    | eof           { EOF }  
+    | eof           { EOF }   *)
 
 
 (* 

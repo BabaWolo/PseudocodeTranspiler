@@ -1,5 +1,6 @@
 type expr =
-  | Ebinop of binop * constant * constant  (* Binary operation *)
+  | Ecst of constant               (* Constant *)
+  | Ebinop of binop * expr * expr  (* Binary operation *)
 
 and command = 
   | Cexpr of expr
@@ -9,7 +10,9 @@ and constant =
 
 (* Define the types for binary operators *)
 and binop =
-  | Badd
+  | Badd | Bsub | Bmul | Bdiv | Bmod
+  | Beq | Bneq | Blt | Ble | Bgt | Bge
+  | Band | Bor
 
 
 
