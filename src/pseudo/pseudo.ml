@@ -20,63 +20,49 @@ open Ast
     | Bge -> if x >= y then 1 else 0
     
     
+let () =
+  let lexbuf = Lexing.from_string "(3 == 2) + 2 " in
+  let ast = Parser.program Lexer.token lexbuf in
+  print_endline ("Result: ");
 
-
-
-
+  match ast with
+  | Cexpr(e)  ->
+    let result = eval_expr e in
+    print_endline (string_of_int result) ;;
+    print_endline ""
     
-let () =
-  let lexbuf = Lexing.from_string "3 == 2 or 2 == 2 or 2 == 3000 " in
-  let ast = Parser.program Lexer.token lexbuf in
 
-  match ast with
-  | Cexpr(e)  ->
-    let result = eval_expr e in
-    print_endline (string_of_int result)
 
-(* 
-    open Ast *)
+ (* Print tokens *)
+ let print_token = function
+  | Parser.EOF -> print_endline "EOF"
+  | Parser.ADD -> print_endline "ADD"
+  | Parser.INT x -> print_endline ("INT " ^ string_of_int x)
+  | Parser.LPAREN -> print_endline "LPAREN"
+  | Parser.RPAREN -> print_endline "RPAREN"
+  | Parser.EQUAL -> print_endline "EQ"
+  | Parser.SUB -> print_endline "SUB"
+  | Parser.DIV -> print_endline "DIV"
+  | Parser.MUL -> print_endline "MUL"
+  | Parser.MOD -> print_endline "MOD"
+  | Parser.AND -> print_endline "AND"
+  | Parser.OR -> print_endline "OR"
+  | Parser.GREATER -> print_endline "GREATER"
+  | Parser.LESS -> print_endline "LESS"
+  | Parser.GREATEREQUAL -> print_endline "GREATEREQUAL"
+  | Parser.LESSEQUAL -> print_endline "LESSEQUAL"
+  | Parser.NOTEQUAL -> print_endline "NOTEQUAL"
 
-    (* Det her skal ind i en anden fil 
-type value =
-  | Int of int
-  | Bool of bool*)
-(* 
-let rec eval_expr = function
-  | Ecst(Cint(x)) -> Int(x)
-  | Ebinop(binop, e1, e2) -> 
-    let x = eval_expr e1 in
-    let y = eval_expr e2 in
-    match binop with
-    | Badd -> Int((get_int x) + (get_int y))
-    | Bsub -> Int((get_int x) - (get_int y))
-    | Bdiv -> Int((get_int x) / (get_int y))
-    | Bmul -> Int((get_int x) * (get_int y))
-    | Bmod -> Int((get_int x) mod (get_int y))
-    | Band -> Bool((get_bool x) && (get_bool y))
-    | Bor -> Bool((get_bool x) || (get_bool y))
-    | Beq -> Bool((get_int x) = (get_int y))
-    | Bneq -> Bool((get_int x) != (get_int y))
-    | Blt -> Bool((get_int x) < (get_int y))
-    | Ble -> Bool((get_int x) <= (get_int y))
-    | Bgt -> Bool((get_int x) > (get_int y))
-    | Bge -> Bool((get_int x) >= (get_int y))
 
-and get_int = function
-  | Int(x) -> x
-  | Bool(_) -> failwith "Expected integer, got boolean"
 
-and get_bool = function
-  | Bool(b) -> b
-  | Int(_) -> failwith "Expected boolean, got integer"
-
-let () =
-  let lexbuf = Lexing.from_string "3 == 2 or 2 == 2 or 2 == 3000 " in
-  let ast = Parser.program Lexer.token lexbuf in
-
-  match ast with
-  | Cexpr(e)  ->
-    let result = eval_expr e in
-    match result with
-    | Int(i) -> print_endline (string_of_int i)
-    | Bool(b) -> print_endline (string_of_bool b) *)
+ let () =
+   print_endline "Tokens:";
+   let lexbuf = Lexing.from_string "(3 == 2) + 2" in
+   let rec print_tokens () =
+     let token = Lexer.token lexbuf in
+     print_token token;
+     match token with
+     | Parser.EOF -> ()
+     | _ -> print_tokens ()
+   in
+   print_tokens ()
