@@ -6,8 +6,10 @@ let digit = ['0'-'9']
 let integer = '0' | ['1'-'9'] digit*
 let space = ' ' | '\t'
 let letter = ['a'-'z' 'A'-'Z']
+let ident = (letter | '_') (letter | digit | '_')*
 
-rule token = parse 
+rule token = parse
+  | "\n"    { Lexing.new_line lexbuf; NEWLINE} 
   | space { token lexbuf }
   | '+'     { ADD }
   | '-'     { SUB }
@@ -24,8 +26,10 @@ rule token = parse
   | "<="    { LESSEQUAL }
   | ">"     { GREATER }
   | ">="    { GREATEREQUAL }
-  | digit+ { INT(int_of_string (Lexing.lexeme lexbuf)) }
-  | eof           { EOF }  
+  | '='     { ASSIGN }
+  | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) }
+  | ident   { ID(Lexing.lexeme lexbuf) }
+  | eof     { EOF }  
 
 (* {
   open Parser
