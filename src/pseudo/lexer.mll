@@ -27,6 +27,9 @@ rule token = parse
   | ">"     { GREATER }
   | ">="    { GREATEREQUAL }
   | '='     { ASSIGN }
+  | "if"    { IF }
+  | '{'     { LBRACE }
+  | '}'     { RBRACE }
   | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) }
   | ident   { ID(Lexing.lexeme lexbuf) }
   | eof     { EOF }  

@@ -11,6 +11,7 @@
 %token LPAREN RPAREN
 %token ASSIGN
 %token NEWLINE
+%token IF LBRACE RBRACE
 
 %start program
 %type <Ast.command> program
@@ -22,6 +23,7 @@
 %left AND OR
 %nonassoc EQUAL NOTEQUAL LESS LESSEQUAL GREATER GREATEREQUAL
 %%
+
 
 
 program:
@@ -37,6 +39,7 @@ stmts:
 stmt:
   | e1 = ID ASSIGN e = expr { Sassign(e1, e)}
   | e1 = expr { Seval(e1) }
+  | IF LPAREN e = expr RPAREN LBRACE s = stmts RBRACE { Sif(e, s) }
 ;
 
 

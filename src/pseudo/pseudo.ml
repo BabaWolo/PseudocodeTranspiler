@@ -32,6 +32,13 @@ module StringMap = Map.Make(String)
     let x = eval_expr env e in
     env := StringMap.add id x !env;
     eval_stmt env tl
+  | Sif(e, stmts) ::
+    tl -> 
+    let x = eval_expr env e in
+    if x = 1 then
+      eval_stmt env stmts
+    else
+      eval_stmt env tl
   | Seval(e) :: tl -> 
     let x = eval_expr env e in
     match tl with
@@ -41,7 +48,7 @@ module StringMap = Map.Make(String)
     
     
 let () =
-  let lexbuf = Lexing.from_string "x = 2 + 2 \n x " in
+  let lexbuf = Lexing.from_string "}" in
   let ast = Parser.program Lexer.token lexbuf in
   print_endline ("Result: ");
   
@@ -75,6 +82,9 @@ let () =
   | Parser.ID x -> print_endline ("ID " ^ x)
   | Parser.ASSIGN -> print_endline "ASSIGN"
   | Parser.NEWLINE -> print_endline "NEWLINE"
+  | Parser.LBRACE -> print_endline "LBRACE"
+  | Parser.RBRACE -> print_endline "RBRACE"
+  | Parser.IF -> print_endline "IF"
 
 
 
