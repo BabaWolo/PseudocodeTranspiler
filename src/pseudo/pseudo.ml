@@ -48,7 +48,7 @@ module StringMap = Map.Make(String)
     
     
 let () =
-  let lexbuf = Lexing.from_string "}" in
+  let lexbuf = Lexing.from_string "x = 1 \n if(2==2){ x = 2 \n }\n x+2" in
   let ast = Parser.program Lexer.token lexbuf in
   print_endline ("Result: ");
   
@@ -99,3 +99,46 @@ let () =
      | _ -> print_tokens ()
    in
    print_tokens ()
+
+  (* Convert to python *)
+  let rec string_of_expr = function
+  | Eident(id) -> id
+  | Ecst(Cint(x)) -> string_of_int x
+  | Ebinop(binop, e1, e2) -> 
+    let x = string_of_expr e1 in
+    let y = string_of_expr e2 in
+    match binop with
+    | Badd -> x ^ " + " ^ y
+    | Bsub -> x ^ " - " ^ y
+    | Bdiv -> x ^ " / " ^ y
+    | Bmul -> x ^ " * " ^ y
+    | Bmod -> x ^ " % " ^ y
+    | Band -> x ^ " and " ^ y
+    | Bor -> x ^ " or " ^ y
+    | Beq -> x ^ " == " ^ y
+    | Bneq -> x ^ " != " ^ y
+    | Blt -> x ^ " < " ^ y
+    | Ble -> x ^ " <= " ^ y
+    | Bgt -> x ^ " > " ^ y
+    | Bge -> x ^ " >= " ^ y
+
+  let rec string_of_stmt indent = function
+  | [] -> ""
+  | Sassign(id, e) :: tl -> 
+    String.make indent ' ' ^ id ^ " = " ^ string_of_expr e ^ "\n" ^ string_of_stmt indent tl
+  | Sif(e, stmts) :: tl ->
+    String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent + 2) stmts ^ string_of_stmt indent tl
+  | Seval(e) :: tl ->
+    String.make indent ' ' ^ string_of_expr e ^ "\n" ^ string_of_stmt indent tl
+
+let string_of_program = function
+  | Cstmts(stmt) -> string_of_stmt 0 stmt
+    
+let () =
+  let lexbuf = Lexing.from_string "x = 1 \n if(x % 2 == 0){ x = x + 1 \n }\n" in
+  let ast = Parser.program Lexer.token lexbuf in
+  let out_channel = open_out "output.py" in
+  match ast with
+  | Cstmts(_) ->
+    Printf.fprintf out_channel "%s\n" (string_of_program ast);
+  close_out out_channel
