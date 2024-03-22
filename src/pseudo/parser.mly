@@ -7,11 +7,15 @@
 %token ADD SUB DIV MUL MOD
 %token AND OR EQUAL NOTEQUAL LESS LESSEQUAL GREATER GREATEREQUAL
 %token <int> INT
+%token <string> ID
 %token LPAREN RPAREN
+%token ASSIGN
+%token NEWLINE
 
 %start program
 %type <Ast.command> program
 %type <Ast.expr> expr
+%type <Ast.stmt> stmt
 
 %left ADD SUB
 %left MUL DIV MOD
@@ -21,13 +25,26 @@
 
 
 program:
-  | e = expr EOF { Cexpr e }
-; 
+  | s = stmts EOF { Cstmts s }
+;
+
+stmts:
+  | s1 = stmt NEWLINE s = stmts { s1 :: s }
+  | s1 = stmt NEWLINE { [s1] }
+  | s1 = stmt EOF { [s1] }
+;
+
+stmt:
+  | e1 = ID ASSIGN e = expr { Sassign(e1, e)}
+  | e1 = expr { Seval(e1) }
+;
+
 
 expr:
   | e1 = INT { Ecst(Cint e1) }
   | e1 = expr o = binop e2 = expr { Ebinop(o, e1, e2) }
   | LPAREN e = expr RPAREN { e }
+  | e1 = ID { Eident(e1) }
 ;
 
 %inline binop:

@@ -1,9 +1,10 @@
 type expr =
   | Ecst of constant               (* Constant *)
   | Ebinop of binop * expr * expr  (* Binary operation *)
+  | Eident of string       (* Identifier *)
 
 and command = 
-  | Cexpr of expr
+  | Cstmts of stmt list
   
 and constant =
   | Cint of int
@@ -13,6 +14,10 @@ and binop =
   | Badd | Bsub | Bmul | Bdiv | Bmod
   | Beq | Bneq | Blt | Ble | Bgt | Bge
   | Band | Bor
+
+and stmt =
+  | Sassign of string * expr
+  | Seval of expr
 
 
 
