@@ -18,6 +18,8 @@ and binop =
 and stmt =
   | Sassign of string * expr
   | Seval of expr
+  | Sif of expr * stmt list
+  | Sprint of expr
 
 
 
