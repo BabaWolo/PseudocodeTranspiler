@@ -8,19 +8,23 @@
 %token AND OR EQUAL NOTEQUAL LESS LESSEQUAL GREATER GREATEREQUAL
 %token <int> INT
 %token <string> ID
-%token LPAREN RPAREN
+%token LPAREN RPAREN LBRACE RBRACE COMMA
 %token ASSIGN
 %token NEWLINE
-%token IF ELSE LBRACE RBRACE PRINT
+%token IF ELSE PRINT
+%token RETURN
 
 %start program
 %type <Ast.command> program
 %type <Ast.expr> expr
-%type <Ast.stmt> stmt
+%type <Ast.stmt> stmt suite
+%type <Ast.ident> ident
+
 
 %left ADD SUB
 %left MUL DIV MOD
 %left AND OR
+%left EQUAL NOTEQUAL LESS LESSEQUAL GREATER GREATEREQUAL
 %%
 
 
@@ -32,6 +36,7 @@ program:
 suite:
   | s = stmt { s }
   | s = stmt NEWLINE s1 = suite { Sblock [s; s1] }
+;
 
 stmt:
   | e1 = ident ASSIGN e = expr { Sassign(e1, e)}
@@ -40,7 +45,8 @@ stmt:
   | IF LPAREN e = expr RPAREN LBRACE s = suite RBRACE { Sif(e, s, Sblock []) }
   | IF LPAREN e = expr RPAREN LBRACE s = suite RBRACE ELSE LBRACE s1 = suite RBRACE { Sif(e, s, s1) }
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
-  // | id = ident LPAREN p = seperated_list(COMMA, ident) RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
+  | id = ident LPAREN p = separated_list(COMMA, expr) RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
+  | RETURN e = expr { Sreturn(e) }
 ;
 
 

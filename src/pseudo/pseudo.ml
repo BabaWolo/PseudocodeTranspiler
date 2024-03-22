@@ -3,7 +3,8 @@ module StringMap = Map.Make(String)
   
   (* Convert to python *)
   let string_of_ident ident = ident.id
-  
+
+
   let rec string_of_expr = function
   | Eident(id) -> string_of_ident id
   | Ecst(Cint(x)) -> string_of_int x
@@ -24,6 +25,7 @@ module StringMap = Map.Make(String)
     | Ble -> x ^ " <= " ^ y
     | Bgt -> x ^ " > " ^ y
     | Bge -> x ^ " >= " ^ y
+    
 
   let rec string_of_stmt indent = function
     | Sassign(id, e) -> 
@@ -40,13 +42,15 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "return " ^ string_of_expr e ^ "\n"
     | Sblock(stmts) ->
       "\n" ^ (String.concat "" (List.map (string_of_stmt (indent)) stmts))
-
+    | Sdef(id, args, stmt) ->
+      String.make indent ' ' ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_expr args)) ^ ")" ^ "\n" ^ string_of_stmt (indent+2) stmt
+  
   let string_of_program = function
     | Cstmt(stmt) -> string_of_stmt 0 stmt
 
     
 let () =
-  let lexbuf = Lexing.from_string "x = 2 \n if(1 < 2 < 3){ x = x+1 \n y = x \n}\n  PRINT(x) \n PRINT(y)" in
+  let lexbuf = Lexing.from_string "a=1\n b=2\n function(a,b){a+b} \n fun(2, 2+2){1} \n x = 2 \n if(1 < 2 < 3){ x = x+1 \n y = x \n}\n  PRINT(x) \n PRINT(y)" in
   let ast = Parser.program Lexer.token lexbuf in
   let out_channel = open_out "output.py" in
   match ast with

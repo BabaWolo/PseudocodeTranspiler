@@ -31,10 +31,10 @@ rule token = parse
   | "else"  { ELSE }
   | '{'     { LBRACE }
   | '}'     { RBRACE }
+  | ','     { COMMA }
   | "PRINT" { PRINT }
   | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) }
   | ident   { ID(Lexing.lexeme lexbuf) }
-  (* | ','     { COMMA } *)
   | eof     { EOF }  
   | _ as c  { raise (Failure ("illegal character: " ^ Char.escaped c)) }
 

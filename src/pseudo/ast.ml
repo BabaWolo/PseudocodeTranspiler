@@ -6,11 +6,13 @@ type expr =
   | Ebinop of binop * expr * expr  (* Binary operation *)
   | Eident of ident       (* Identifier *)
 
+
 and command = 
   | Cstmt of stmt
   
 and constant =
   | Cint of int
+
 
 (* Define the types for binary operators *)
 and binop =
@@ -25,7 +27,8 @@ and stmt =
   | Sprint of expr
   | Sreturn of expr
   | Sblock of stmt list
-  (* | Sdef of ident * ident list * stmt *)
+  | Sdef of ident * expr list * stmt
+
 
 
 (* Define the types for arithmetic expressions and variables *)
