@@ -30,9 +30,11 @@ rule token = parse
   | "if"    { IF }
   | '{'     { LBRACE }
   | '}'     { RBRACE }
+  | "PRINT" { PRINT }
   | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) }
   | ident   { ID(Lexing.lexeme lexbuf) }
   | eof     { EOF }  
+  | _ as c  { raise (Failure ("illegal character: " ^ Char.escaped c)) }
 
 (* {
   open Parser

@@ -1,6 +1,6 @@
 open Ast
 module StringMap = Map.Make(String)
-  let rec eval_expr env = function
+  (* let rec eval_expr env = function
   | Eident(id) ->
     begin try
       StringMap.find id !env
@@ -98,7 +98,7 @@ let () =
      | Parser.EOF -> ()
      | _ -> print_tokens ()
    in
-   print_tokens ()
+   print_tokens () *)
 
   (* Convert to python *)
   let rec string_of_expr = function
@@ -130,12 +130,14 @@ let () =
     String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent + 2) stmts ^ string_of_stmt indent tl
   | Seval(e) :: tl ->
     String.make indent ' ' ^ string_of_expr e ^ "\n" ^ string_of_stmt indent tl
+  | Sprint(e) :: tl ->
+    String.make indent ' ' ^ "print(" ^ string_of_expr e ^ ")\n" ^ string_of_stmt indent tl
 
 let string_of_program = function
   | Cstmts(stmt) -> string_of_stmt 0 stmt
     
 let () =
-  let lexbuf = Lexing.from_string "x = 1 \n if(x % 2 == 0){ x = x + 1 \n }\n" in
+  let lexbuf = Lexing.from_string "x = 2 \n if(x % 2 == 0){ x = x + 1 \n x = x / 2 \n }\n PRINT(x)" in
   let ast = Parser.program Lexer.token lexbuf in
   let out_channel = open_out "output.py" in
   match ast with

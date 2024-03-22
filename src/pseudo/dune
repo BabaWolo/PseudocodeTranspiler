@@ -3,8 +3,6 @@
  (promote
   (until-clean)
   (into ../..)))
-
 (menhir
   (modules parser))
-
 (ocamllex lexer)

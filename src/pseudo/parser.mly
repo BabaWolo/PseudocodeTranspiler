@@ -11,7 +11,7 @@
 %token LPAREN RPAREN
 %token ASSIGN
 %token NEWLINE
-%token IF LBRACE RBRACE
+%token IF LBRACE RBRACE PRINT
 
 %start program
 %type <Ast.command> program
@@ -40,6 +40,7 @@ stmt:
   | e1 = ID ASSIGN e = expr { Sassign(e1, e)}
   | e1 = expr { Seval(e1) }
   | IF LPAREN e = expr RPAREN LBRACE s = stmts RBRACE { Sif(e, s) }
+  | PRINT LPAREN e = expr RPAREN { Sprint(e) }
 ;
 
 
@@ -64,4 +65,4 @@ expr:
   | LESSEQUAL { Ble }
   | GREATER { Bgt }
   | GREATEREQUAL { Bge }
-
+;
