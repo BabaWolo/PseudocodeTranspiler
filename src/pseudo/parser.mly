@@ -11,7 +11,7 @@
 %token LPAREN RPAREN
 %token ASSIGN
 %token NEWLINE
-%token IF LBRACE RBRACE PRINT
+%token IF ELSE LBRACE RBRACE PRINT
 
 %start program
 %type <Ast.command> program
@@ -26,20 +26,21 @@
 
 
 program:
-  | s = stmts EOF { Cstmts s }
+  | s = suite EOF { Cstmt s }
 ;
 
-stmts:
-  | s1 = stmt NEWLINE s = stmts { s1 :: s }
-  | s1 = stmt NEWLINE { [s1] }
-  | s1 = stmt EOF { [s1] }
-;
+suite:
+  | s = stmt { s }
+  | s = stmt NEWLINE s1 = suite { Sblock [s; s1] }
 
 stmt:
-  | e1 = ID ASSIGN e = expr { Sassign(e1, e)}
+  | e1 = ident ASSIGN e = expr { Sassign(e1, e)}
   | e1 = expr { Seval(e1) }
-  | IF LPAREN e = expr RPAREN LBRACE s = stmts RBRACE { Sif(e, s) }
+  | s = stmt NEWLINE { s }
+  | IF LPAREN e = expr RPAREN LBRACE s = suite RBRACE { Sif(e, s, Sblock []) }
+  | IF LPAREN e = expr RPAREN LBRACE s = suite RBRACE ELSE LBRACE s1 = suite RBRACE { Sif(e, s, s1) }
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
+  // | id = ident LPAREN p = seperated_list(COMMA, ident) RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
 ;
 
 
@@ -47,7 +48,11 @@ expr:
   | e1 = INT { Ecst(Cint e1) }
   | e1 = expr o = binop e2 = expr { Ebinop(o, e1, e2) }
   | LPAREN e = expr RPAREN { e }
-  | e1 = ID { Eident(e1) }
+  | e1 = ident { Eident(e1) }
+;
+
+ident:
+  id = ID { { loc = ($startpos, $endpos); id } }
 ;
 
 %inline binop:

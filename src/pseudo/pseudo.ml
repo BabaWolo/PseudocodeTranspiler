@@ -2,8 +2,10 @@ open Ast
 module StringMap = Map.Make(String)
   
   (* Convert to python *)
+  let string_of_ident ident = ident.id
+  
   let rec string_of_expr = function
-  | Eident(id) -> id
+  | Eident(id) -> string_of_ident id
   | Ecst(Cint(x)) -> string_of_int x
   | Ebinop(binop, e1, e2) -> 
     let x = string_of_expr e1 in
@@ -24,24 +26,30 @@ module StringMap = Map.Make(String)
     | Bge -> x ^ " >= " ^ y
 
   let rec string_of_stmt indent = function
-  | [] -> ""
-  | Sassign(id, e) :: tl -> 
-    String.make indent ' ' ^ id ^ " = " ^ string_of_expr e ^ "\n" ^ string_of_stmt indent tl
-  | Sif(e, stmts) :: tl ->
-    String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent + 2) stmts ^ string_of_stmt indent tl
-  | Seval(e) :: tl ->
-    String.make indent ' ' ^ string_of_expr e ^ "\n" ^ string_of_stmt indent tl
-  | Sprint(e) :: tl ->
-    String.make indent ' ' ^ "print(" ^ string_of_expr e ^ ")\n" ^ string_of_stmt indent tl
+    | Sassign(id, e) -> 
+      String.make indent ' ' ^ string_of_ident id ^ " = " ^ string_of_expr e ^ "\n"
+    | Sif(e, stmt, Sblock []) ->
+      String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt
+    | Sif(e, stmt, else_stmts) ->
+      String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "else:\n" ^ string_of_stmt (indent+2) else_stmts
+    | Seval(e) ->
+      String.make indent ' ' ^ string_of_expr e ^ "\n"
+    | Sprint(e) ->
+      String.make indent ' ' ^ "print(" ^ string_of_expr e ^ ")\n"
+    | Sreturn(e) ->
+      String.make indent ' ' ^ "return " ^ string_of_expr e ^ "\n"
+    | Sblock(stmts) ->
+      "\n" ^ (String.concat "" (List.map (string_of_stmt (indent)) stmts))
 
-let string_of_program = function
-  | Cstmts(stmt) -> string_of_stmt 0 stmt
+  let string_of_program = function
+    | Cstmt(stmt) -> string_of_stmt 0 stmt
+
     
 let () =
-  let lexbuf = Lexing.from_string "x = 2 \n if(1 < 2 < 3){ x = x+1 \n }\n PRINT(x)" in
+  let lexbuf = Lexing.from_string "x = 2 \n if(1 < 2 < 3){ x = x+1 \n y = x \n}\n  PRINT(x) \n PRINT(y)" in
   let ast = Parser.program Lexer.token lexbuf in
   let out_channel = open_out "output.py" in
   match ast with
-  | Cstmts(_) ->
-    Printf.fprintf out_channel "%s\n" (string_of_program ast);
+  | Cstmt(stmt) ->
+    Printf.fprintf out_channel "%s\n" (string_of_program (Cstmt(stmt)));
   close_out out_channel

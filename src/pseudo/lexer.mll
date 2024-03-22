@@ -28,11 +28,13 @@ rule token = parse
   | ">="    { GREATEREQUAL }
   | '='     { ASSIGN }
   | "if"    { IF }
+  | "else"  { ELSE }
   | '{'     { LBRACE }
   | '}'     { RBRACE }
   | "PRINT" { PRINT }
   | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) }
   | ident   { ID(Lexing.lexeme lexbuf) }
+  (* | ','     { COMMA } *)
   | eof     { EOF }  
   | _ as c  { raise (Failure ("illegal character: " ^ Char.escaped c)) }
 

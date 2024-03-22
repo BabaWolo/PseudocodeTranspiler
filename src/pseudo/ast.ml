@@ -1,10 +1,13 @@
+type location = Lexing.position * Lexing.position
+type ident = { loc: location; id: string; }
+
 type expr =
   | Ecst of constant               (* Constant *)
   | Ebinop of binop * expr * expr  (* Binary operation *)
-  | Eident of string       (* Identifier *)
+  | Eident of ident       (* Identifier *)
 
 and command = 
-  | Cstmts of stmt list
+  | Cstmt of stmt
   
 and constant =
   | Cint of int
@@ -16,11 +19,13 @@ and binop =
   | Band | Bor
 
 and stmt =
-  | Sassign of string * expr
+  | Sassign of ident * expr
   | Seval of expr
-  | Sif of expr * stmt list
+  | Sif of expr * stmt * stmt
   | Sprint of expr
-
+  | Sreturn of expr
+  | Sblock of stmt list
+  (* | Sdef of ident * ident list * stmt *)
 
 
 (* Define the types for arithmetic expressions and variables *)
