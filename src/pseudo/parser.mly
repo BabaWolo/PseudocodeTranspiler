@@ -46,6 +46,7 @@ stmt:
   | IF LPAREN e = expr RPAREN LBRACE s = suite RBRACE ELSE LBRACE s1 = suite RBRACE { Sif(e, s, s1) }
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
   | id = ident LPAREN p = separated_list(COMMA, expr) RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
+  | id = ident LPAREN p = separated_list(COMMA, expr) RPAREN { Scall(id, p)}
   | RETURN e = expr { Sreturn(e) }
 ;
 

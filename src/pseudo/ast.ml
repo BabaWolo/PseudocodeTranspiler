@@ -28,6 +28,7 @@ and stmt =
   | Sreturn of expr
   | Sblock of stmt list
   | Sdef of ident * expr list * stmt
+  | Scall of ident * expr list
 
 
 
