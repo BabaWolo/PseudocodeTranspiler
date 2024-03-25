@@ -5,12 +5,19 @@ type expr =
   | Ecst of constant               (* Constant *)
   | Ebinop of binop * expr * expr  (* Binary operation *)
   | Eident of ident       (* Identifier *)
+  | Ecall of ident * expr list
+  | Elist of expr list (* [e1,e2,...] *)
+  | Eget of ident * expr (* e1[e2]*)
+  | Emethod of ident * ident
+
 
 and command = 
   | Cstmt of stmt
   
 and constant =
   | Cint of int
+  | Cfloat of float
+
 
 (* Define the types for binary operators *)
 and binop =
@@ -25,7 +32,9 @@ and stmt =
   | Sprint of expr
   | Sreturn of expr
   | Sblock of stmt list
-  (* | Sdef of ident * ident list * stmt *)
+  | Sdef of ident * ident list * stmt
+  | Sfor of ident * expr * expr * stmt * int
+
 
 
 (* Define the types for arithmetic expressions and variables *)
