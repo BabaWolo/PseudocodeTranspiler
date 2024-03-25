@@ -5,6 +5,7 @@ type expr =
   | Ecst of constant               (* Constant *)
   | Ebinop of binop * expr * expr  (* Binary operation *)
   | Eident of ident       (* Identifier *)
+  | Ecall of ident * expr list
 
 
 and command = 
@@ -27,8 +28,7 @@ and stmt =
   | Sprint of expr
   | Sreturn of expr
   | Sblock of stmt list
-  | Sdef of ident * expr list * stmt
-  | Scall of ident * expr list
+  | Sdef of ident * ident list * stmt
 
 
 

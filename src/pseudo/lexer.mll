@@ -33,6 +33,8 @@ rule token = parse
   | '}'     { RBRACE }
   | ','     { COMMA }
   | "PRINT" { PRINT }
+  | "return" { RETURN }
+  | "def"   { DEF }
   | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) }
   | ident   { ID(Lexing.lexeme lexbuf) }
   | eof     { EOF }  
