@@ -8,7 +8,23 @@ module StringMap = Map.Make(String)
 
   let rec string_of_expr = function
   | Eident(id) -> string_of_ident id
-  | Ecst(Cint(x)) -> string_of_int x
+  | Ecst(x) ->
+    begin
+      match x with
+      | Cint(i) -> string_of_int i
+      | Cfloat(f) -> string_of_float f
+    end
+  | Emethod(id, method_name) ->
+    let method_name = string_of_ident method_name in
+    begin
+      match method_name with
+      | "length" -> "len(" ^ string_of_ident id ^ ")"
+      | _ -> failwith "Method not supported"
+    end
+  | Elist(expr_list) ->
+    "[" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ "]"
+  | Eget(id, index) ->
+    string_of_ident id ^ "[" ^ string_of_expr index ^ "]"
   | Ecall(id, args) -> 
     string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_expr args)) ^ ")"
   | Ebinop(binop, e1, e2) -> 
@@ -55,13 +71,15 @@ module StringMap = Map.Make(String)
   let string_of_program = function
     | Cstmt(stmt) -> string_of_stmt 0 stmt
 
-    
+
 let () =
-  let lexbuf = Lexing.from_string "for i = 10 downto 1{\n PRINT(i)}" in
+  let in_channel = open_in "test.txt" in
+  let lexbuf = Lexing.from_channel in_channel in
   let ast = Parser.program Lexer.token lexbuf in
   let out_channel = open_out "output.py" in
   match ast with
   | Cstmt(stmt) ->
     Printf.fprintf out_channel "%s\n" (string_of_program (Cstmt(stmt)));
-  close_out out_channel
+  close_out out_channel;
+  close_in in_channel
     

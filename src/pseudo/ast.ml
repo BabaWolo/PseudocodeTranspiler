@@ -6,6 +6,9 @@ type expr =
   | Ebinop of binop * expr * expr  (* Binary operation *)
   | Eident of ident       (* Identifier *)
   | Ecall of ident * expr list
+  | Elist of expr list (* [e1,e2,...] *)
+  | Eget of ident * expr (* e1[e2]*)
+  | Emethod of ident * ident
 
 
 and command = 
@@ -13,6 +16,7 @@ and command =
   
 and constant =
   | Cint of int
+  | Cfloat of float
 
 
 (* Define the types for binary operators *)

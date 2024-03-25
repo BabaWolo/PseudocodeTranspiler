@@ -3,6 +3,7 @@
 }
 
 let digit = ['0'-'9']
+let float = digit+'.'digit+
 let integer = '0' | ['1'-'9'] digit*
 let space = ' ' | '\t'
 let letter = ['a'-'z' 'A'-'Z']
@@ -18,6 +19,8 @@ rule token = parse
   | '%'     { MOD }
   | '('     { LPAREN }
   | ')'     { RPAREN }
+  | '['     { LBRACKET }
+  | ']'     { RBRACKET }
   | "and"   { AND }
   | "or"    { OR }
   | "=="    { EQUAL }
@@ -32,12 +35,14 @@ rule token = parse
   | '{'     { LBRACE }
   | '}'     { RBRACE }
   | ','     { COMMA }
-  | "PRINT" { PRINT }
+  | "print" { PRINT }
   | "return" { RETURN }
   | "for"   { FOR }
   | "to"    { TO }
   | "downto" { DOWNTO }
+  | "."     { DOT }
   | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) }
+  | float+  { FLOAT(float_of_string (Lexing.lexeme lexbuf)) }
   | ident   { ID(Lexing.lexeme lexbuf) }
   | eof     { EOF }  
   | _ as c  { raise (Failure ("illegal character: " ^ Char.escaped c)) }
