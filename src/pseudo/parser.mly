@@ -11,8 +11,8 @@
 %token LPAREN RPAREN LBRACE RBRACE COMMA
 %token ASSIGN
 %token NEWLINE
-%token IF ELSE PRINT
-%token RETURN DEF
+%token IF ELSE PRINT FOR TO DOWNTO
+%token RETURN
 
 %start program
 %type <Ast.command> program
@@ -34,6 +34,7 @@ program:
 
 suite:
   | s = stmt { s }
+  | NEWLINE s = suite { s }
   | s = stmt NEWLINE s1 = suite { Sblock [s; s1] }
 ;
 
@@ -46,6 +47,8 @@ stmt:
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
   | id = ident LPAREN p = params RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
   | RETURN e = expr { Sreturn(e) }
+  | FOR id = ident ASSIGN e1 = expr TO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, 1) }
+  | FOR id = ident ASSIGN e1 = expr DOWNTO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, -1) }
 ;
 
 params:

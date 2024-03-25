@@ -48,6 +48,8 @@ module StringMap = Map.Make(String)
     | Sdef(id, args, stmt) ->
       Hashtbl.add functions (string_of_ident id) (args, stmt);
       String.make indent ' ' ^ "def " ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_ident args)) ^ ")" ^ ":\n" ^ string_of_stmt (indent+2) stmt
+    | Sfor(id, e1, e2, stmt, incr) ->
+      String.make indent ' ' ^ "for " ^ string_of_ident id ^ " in range(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ", " ^ string_of_int incr ^"):\n" ^ string_of_stmt (indent+2) stmt
 
 
   let string_of_program = function
@@ -55,7 +57,7 @@ module StringMap = Map.Make(String)
 
     
 let () =
-  let lexbuf = Lexing.from_string "c = 1 \n d = 2 \n function(a,b){ return a+b} \n PRINT(function(c,d))" in
+  let lexbuf = Lexing.from_string "for i = 10 downto 1{\n PRINT(i)}" in
   let ast = Parser.program Lexer.token lexbuf in
   let out_channel = open_out "output.py" in
   match ast with

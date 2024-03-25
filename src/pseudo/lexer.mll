@@ -34,7 +34,9 @@ rule token = parse
   | ','     { COMMA }
   | "PRINT" { PRINT }
   | "return" { RETURN }
-  | "def"   { DEF }
+  | "for"   { FOR }
+  | "to"    { TO }
+  | "downto" { DOWNTO }
   | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) }
   | ident   { ID(Lexing.lexeme lexbuf) }
   | eof     { EOF }  
