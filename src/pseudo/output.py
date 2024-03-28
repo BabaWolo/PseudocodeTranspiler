@@ -5,4 +5,9 @@ def minimum(A):
       min = A[i]
   return min
 print(minimum([2, 3, 1, 5, 7]))
+def test(A):
+  for i in range(0, len(A), 1):
+    A[i] = 0
+  return A
+print(test([1, 2, 3, 4]))
 
