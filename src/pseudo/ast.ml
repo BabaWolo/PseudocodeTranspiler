@@ -27,6 +27,7 @@ and binop =
 
 and stmt =
   | Sassign of ident * expr
+  | Sset of ident * expr * expr
   | Seval of expr
   | Sif of expr * stmt * stmt
   | Sprint of expr

@@ -49,6 +49,8 @@ module StringMap = Map.Make(String)
   let rec string_of_stmt indent = function
     | Sassign(id, e) -> 
       String.make indent ' ' ^ string_of_ident id ^ " = " ^ string_of_expr e ^ "\n"
+    | Sset(id, index, e) ->
+      String.make indent ' ' ^ string_of_ident id ^ "[" ^ string_of_expr index ^ "] = " ^ string_of_expr e ^ "\n"
     | Sif(e, stmt, Sblock []) ->
       String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt
     | Sif(e, stmt, else_stmts) ->
