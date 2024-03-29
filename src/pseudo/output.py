@@ -8,5 +8,5 @@ def minimum(A):
   return min
 x = 3.2
 print(minimum([2, 3, 1, 5, 7]))
-print(math.ceil(x))
+
 

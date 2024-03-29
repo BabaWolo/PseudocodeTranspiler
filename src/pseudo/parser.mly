@@ -40,6 +40,7 @@ suite:
 
 stmt:
   | e1 = ident ASSIGN e = expr { Sassign(e1, e)}
+  | id = ident LBRACKET index = expr RBRACKET ASSIGN e = expr { Sset(id, index, e) }
   | e1 = expr { Seval(e1) }
   | s = stmt NEWLINE { s }
   | IF e = expr LBRACE s = suite RBRACE { Sif(e, s, Sblock []) }
