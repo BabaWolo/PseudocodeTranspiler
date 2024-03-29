@@ -74,6 +74,7 @@ expr:
   | e1 = ident DOT e2 = ident { Emethod(e1, e2) }
   | LBRACKET e = expr_list RBRACKET { Elist(e) }
   | id = ident LBRACKET e = expr RBRACKET { Eget(id, e) }
+  | u = unop e = expr { Eunop(u, e) }
 ;
 
 ident:
@@ -95,3 +96,7 @@ ident:
   | GREATER { Bgt }
   | GREATEREQUAL { Bge }
 ;
+
+%inline unop:
+  | ADD { Uplus }
+  | SUB { Uneg }

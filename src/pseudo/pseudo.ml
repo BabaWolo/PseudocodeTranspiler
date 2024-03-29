@@ -6,6 +6,14 @@ module StringMap = Map.Make(String)
 
   let functions = (Hashtbl.create 16 : (string, ident list * stmt) Hashtbl.t)
 
+  let required_imports = ref []
+
+  (* Add import if not already in list. The ! operator is used for dereferencing *)
+  let add_import import =
+    if not (List.mem import !required_imports) then
+      required_imports := import :: !required_imports
+
+
   let rec string_of_expr = function
   | Eident(id) -> string_of_ident id
   | Ecst(x) ->
@@ -26,25 +34,44 @@ module StringMap = Map.Make(String)
   | Eget(id, index) ->
     string_of_ident id ^ "[" ^ string_of_expr index ^ "]"
   | Ecall(id, args) -> 
-    string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_expr args)) ^ ")"
+    let func_name = string_of_ident id in
+    let args_str = String.concat ", " (List.map string_of_expr args) in
+    let func_call = func_name ^ "(" ^ args_str ^ ")" in
+    begin
+      match func_name with
+      | "ceil" | "floor" | "round" ->
+        add_import "import math";
+        "math." ^ func_call
+      | _ -> 
+        func_call
+    end
   | Ebinop(binop, e1, e2) -> 
     let x = string_of_expr e1 in
     let y = string_of_expr e2 in
-    match binop with
-    | Badd -> x ^ " + " ^ y
-    | Bsub -> x ^ " - " ^ y
-    | Bdiv -> x ^ " / " ^ y
-    | Bmul -> x ^ " * " ^ y
-    | Bmod -> x ^ " % " ^ y
-    | Band -> x ^ " and " ^ y
-    | Bor -> x ^ " or " ^ y
-    | Beq -> x ^ " == " ^ y
-    | Bneq -> x ^ " != " ^ y
-    | Blt -> x ^ " < " ^ y
-    | Ble -> x ^ " <= " ^ y
-    | Bgt -> x ^ " > " ^ y
-    | Bge -> x ^ " >= " ^ y
-    
+    begin
+      match binop with
+      | Badd -> x ^ " + " ^ y
+      | Bsub -> x ^ " - " ^ y
+      | Bdiv -> x ^ " / " ^ y
+      | Bmul -> x ^ " * " ^ y
+      | Bmod -> x ^ " % " ^ y
+      | Band -> x ^ " and " ^ y
+      | Bor -> x ^ " or " ^ y
+      | Beq -> x ^ " == " ^ y
+      | Bneq -> x ^ " != " ^ y
+      | Blt -> x ^ " < " ^ y
+      | Ble -> x ^ " <= " ^ y
+      | Bgt -> x ^ " > " ^ y
+      | Bge -> x ^ " >= " ^ y
+    end
+  | Eunop(unop, e) ->
+    let x = string_of_expr e in
+    begin
+      match unop with
+      | Uneg -> "-" ^ x
+      | Uplus -> "+" ^ x
+    end
+
 
   let rec string_of_stmt indent = function
     | Sassign(id, e) -> 
@@ -70,18 +97,27 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "for " ^ string_of_ident id ^ " in range(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ", " ^ string_of_int incr ^"):\n" ^ string_of_stmt (indent+2) stmt
 
 
-  let string_of_program = function
-    | Cstmt(stmt) -> string_of_stmt 0 stmt
 
+  (* let string_of_program = function
+    | Cstmt(stmt) -> string_of_stmt 0 stmt *)
+
+  
+  let generate_code = function
+  | Cstmt(stmt) ->
+    let code = string_of_stmt 0 stmt in
+    let imports = String.concat "\n" !required_imports in
+    if imports <> "" then
+      imports ^ "\n\n" ^ code
+    else
+      code
 
 let () =
   let in_channel = open_in "test.txt" in
   let lexbuf = Lexing.from_channel in_channel in
   let ast = Parser.program Lexer.token lexbuf in
   let out_channel = open_out "output.py" in
-  match ast with
-  | Cstmt(stmt) ->
-    Printf.fprintf out_channel "%s\n" (string_of_program (Cstmt(stmt)));
+  let code = generate_code ast in
+  Printf.fprintf out_channel "%s\n" code;
   close_out out_channel;
   close_in in_channel
     

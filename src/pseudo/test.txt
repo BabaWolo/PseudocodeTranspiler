@@ -6,15 +6,3 @@ minimum(A){
         }
     }
     return min
-}
-
-print(minimum([2, 3, 1, 5, 7]))
-
-test(A){
-    for i = 0 to A.length {
-        A[i] = 0
-    }
-    return A
-}
-
-print(test([1, 2, 3, 4]))
