@@ -4,6 +4,7 @@ type ident = { loc: location; id: string; }
 type expr =
   | Ecst of constant               (* Constant *)
   | Ebinop of binop * expr * expr  (* Binary operation *)
+  | Eunop of unop * expr  (* Unary operation *)
   | Eident of ident       (* Identifier *)
   | Ecall of ident * expr list
   | Elist of expr list (* [e1,e2,...] *)
@@ -24,6 +25,9 @@ and binop =
   | Badd | Bsub | Bmul | Bdiv | Bmod
   | Beq | Bneq | Blt | Ble | Bgt | Bge
   | Band | Bor
+
+and unop =
+  | Uneg | Uplus
 
 and stmt =
   | Sassign of ident * expr
