@@ -26,6 +26,9 @@ module StringMap = Map.Make(String)
     let method_name = string_of_ident method_name in
     begin
       match method_name with
+      | "next" | "prev" | "key" | "head" -> 
+        add_import "from classes.linkedlist import LinkedList";
+        string_of_ident id ^ "." ^ method_name
       | "length" -> "len(" ^ string_of_ident id ^ ")"
       | _ -> failwith "Method not supported"
     end

@@ -6,3 +6,12 @@ minimum(A){
         }
     }
     return min
+}
+
+listInsert(L, x){
+    x.next = L.head
+
+    return x
+}
+
+print([5, 4, 3, 1, 7, 8])
