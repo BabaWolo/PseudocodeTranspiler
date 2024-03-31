@@ -39,7 +39,7 @@ suite:
 ;
 
 stmt:
-  | e1 = ident ASSIGN e = expr { Sassign(e1, e)}
+  | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
   | id = ident LBRACKET index = expr RBRACKET ASSIGN e = expr { Sset(id, index, e) }
   | e1 = expr { Seval(e1) }
   | s = stmt NEWLINE { s }
@@ -71,7 +71,7 @@ expr:
   | LPAREN e = expr RPAREN { e }
   | e1 = ident { Eident(e1) }
   | id = ident LPAREN p = expr_list RPAREN { Ecall(id, p)}
-  | e1 = ident DOT e2 = ident { Emethod(e1, e2) }
+  | e1 = expr DOT e2 = ident { Eattribute(e1, e2) }
   | LBRACKET e = expr_list RBRACKET { Elist(e) }
   | id = ident LBRACKET e = expr RBRACKET { Eget(id, e) }
   | u = unop e = expr { Eunop(u, e) }

@@ -22,15 +22,15 @@ module StringMap = Map.Make(String)
       | Cint(i) -> string_of_int i
       | Cfloat(f) -> string_of_float f
     end
-  | Emethod(id, method_name) ->
-    let method_name = string_of_ident method_name in
+  | Eattribute(e1, attribute_name) ->
+    let attribute_name = string_of_ident attribute_name in
     begin
-      match method_name with
+      match attribute_name with
       | "next" | "prev" | "key" | "head" -> 
         add_import "from classes.linkedlist import LinkedList";
-        string_of_ident id ^ "." ^ method_name
-      | "length" -> "len(" ^ string_of_ident id ^ ")"
-      | _ -> failwith "Method not supported"
+        string_of_expr e1 ^ "." ^ attribute_name
+      | "length" -> "len(" ^ string_of_expr e1 ^ ")"
+      | _ -> failwith "Attribute not supported"
     end
   | Elist(expr_list) ->
     "[" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ "]"
@@ -77,8 +77,13 @@ module StringMap = Map.Make(String)
 
 
   let rec string_of_stmt indent = function
-    | Sassign(id, e) -> 
-      String.make indent ' ' ^ string_of_ident id ^ " = " ^ string_of_expr e ^ "\n"
+    | Sassign(e1, e2) ->
+      let lhs = match e1 with
+        | Eident(id) -> string_of_ident id
+        | Eattribute(e, id) -> string_of_expr e ^ "." ^ string_of_ident id
+        | _ -> failwith "Left-hand side of assignment must be an identifier or attribute"
+      in
+      String.make indent ' ' ^ lhs ^ " = " ^ string_of_expr e2 ^ "\n"
     | Sset(id, index, e) ->
       String.make indent ' ' ^ string_of_ident id ^ "[" ^ string_of_expr index ^ "] = " ^ string_of_expr e ^ "\n"
     | Sif(e, stmt, Sblock []) ->
