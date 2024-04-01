@@ -9,7 +9,7 @@ type expr =
   | Ecall of ident * expr list
   | Elist of expr list (* [e1,e2,...] *)
   | Eget of ident * expr (* e1[e2]*)
-  | Emethod of ident * ident
+  | Eattribute of expr * ident
 
 
 and command = 
@@ -30,7 +30,7 @@ and unop =
   | Uneg | Uplus
 
 and stmt =
-  | Sassign of ident * expr
+  | Sassign of expr * expr
   | Sset of ident * expr * expr
   | Seval of expr
   | Sif of expr * stmt * stmt
