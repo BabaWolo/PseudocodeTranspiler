@@ -5,6 +5,9 @@ class Node:
         self.right = None
         self.p = None
 
+    def __str__(self):
+        return str(self.key)
+
 class BinaryTree:
     def __init__(self, elements):
         self.root = None
