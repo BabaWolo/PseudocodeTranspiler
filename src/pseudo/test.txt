@@ -19,3 +19,7 @@ listInsert(L, x){
     x.prev = 0
     return x
 }
+
+list = newLinkedList([1, 2, 3, 4, 5])
+
+print(listInsert(list, newLinkedList([6])).head.key)

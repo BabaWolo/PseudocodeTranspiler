@@ -45,6 +45,9 @@ module StringMap = Map.Make(String)
       | "ceil" | "floor" | "round" ->
         add_import "import math";
         "math." ^ func_call
+      | "newLinkedList" ->
+        add_import "from classes.linkedlist import LinkedList";
+        "LinkedList(" ^ args_str ^ ")"
       | _ -> 
         func_call
     end
