@@ -18,14 +18,17 @@
 
 %start program
 %type <Ast.command> program
-%type <Ast.expr> expr
+%type <Ast.expr> expr 
 %type <Ast.stmt> stmt suite
 %type <Ast.ident> ident
 
+
+%left AND OR
+%left EQUAL NOTEQUAL
+%left LESS LESSEQUAL GREATER GREATEREQUAL
 %left ADD SUB
 %left MUL DIV MOD
-%left AND OR
-%left EQUAL NOTEQUAL LESS LESSEQUAL GREATER GREATEREQUAL
+%left DOT
 %%
 
 program:
