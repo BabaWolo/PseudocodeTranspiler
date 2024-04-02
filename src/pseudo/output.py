@@ -15,5 +15,5 @@ def listInsert(L, x):
   x.prev = 0
   return x
 list = LinkedList([1, 2, 3, 4, 5])
-print(listInsert(list, LinkedList([6])).head)
+print(listInsert(list, LinkedList([6])).head.key)
 

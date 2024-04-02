@@ -84,11 +84,10 @@ module StringMap = Map.Make(String)
       let lhs = match e1 with
         | Eident(id) -> string_of_ident id
         | Eattribute(e, id) -> string_of_expr e ^ "." ^ string_of_ident id
+        | Eget(id, index) -> string_of_ident id ^ "[" ^ string_of_expr index ^ "]"
         | _ -> failwith "Left-hand side of assignment must be an identifier or attribute"
       in
       String.make indent ' ' ^ lhs ^ " = " ^ string_of_expr e2 ^ "\n"
-    | Sset(id, index, e) ->
-      String.make indent ' ' ^ string_of_ident id ^ "[" ^ string_of_expr index ^ "] = " ^ string_of_expr e ^ "\n"
     | Sif(e, stmt, Sblock []) ->
       String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt
     | Sif(e, stmt, else_stmts) ->

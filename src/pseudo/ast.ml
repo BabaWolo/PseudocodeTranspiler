@@ -8,8 +8,8 @@ type expr =
   | Eident of ident       (* Identifier *)
   | Ecall of ident * expr list
   | Elist of expr list (* [e1,e2,...] *)
-  | Eget of ident * expr (* e1[e2]*)
-  | Eattribute of expr * ident
+  | Eget of ident * expr (* e1[e2] *)
+  | Eattribute of expr * ident (* e1.e2 *)
 
 
 and command = 
@@ -31,7 +31,6 @@ and unop =
 
 and stmt =
   | Sassign of expr * expr
-  | Sset of ident * expr * expr
   | Seval of expr
   | Sif of expr * stmt * stmt
   | Sprint of expr
