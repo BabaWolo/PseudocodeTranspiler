@@ -124,7 +124,18 @@ module StringMap = Map.Make(String)
 let () =
   let in_channel = open_in "test.txt" in
   let lexbuf = Lexing.from_channel in_channel in
-  let ast = Parser.program Lexer.token lexbuf in
+  let ast = 
+    try
+      Parser.program Lexer.token lexbuf
+    with
+    | Parser.Error ->
+      let curr = lexbuf.Lexing.lex_curr_p in
+      let line = curr.Lexing.pos_lnum in
+      let cnum = curr.Lexing.pos_cnum - curr.Lexing.pos_bol in
+      let tok = Lexing.lexeme lexbuf in
+      Printf.eprintf "Syntax error at line %d, column %d, token %s\n" line cnum tok;
+      exit (-1) 
+  in
   let out_channel = open_out "output.py" in
   let code = generate_code ast in
   Printf.fprintf out_channel "%s\n" code;
