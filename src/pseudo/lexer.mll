@@ -38,6 +38,12 @@ rule token = parse
   | "print" { PRINT }
   | "return" { RETURN }
   | "for"   { FOR }
+  | "while" { WHILE }
+  | "break" { BREAK }
+  | "continue" { CONTINUE }
+  | "repeat"    { REPEAT }
+  | "until"     { UNTIL }
+  | "do"    { DO }
   | "to"    { TO }
   | "downto" { DOWNTO }
   | "."     { DOT }

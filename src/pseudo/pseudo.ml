@@ -102,9 +102,19 @@ module StringMap = Map.Make(String)
       String.concat "" (List.map (string_of_stmt (indent)) stmts)
     | Sdef(id, args, stmt) ->
       Hashtbl.add functions (string_of_ident id) (args, stmt);
-      String.make indent ' ' ^ "def " ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_ident args)) ^ ")" ^ ":\n" ^ string_of_stmt (indent+2) stmt
+      String.make indent ' ' ^ "def " ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_ident args)) ^ ")" ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ "\n"
     | Sfor(id, e1, e2, stmt, incr) ->
       String.make indent ' ' ^ "for " ^ string_of_ident id ^ " in range(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ", " ^ string_of_int incr ^"):\n" ^ string_of_stmt (indent+2) stmt
+    | Swhile(e, stmt) ->
+      String.make indent ' ' ^ "while " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ "\n"
+    | Sdowhile(e, stmt) ->
+      String.make indent ' ' ^ "while True:\n" ^ string_of_stmt (indent+2) stmt ^ String.make (indent+2) ' ' ^ "if not " ^ string_of_expr e ^ ":\n" ^ String.make (indent+4) ' ' ^ "break\n\n"
+    | Srepeat(e, stmt) ->
+      String.make indent ' ' ^ "while True:\n" ^ string_of_stmt (indent+2) stmt ^ String.make (indent+2) ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ String.make (indent+4) ' ' ^ "break\n\n"
+    | Sbreak ->
+      String.make indent ' ' ^ "break\n"
+    | Scontinue ->
+      String.make indent ' ' ^ "continue\n"
 
 
 

@@ -38,6 +38,11 @@ and stmt =
   | Sblock of stmt list
   | Sdef of ident * ident list * stmt
   | Sfor of ident * expr * expr * stmt * int
+  | Swhile of expr * stmt
+  | Sdowhile of expr * stmt
+  | Srepeat of expr * stmt
+  | Sbreak
+  | Scontinue
 
 
 

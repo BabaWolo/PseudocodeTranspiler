@@ -13,7 +13,8 @@
 %token LBRACKET RBRACKET
 %token ASSIGN
 %token NEWLINE
-%token IF ELSE PRINT FOR TO DOWNTO
+%token IF ELSE PRINT FOR TO DOWNTO WHILE DO REPEAT UNTIL
+%token BREAK CONTINUE
 %token RETURN
 
 %start program
@@ -52,6 +53,11 @@ stmt:
   | RETURN e = expr { Sreturn(e) }
   | FOR id = ident ASSIGN e1 = expr TO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, 1) }
   | FOR id = ident ASSIGN e1 = expr DOWNTO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, -1) }
+  | WHILE e = expr LBRACE s = suite RBRACE { Swhile(e, s) }
+  | WHILE e = expr DO LBRACE s = suite RBRACE { Sdowhile(e, s) }
+  | REPEAT LBRACE s = suite RBRACE UNTIL e = expr { Srepeat(e, s) }
+  | BREAK { Sbreak }
+  | CONTINUE { Scontinue }
 ;
 
 params:
