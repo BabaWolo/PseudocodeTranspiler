@@ -43,5 +43,5 @@ def Test():
   return (1, 2, 3)
 
 (e, f, g) = Test()
-print(b)
+print(f)
 
