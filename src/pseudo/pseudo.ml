@@ -1,10 +1,17 @@
 open Ast
 module StringMap = Map.Make(String)
-  
+
   (* Convert to python *)
   let string_of_ident ident = ident.id
 
-  let functions = (Hashtbl.create 16 : (string, ident list * stmt) Hashtbl.t)
+  (* A hashtable of size 16, used for storing function declartions in the user-program *)
+  let functions = (Hashtbl.create 16 : (string, expr list * stmt) Hashtbl.t)
+
+  (* Recursive function checking the expressions of an expr list are equal to identifiers *)
+  let rec check_expr_list = function
+    | [] -> ()
+    | Eident _ :: tl -> check_expr_list tl
+    | _ -> raise (Failure "Arguments must be identifiers")
 
   let required_imports = ref []
 
@@ -12,7 +19,6 @@ module StringMap = Map.Make(String)
   let add_import import =
     if not (List.mem import !required_imports) then
       required_imports := import :: !required_imports
-
 
   let rec string_of_expr = function
   | Eident(id) -> string_of_ident id
@@ -29,7 +35,9 @@ module StringMap = Map.Make(String)
       | "next" | "prev" | "key" | "head" -> 
         add_import "from classes.linkedlist import LinkedList";
         string_of_expr e1 ^ "." ^ attribute_name
-      | "length" -> "len(" ^ string_of_expr e1 ^ ")"
+      | "length" | "size" -> "len(" ^ string_of_expr e1 ^ ")"
+      | "top" -> string_of_expr e1 ^ "[-1]"
+      | "tail" -> string_of_expr e1 ^ "[0]"
       | _ -> failwith "Attribute not supported"
     end
   | Elist(expr_list) ->
@@ -81,6 +89,7 @@ module StringMap = Map.Make(String)
     end
 
 
+  (* Recursive function for translating statements into python *)
   let rec string_of_stmt indent = function
     | Sassign(e1, e2) ->
       let lhs = match e1 with
@@ -104,8 +113,17 @@ module StringMap = Map.Make(String)
     | Sblock(stmts) ->
       String.concat "" (List.map (string_of_stmt (indent)) stmts)
     | Sdef(id, args, stmt) ->
+      (* Calling function which checks parameters are equal to identifiers *)
+      let _ = check_expr_list args in
       Hashtbl.add functions (string_of_ident id) (args, stmt);
-      String.make indent ' ' ^ "def " ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_ident args)) ^ ")" ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ "\n"
+      String.make indent ' ' ^ "def " ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_expr args)) ^ ")" ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ "\n"
+    | Snewlist(id, list) ->
+      begin
+        match string_of_ident list with
+        | li when li = "hashtable" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "{}" ^ "\n"
+        | li when li = "queue" || li = "stack" || li = "array" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "[]" ^ "\n"
+        | _ -> failwith (string_of_ident id ^ " must be of array, queue, stack, or hashtable")
+      end
     | Sfor(id, e1, e2, stmt, incr) ->
       String.make indent ' ' ^ "for " ^ string_of_ident id ^ " in range(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ", " ^ string_of_int incr ^"):\n" ^ string_of_stmt (indent+2) stmt
     | Swhile(e, stmt) ->
@@ -118,8 +136,6 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "break\n"
     | Scontinue ->
       String.make indent ' ' ^ "continue\n"
-
-
 
   (* let string_of_program = function
     | Cstmt(stmt) -> string_of_stmt 0 stmt *)
@@ -134,6 +150,7 @@ module StringMap = Map.Make(String)
     else
       code
 
+(* Main function for reading in the file and writing to a new file *)
 let () =
   let in_channel = open_in "test.txt" in
   let lexbuf = Lexing.from_channel in_channel in

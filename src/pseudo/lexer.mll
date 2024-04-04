@@ -36,7 +36,7 @@ rule token = parse
   | '}'     { RBRACE }
   | ','     { COMMA }
   | "print" { PRINT }
-  | "return" { RETURN }
+  | "return" { RETURN } 
   | "for"   { FOR }
   | "while" { WHILE }
   | "break" { BREAK }
@@ -46,6 +46,10 @@ rule token = parse
   | "do"    { DO }
   | "to"    { TO }
   | "downto" { DOWNTO }
+  | "let"   { LET }
+  | "be"    { BE }
+  | "a"     { A }
+  | "new"   { NEW }
   | "."     { DOT }
   | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) }
   | float+  { FLOAT(float_of_string (Lexing.lexeme lexbuf)) }

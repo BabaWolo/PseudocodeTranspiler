@@ -13,6 +13,7 @@
 %token LBRACKET RBRACKET
 %token ASSIGN
 %token NEWLINE
+%token LET BE A NEW
 %token IF ELSE PRINT FOR TO DOWNTO WHILE DO REPEAT UNTIL
 %token BREAK CONTINUE
 %token RETURN
@@ -22,14 +23,16 @@
 %type <Ast.expr> expr 
 %type <Ast.stmt> stmt suite
 %type <Ast.ident> ident
+%type <Ast.expr list> expr_list
 
 
 %left AND OR
-%left EQUAL NOTEQUAL
-%left LESS LESSEQUAL GREATER GREATEREQUAL
 %left ADD SUB
 %left MUL DIV MOD
+%left EQUAL NOTEQUAL LESS LESSEQUAL GREATER GREATEREQUAL
+%left NEWLINE
 %left DOT
+
 %%
 
 program:
@@ -48,22 +51,17 @@ stmt:
   | s = stmt NEWLINE { s }
   | IF e = expr LBRACE s = suite RBRACE { Sif(e, s, Sblock []) }
   | IF e = expr LBRACE s = suite RBRACE ELSE LBRACE s1 = suite RBRACE { Sif(e, s, s1) }
+  | id = ident LPAREN p = expr_list RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
-  | id = ident LPAREN p = params RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
   | RETURN e = expr { Sreturn(e) }
   | FOR id = ident ASSIGN e1 = expr TO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, 1) }
   | FOR id = ident ASSIGN e1 = expr DOWNTO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, -1) }
+  | LET id = ident BE A NEW list = ident { Snewlist(id, list) }
   | WHILE e = expr LBRACE s = suite RBRACE { Swhile(e, s) }
   | WHILE e = expr DO LBRACE s = suite RBRACE { Sdowhile(e, s) }
   | REPEAT LBRACE s = suite RBRACE UNTIL e = expr { Srepeat(e, s) }
   | BREAK { Sbreak }
   | CONTINUE { Scontinue }
-;
-
-params:
-  | /* empty */ { [] }
-  | id = ident { [id] }
-  | id = ident COMMA p = params { id :: p }
 ;
 
 expr_list:

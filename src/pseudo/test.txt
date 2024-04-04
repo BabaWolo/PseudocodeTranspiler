@@ -38,6 +38,18 @@ listInsert(L, x){
     return x
 }
 
+let A be a new stack
+let B be a new queue
+let C be a new array
+let D be a new hashtable
+
+
+A.top
+
+B.head
+
+B.tail
+
 list = newLinkedList([1, 2, 3, 4, 5])
 
 print(listInsert(list, newLinkedList([6])).head.key)

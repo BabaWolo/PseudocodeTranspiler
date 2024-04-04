@@ -37,15 +37,14 @@ and stmt =
   | Sprint of expr
   | Sreturn of expr
   | Sblock of stmt list
-  | Sdef of ident * ident list * stmt
+  | Sdef of ident * expr list * stmt
   | Sfor of ident * expr * expr * stmt * int
+  | Snewlist of ident * ident
   | Swhile of expr * stmt
   | Sdowhile of expr * stmt
   | Srepeat of expr * stmt
   | Sbreak
   | Scontinue
-
-
 
 (* Define the types for arithmetic expressions and variables *)
 (* type location = Lexing.position * Lexing.position
