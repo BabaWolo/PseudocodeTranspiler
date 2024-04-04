@@ -37,9 +37,6 @@ A = []
 B = []
 C = []
 D = {}
-A[-1]
-B.head
-B[0]
 list = LinkedList([1, 2, 3, 4, 5])
 print(listInsert(list, LinkedList([6])).head.key)
 def Test():
