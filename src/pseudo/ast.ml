@@ -10,6 +10,7 @@ type expr =
   | Elist of expr list (* [e1,e2,...] *)
   | Eget of ident * expr (* e1[e2] *)
   | Eattribute of expr * ident (* e1.e2 *)
+  | Etuple of expr list (* (e1,e2,...) *)
 
 
 and command = 

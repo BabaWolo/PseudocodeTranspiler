@@ -77,6 +77,7 @@ expr:
   | e1 = FLOAT { Ecst(Cfloat e1) }
   | e1 = expr o = binop e2 = expr { Ebinop(o, e1, e2) }
   | LPAREN e = expr RPAREN { e }
+  | LPAREN e1 = expr COMMA el = expr_list RPAREN { Etuple(e1 :: el) }
   | e1 = ident { Eident(e1) }
   | id = ident LPAREN p = expr_list RPAREN { Ecall(id, p)}
   | e1 = expr DOT e2 = ident { Eattribute(e1, e2) }

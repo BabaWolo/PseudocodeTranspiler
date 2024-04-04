@@ -35,4 +35,9 @@ def listInsert(L, x):
 
 list = LinkedList([1, 2, 3, 4, 5])
 print(listInsert(list, LinkedList([6])).head.key)
+def Test():
+  return (1, 2, 3)
+
+(a, b, c) = Test()
+print(b)
 

@@ -41,3 +41,11 @@ listInsert(L, x){
 list = newLinkedList([1, 2, 3, 4, 5])
 
 print(listInsert(list, newLinkedList([6])).head.key)
+
+
+Test(){
+    return (1,2,3)
+}
+
+(a,b,c) = Test()
+print(b)

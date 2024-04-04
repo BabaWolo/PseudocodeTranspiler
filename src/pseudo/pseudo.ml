@@ -34,6 +34,8 @@ module StringMap = Map.Make(String)
     end
   | Elist(expr_list) ->
     "[" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ "]"
+  | Etuple(expr_list) ->
+    "(" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ ")"
   | Eget(id, index) ->
     string_of_ident id ^ "[" ^ string_of_expr index ^ "]"
   | Ecall(id, args) -> 
@@ -85,6 +87,7 @@ module StringMap = Map.Make(String)
         | Eident(id) -> string_of_ident id
         | Eattribute(e, id) -> string_of_expr e ^ "." ^ string_of_ident id
         | Eget(id, index) -> string_of_ident id ^ "[" ^ string_of_expr index ^ "]"
+        | Etuple(expr_list) -> "(" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ ")"
         | _ -> failwith "Left-hand side of assignment must be an identifier or attribute"
       in
       String.make indent ' ' ^ lhs ^ " = " ^ string_of_expr e2 ^ "\n"
