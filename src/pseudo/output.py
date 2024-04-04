@@ -45,6 +45,6 @@ print(listInsert(list, LinkedList([6])).head.key)
 def Test():
   return (1, 2, 3)
 
-(a, b, c) = Test()
+(e, f, g) = Test()
 print(b)
 
