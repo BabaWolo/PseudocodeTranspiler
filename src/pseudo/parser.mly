@@ -20,8 +20,8 @@
 
 %start program
 %type <Ast.command> program
-%type <Ast.expr> expr 
-%type <Ast.stmt> stmt suite
+%type <Ast.expr> expr simple_expr
+%type <Ast.stmt> stmt suite conditional iterative collections
 %type <Ast.ident> ident
 %type <Ast.expr list> expr_list
 
@@ -85,18 +85,21 @@ expr_list:
 ;
 
 expr:
-  | e1 = INT { Ecst(Cint e1) }
-  | e1 = FLOAT { Ecst(Cfloat e1) }
   | e1 = expr o = binop e2 = expr { Ebinop(o, e1, e2) }
-  | LPAREN e = expr RPAREN { e }
   | LPAREN e1 = expr COMMA el = expr_list RPAREN { Etuple(e1 :: el) }
-  | e1 = ident { Eident(e1) }
   | id = ident LPAREN p = expr_list RPAREN { Ecall(id, p)}
   | e1 = expr DOT e2 = ident { Eattribute(e1, e2) }
   | LBRACKET e = expr_list RBRACKET { Elist(e) }
   | id = ident LBRACKET e = expr RBRACKET { Eget(id, e) }
-  | u = unop e = expr { Eunop(u, e) }
+  | s = simple_expr { s }
 ;
+
+simple_expr:
+  | e1 = INT { Ecst(Cint e1) }
+  | e1 = FLOAT { Ecst(Cfloat e1) }
+  | u = unop e = expr { Eunop(u, e) }
+  | LPAREN e = expr RPAREN { e }
+  | e1 = ident { Eident(e1) }
 
 ident:
   id = ID { { loc = ($startpos, $endpos); id } }
