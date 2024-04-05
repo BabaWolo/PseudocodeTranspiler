@@ -49,21 +49,33 @@ stmt:
   | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
   | e1 = expr { Seval(e1) }
   | s = stmt NEWLINE { s }
-  | IF e = expr LBRACE s = suite RBRACE { Sif(e, s, Sblock []) }
-  | IF e = expr LBRACE s = suite RBRACE ELSE LBRACE s1 = suite RBRACE { Sif(e, s, s1) }
   | id = ident LPAREN p = expr_list RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
   | RETURN e = expr { Sreturn(e) }
+  | BREAK { Sbreak }
+  | CONTINUE { Scontinue }
+  | c = collections { c }
+  | c = conditional { c }
+  | i = iterative { i }
+;
+
+conditional:
+  | IF e = expr LBRACE s = suite RBRACE { Sif(e, s, Sblock []) }
+  | IF e = expr LBRACE s = suite RBRACE ELSE LBRACE s1 = suite RBRACE { Sif(e, s, s1) }
+;
+
+iterative:
   | FOR id = ident ASSIGN e1 = expr TO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, 1) }
   | FOR id = ident ASSIGN e1 = expr DOWNTO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, -1) }
-  | LET id = ident BE A NEW list = ident { Snewlist(id, Ecst(None), list) }
-  | LET id = ident LBRACKET RBRACKET BE A NEW list = ident { Snewlist(id, Ecst(None), list) }
-  | LET id = ident LBRACKET e1 = expr RBRACKET BE A NEW list = ident { Snewlist(id, e1, list) }
   | WHILE e = expr LBRACE s = suite RBRACE { Swhile(e, s) }
   | WHILE e = expr DO LBRACE s = suite RBRACE { Sdowhile(e, s) }
   | REPEAT LBRACE s = suite RBRACE UNTIL e = expr { Srepeat(e, s) }
-  | BREAK { Sbreak }
-  | CONTINUE { Scontinue }
+;
+
+collections:
+  | LET id = ident BE A NEW list = ident { Snewlist(id, Ecst(None), list) }
+  | LET id = ident LBRACKET RBRACKET BE A NEW list = ident { Snewlist(id, Ecst(None), list) }
+  | LET id = ident LBRACKET e1 = expr RBRACKET BE A NEW list = ident { Snewlist(id, e1, list) }
 ;
 
 expr_list:
