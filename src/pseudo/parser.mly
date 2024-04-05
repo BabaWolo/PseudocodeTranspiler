@@ -13,19 +13,26 @@
 %token LBRACKET RBRACKET
 %token ASSIGN
 %token NEWLINE
-%token IF ELSE PRINT FOR TO DOWNTO
+%token LET BE A NEW
+%token IF ELSE PRINT FOR TO DOWNTO WHILE DO REPEAT UNTIL
+%token BREAK CONTINUE
 %token RETURN
 
 %start program
 %type <Ast.command> program
-%type <Ast.expr> expr
+%type <Ast.expr> expr 
 %type <Ast.stmt> stmt suite
 %type <Ast.ident> ident
+%type <Ast.expr list> expr_list
 
+
+%left AND OR
 %left ADD SUB
 %left MUL DIV MOD
-%left AND OR
 %left EQUAL NOTEQUAL LESS LESSEQUAL GREATER GREATEREQUAL
+%left NEWLINE
+%left DOT
+
 %%
 
 program:
@@ -40,22 +47,21 @@ suite:
 
 stmt:
   | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
-  | id = ident LBRACKET index = expr RBRACKET ASSIGN e = expr { Sset(id, index, e) }
   | e1 = expr { Seval(e1) }
   | s = stmt NEWLINE { s }
   | IF e = expr LBRACE s = suite RBRACE { Sif(e, s, Sblock []) }
   | IF e = expr LBRACE s = suite RBRACE ELSE LBRACE s1 = suite RBRACE { Sif(e, s, s1) }
+  | id = ident LPAREN p = expr_list RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
-  | id = ident LPAREN p = params RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
   | RETURN e = expr { Sreturn(e) }
   | FOR id = ident ASSIGN e1 = expr TO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, 1) }
   | FOR id = ident ASSIGN e1 = expr DOWNTO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, -1) }
-;
-
-params:
-  | /* empty */ { [] }
-  | id = ident { [id] }
-  | id = ident COMMA p = params { id :: p }
+  | LET id = ident BE A NEW list = ident { Snewlist(id, list) }
+  | WHILE e = expr LBRACE s = suite RBRACE { Swhile(e, s) }
+  | WHILE e = expr DO LBRACE s = suite RBRACE { Sdowhile(e, s) }
+  | REPEAT LBRACE s = suite RBRACE UNTIL e = expr { Srepeat(e, s) }
+  | BREAK { Sbreak }
+  | CONTINUE { Scontinue }
 ;
 
 expr_list:
@@ -69,6 +75,7 @@ expr:
   | e1 = FLOAT { Ecst(Cfloat e1) }
   | e1 = expr o = binop e2 = expr { Ebinop(o, e1, e2) }
   | LPAREN e = expr RPAREN { e }
+  | LPAREN e1 = expr COMMA el = expr_list RPAREN { Etuple(e1 :: el) }
   | e1 = ident { Eident(e1) }
   | id = ident LPAREN p = expr_list RPAREN { Ecall(id, p)}
   | e1 = expr DOT e2 = ident { Eattribute(e1, e2) }

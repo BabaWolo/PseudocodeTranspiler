@@ -6,3 +6,6 @@ class LinkedList:
         self.key = list[0]
         if self.next:
             self.next.prev = self
+    
+    def __str__(self):
+        return str(self.key)

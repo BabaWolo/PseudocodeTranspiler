@@ -8,8 +8,9 @@ type expr =
   | Eident of ident       (* Identifier *)
   | Ecall of ident * expr list
   | Elist of expr list (* [e1,e2,...] *)
-  | Eget of ident * expr (* e1[e2]*)
-  | Eattribute of expr * ident
+  | Eget of ident * expr (* e1[e2] *)
+  | Eattribute of expr * ident (* e1.e2 *)
+  | Etuple of expr list (* (e1,e2,...) *)
 
 
 and command = 
@@ -31,16 +32,19 @@ and unop =
 
 and stmt =
   | Sassign of expr * expr
-  | Sset of ident * expr * expr
   | Seval of expr
   | Sif of expr * stmt * stmt
   | Sprint of expr
   | Sreturn of expr
   | Sblock of stmt list
-  | Sdef of ident * ident list * stmt
+  | Sdef of ident * expr list * stmt
   | Sfor of ident * expr * expr * stmt * int
-
-
+  | Snewlist of ident * ident
+  | Swhile of expr * stmt
+  | Sdowhile of expr * stmt
+  | Srepeat of expr * stmt
+  | Sbreak
+  | Scontinue
 
 (* Define the types for arithmetic expressions and variables *)
 (* type location = Lexing.position * Lexing.position
