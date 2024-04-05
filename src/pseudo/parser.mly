@@ -56,7 +56,9 @@ stmt:
   | RETURN e = expr { Sreturn(e) }
   | FOR id = ident ASSIGN e1 = expr TO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, 1) }
   | FOR id = ident ASSIGN e1 = expr DOWNTO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, -1) }
-  | LET id = ident BE A NEW list = ident { Snewlist(id, list) }
+  | LET id = ident BE A NEW list = ident { Snewlist(id, Ecst(None), list) }
+  | LET id = ident LBRACKET RBRACKET BE A NEW list = ident { Snewlist(id, Ecst(None), list) }
+  | LET id = ident LBRACKET e1 = expr RBRACKET BE A NEW list = ident { Snewlist(id, e1, list) }
   | WHILE e = expr LBRACE s = suite RBRACE { Swhile(e, s) }
   | WHILE e = expr DO LBRACE s = suite RBRACE { Sdowhile(e, s) }
   | REPEAT LBRACE s = suite RBRACE UNTIL e = expr { Srepeat(e, s) }

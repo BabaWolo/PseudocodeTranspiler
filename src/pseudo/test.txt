@@ -42,6 +42,8 @@ let A be a new stack
 let B be a new queue
 let C be a new array
 let D be a new hashtable
+let Z[] be a new array
+let Q[5+7] be a new hashtable
 
 list = newLinkedList([1, 2, 3, 4, 5])
 

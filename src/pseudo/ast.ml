@@ -19,6 +19,7 @@ and command =
 and constant =
   | Cint of int
   | Cfloat of float
+  | None
 
 
 (* Define the types for binary operators *)
@@ -39,7 +40,7 @@ and stmt =
   | Sblock of stmt list
   | Sdef of ident * expr list * stmt
   | Sfor of ident * expr * expr * stmt * int
-  | Snewlist of ident * ident
+  | Snewlist of ident * expr * ident
   | Swhile of expr * stmt
   | Sdowhile of expr * stmt
   | Srepeat of expr * stmt

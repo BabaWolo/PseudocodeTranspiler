@@ -37,6 +37,8 @@ A = []
 B = []
 C = []
 D = {}
+Z = []
+Q = {i: None for i in range(5 + 7)}
 list = LinkedList([1, 2, 3, 4, 5])
 print(listInsert(list, LinkedList([6])).head.key)
 def Test():
