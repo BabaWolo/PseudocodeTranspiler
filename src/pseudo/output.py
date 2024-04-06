@@ -45,3 +45,14 @@ def Test():
 (e, f, g) = Test()
 print(f)
 
+# Exchange with/swap
+a = 1
+b = 2
+a, b = b, a
+print(f"a: {a == 2}, b: {b == 1}")
+
+# Nil/None
+variable = None
+if variable is None:
+  print("Variable is None!")
+

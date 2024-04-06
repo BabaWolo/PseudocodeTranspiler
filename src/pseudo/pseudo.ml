@@ -1,3 +1,5 @@
+(* Part of a transpiler - A transpiler converts source code from one programming language to another, 
+   while a compiler translates source code into machine code. *)
 open Ast
 module StringMap = Map.Make(String)
 
@@ -27,6 +29,8 @@ module StringMap = Map.Make(String)
       match x with
       | Cint(i) -> string_of_int i
       | Cfloat(f) -> string_of_float f
+      | Cstring(s) -> "\"" ^ s ^ "\""
+      | Cnil -> "None"
     end
   | Eattribute(e1, attribute_name) ->
     let attribute_name = string_of_ident attribute_name in
@@ -136,6 +140,10 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "break\n"
     | Scontinue ->
       String.make indent ' ' ^ "continue\n"
+    | Sexchange(id1, id2) -> 
+      "exchange " ^ string_of_ident id1 ^ " with" ^ string_of_ident id2
+      (* Exchange with syntax not supported in Python so to test it in Python use the following:
+         String.make indent ' ' ^ string_of_ident id1 ^ ", " ^ string_of_ident id2 ^ " = " ^ string_of_ident id2 ^ ", " ^ string_of_ident id1 ^ "\n" *)
 
   (* let string_of_program = function
     | Cstmt(stmt) -> string_of_stmt 0 stmt *)
