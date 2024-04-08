@@ -19,8 +19,6 @@ and command =
 and constant =
   | Cint of int
   | Cfloat of float
-  | Cstring of string
-  | Cnil
 
 
 (* Define the types for binary operators *)
@@ -47,7 +45,6 @@ and stmt =
   | Srepeat of expr * stmt
   | Sbreak
   | Scontinue
-  | Sexchange of expr * expr
 
 (* Define the types for arithmetic expressions and variables *)
 (* type location = Lexing.position * Lexing.position

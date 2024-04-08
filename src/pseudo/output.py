@@ -56,9 +56,5 @@ def Test():
 
 (e, f, g) = Test()
 print(f)
-e, f = f, e
-print(e)
-print(f)
-str = "Hello World"
-print(str)
+
 
