@@ -1,3 +1,4 @@
+from classes.binarytree import BinaryTree
 from classes.linkedlist import LinkedList
 import math
 
@@ -39,6 +40,17 @@ C = []
 D = {}
 list = LinkedList([1, 2, 3, 4, 5])
 print(listInsert(list, LinkedList([6])).head.key)
+
+def treeSearch(x, k):
+  if x == None or k == x.key:
+    return x
+  if k < x.key:
+    return treeSearch(x.left, k)
+  else:
+    return treeSearch(x.right, k)
+tree = BinaryTree([5, 2, 8])
+print(treeSearch(tree.root, 2))
+
 def Test():
   return (1, 2, 3)
 
