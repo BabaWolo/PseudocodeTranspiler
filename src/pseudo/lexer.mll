@@ -1,14 +1,6 @@
 (* Lexer is a program that takes a sequence of characters and breaks it down into tokens that can be processed by a parser. *)
 {
   open Parser
-
-  (* string is a function that reads characters from lexer buffer until encountering the closing quote. *)
-  let rec string buf =
-  match Lexing.lexeme_char buf 0 with
-  | '"' -> ""
-  | c -> 
-    let _ = Lexing.lexeme_end buf in
-    String.make 1 c ^ string buf
 }
 
 (* Patterns to define tokens by rocognizing numbers, identifiers, etc. *)
@@ -18,6 +10,10 @@ let integer = '0' | ['1'-'9'] digit*
 let space = ' ' | '\t'
 let letter = ['a'-'z' 'A'-'Z']
 let ident = (letter | '_') (letter | digit | '_')*
+let any_char = [^'"'] (* [^ ] denotes a negated character class, meaning it matches any character not listed within the square brackets. *)
+let string = '"' any_char* '"'
+
+(* Lexer rule named 'ident' to tokenize an input stream into a series of tokens. *)
 
 (* Lexer rule named 'token' to tokenize an input stream into a series of tokens. *)
 rule token = parse
@@ -68,7 +64,7 @@ rule token = parse
   | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) } (* lexbuf contains the current state of the lexer, including current position in input stream and matched string. *)
   | float+  { FLOAT(float_of_string (Lexing.lexeme lexbuf)) }
   | ident   { ID(Lexing.lexeme lexbuf) }
-  | '"'     { STRING(string lexbuf) }
+  | string  { STRING(Lexing.lexeme lexbuf) }
   | eof     { EOF }  
   | _ as c  { raise (Failure ("illegal character: " ^ Char.escaped c)) } (* _ wildcard pattern that matches any value and binds to variable c and raises an exception. 'Char.escaped' converts to string. *)
 

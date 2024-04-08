@@ -29,7 +29,7 @@ module StringMap = Map.Make(String)
       match x with
       | Cint(i) -> string_of_int i
       | Cfloat(f) -> string_of_float f
-      | Cstring(s) -> "\"" ^ s ^ "\""
+      | Cstring(s) -> "" ^ s ^ ""
       | Cnil -> "None"
     end
   | Eattribute(e1, attribute_name) ->
@@ -38,6 +38,9 @@ module StringMap = Map.Make(String)
       match attribute_name with
       | "next" | "prev" | "key" | "head" -> 
         add_import "from classes.linkedlist import LinkedList";
+        string_of_expr e1 ^ "." ^ attribute_name
+      | "left" | "right" | "p" | "root" -> 
+        add_import "from classes.binarytree import BinaryTree";
         string_of_expr e1 ^ "." ^ attribute_name
       | "length" | "size" -> "len(" ^ string_of_expr e1 ^ ")"
       | "top" -> string_of_expr e1 ^ "[-1]"
@@ -62,6 +65,9 @@ module StringMap = Map.Make(String)
       | "newLinkedList" ->
         add_import "from classes.linkedlist import LinkedList";
         "LinkedList(" ^ args_str ^ ")"
+      | "newBinaryTree" ->
+        add_import "from classes.binarytree import BinaryTree";
+        "BinaryTree(" ^ args_str ^ ")"
       | _ -> 
         func_call
     end
@@ -140,10 +146,8 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "break\n"
     | Scontinue ->
       String.make indent ' ' ^ "continue\n"
-    | Sexchange(id1, id2) -> 
-      "exchange " ^ string_of_ident id1 ^ " with" ^ string_of_ident id2
-      (* Exchange with syntax not supported in Python so to test it in Python use the following:
-         String.make indent ' ' ^ string_of_ident id1 ^ ", " ^ string_of_ident id2 ^ " = " ^ string_of_ident id2 ^ ", " ^ string_of_ident id1 ^ "\n" *)
+    | Sexchange(e1, e2) -> 
+      String.make indent ' ' ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ " = " ^ string_of_expr e2 ^ ", " ^ string_of_expr e1 ^ "\n"
 
   (* let string_of_program = function
     | Cstmt(stmt) -> string_of_stmt 0 stmt *)

@@ -67,7 +67,7 @@ stmt:
   | REPEAT LBRACE s = suite RBRACE UNTIL e = expr { Srepeat(e, s) }
   | BREAK { Sbreak }
   | CONTINUE { Scontinue }
-  | EXCHANGE id1 = ident WITH id2 = ident { Sexchange(id1, id2) } (* The rule can be read as follows: When the parser encounters the EXCHANGE token, it expects to find an identifier (represented by id1 = ident). Then it expects the WITH token, followed by another identifier (id2 = ident). *)
+  | EXCHANGE e1 = expr WITH e2 = expr { Sexchange(e1, e2) } (* The rule can be read as follows: When the parser encounters the EXCHANGE token, it expects to find an identifier (represented by id1 = ident). Then it expects the WITH token, followed by another identifier (id2 = ident). *)
 ;
 
 expr_list:
