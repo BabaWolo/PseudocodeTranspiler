@@ -71,3 +71,11 @@ Test(){
 (e, f, g) = Test()
 print(f)
 
+
+exchange e with f
+print(e)
+print(f)
+
+str = "Hello World"
+print(str)
+
