@@ -48,7 +48,7 @@ print(listInsert(list, newLinkedList([6])).head.key)
 
 
 treeSearch(x, k){
-    if x == 0 or k == x.key {
+    if x == NIL or k == x.key {
         return x
     }
     if k < x.key {
@@ -58,10 +58,8 @@ treeSearch(x, k){
     }
 }
 
-tree = newBinaryTree([1, 2, 3, 4, 5])
+tree = newBinaryTree([3, 1, 5])
 print(treeSearch(tree.root, 2))
-
-print(listInsert(list, newLinkedList([6])).head.key)
 
 
 Test(){

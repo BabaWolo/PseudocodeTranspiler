@@ -40,7 +40,6 @@ C = []
 D = {}
 list = LinkedList([1, 2, 3, 4, 5])
 print(listInsert(list, LinkedList([6])).head.key)
-
 def treeSearch(x, k):
   if x == None or k == x.key:
     return x
@@ -48,9 +47,9 @@ def treeSearch(x, k):
     return treeSearch(x.left, k)
   else:
     return treeSearch(x.right, k)
-tree = BinaryTree([5, 2, 8])
-print(treeSearch(tree.root, 2))
 
+tree = BinaryTree([3, 1, 5])
+print(treeSearch(tree.root, 2))
 def Test():
   return (1, 2, 3)
 
