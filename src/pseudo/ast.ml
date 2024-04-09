@@ -45,6 +45,8 @@ and stmt =
   | Srepeat of expr * stmt
   | Sbreak
   | Scontinue
+  | Ssort of ident
+  | Serror of string
 
 (* Define the types for arithmetic expressions and variables *)
 (* type location = Lexing.position * Lexing.position

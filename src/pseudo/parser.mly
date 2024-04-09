@@ -17,6 +17,9 @@
 %token IF ELSE PRINT FOR TO DOWNTO WHILE DO REPEAT UNTIL
 %token BREAK CONTINUE
 %token RETURN
+%token SORT
+%token <string> STRING
+%token ERROR
 
 %start program
 %type <Ast.command> program
@@ -62,6 +65,8 @@ stmt:
   | REPEAT LBRACE s = suite RBRACE UNTIL e = expr { Srepeat(e, s) }
   | BREAK { Sbreak }
   | CONTINUE { Scontinue }
+  | SORT id = ident { Ssort(id)}
+  | ERROR STRING { Serror($2) }
 ;
 
 expr_list:
