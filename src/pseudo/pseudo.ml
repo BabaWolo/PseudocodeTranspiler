@@ -91,8 +91,6 @@ module StringMap = Map.Make(String)
 
   (* Recursive function for translating statements into python *)
   let rec string_of_stmt indent = function
-    | Ssort(id) ->
-      String.make indent ' ' ^ string_of_ident id ^ ".sort()\n"
     | Sassign(e1, e2) ->
       let lhs = match e1 with
         | Eident(id) -> string_of_ident id
@@ -138,8 +136,6 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "break\n"
     | Scontinue ->
       String.make indent ' ' ^ "continue\n"
-    | Serror msg ->
-      String.make indent ' ' ^ "raise ValueError('" ^ msg ^ "')\n"
 
   (* let string_of_program = function
     | Cstmt(stmt) -> string_of_stmt 0 stmt *)
