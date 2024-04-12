@@ -101,6 +101,8 @@ module StringMap = Map.Make(String)
 
   (* Recursive function for translating statements into python *)
   let rec string_of_stmt indent = function
+    | Ssort(id) ->
+      String.make indent ' ' ^ string_of_ident id ^ ".sort()\n"
     | Sassign(e1, e2) ->
       let lhs = match e1 with
         | Eident(id) -> string_of_ident id

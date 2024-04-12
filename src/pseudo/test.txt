@@ -44,6 +44,9 @@ let C be a new array
 let D be a new hashtable
 
 list = newLinkedList([1, 2, 3, 4, 5])
+A = [ 1, 2, 5, 3, 7, 8, 3, 1000 ]
+sort A
+
 print(listInsert(list, newLinkedList([6])).head.key)
 
 

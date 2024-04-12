@@ -40,6 +40,8 @@ B = []
 C = []
 D = {}
 list = LinkedList([1, 2, 3, 4, 5])
+A = [1, 2, 5, 3, 7, 8, 3, 1000]
+A.sort()
 print(listInsert(list, LinkedList([6])).head.key)
 def treeSearch(x, k):
   if x == None or k == x.key:

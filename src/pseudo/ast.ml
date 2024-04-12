@@ -47,6 +47,7 @@ and stmt =
   | Srepeat of expr * stmt
   | Sbreak
   | Scontinue
+  | Ssort of ident
   | Sexchange of expr * expr
   | Srandom of expr
 
