@@ -20,6 +20,7 @@
 %token BREAK CONTINUE
 %token RETURN
 %token EXCHANGE WITH
+%token RANDOM
 %token NIL
 
 (* Type declarations tell the parser what type of value to produce for each non-terminal symbol in the grammar. *)
@@ -68,6 +69,7 @@ stmt:
   | BREAK { Sbreak }
   | CONTINUE { Scontinue }
   | EXCHANGE e1 = expr WITH e2 = expr { Sexchange(e1, e2) } (* The rule can be read as follows: When the parser encounters the EXCHANGE token, it expects to find an identifier (represented by id1 = ident). Then it expects the WITH token, followed by another identifier (id2 = ident). *)
+  | RANDOM LPAREN e = expr RPAREN { Srandom(e)}
 ;
 
 expr_list:

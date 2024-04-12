@@ -48,6 +48,7 @@ and stmt =
   | Sbreak
   | Scontinue
   | Sexchange of expr * expr
+  | Srandom of expr
 
 (* Define the types for arithmetic expressions and variables *)
 (* type location = Lexing.position * Lexing.position

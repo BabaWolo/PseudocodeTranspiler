@@ -1,3 +1,4 @@
+import random
 from classes.binarytree import BinaryTree
 from classes.linkedlist import LinkedList
 import math
@@ -60,4 +61,5 @@ print(e)
 print(f)
 str = "Hello World"
 print(str)
+random.randint(0, 5)
 
