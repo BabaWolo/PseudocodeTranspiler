@@ -77,3 +77,4 @@ print(f)
 str = "Hello World"
 print(str)
 
+random(5)
