@@ -1,6 +1,6 @@
 (* Part of a transpiler - A transpiler converts source code from one programming language to another, 
    while a compiler translates source code into machine code. *)
-open Ast
+open Pseudo_lib.Ast
 module StringMap = Map.Make(String)
 
   (* Convert to python *)
@@ -173,9 +173,9 @@ let () =
   let lexbuf = Lexing.from_channel in_channel in
   let ast = 
     try
-      Parser.program Lexer.token lexbuf
+      Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
     with
-    | Parser.Error ->
+    | Pseudo_lib.Parser.Error ->
       let curr = lexbuf.Lexing.lex_curr_p in
       let line = curr.Lexing.pos_lnum in
       let cnum = curr.Lexing.pos_cnum - curr.Lexing.pos_bol in
