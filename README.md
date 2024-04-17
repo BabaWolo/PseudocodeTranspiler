@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.pinimg.com/originals/cb/67/e9/cb67e94f7dc44ac7ea0c333a8e44fc1f.gif" alt="MasterHead" width="400" height="300">
+  <img src="https://i.pinimg.com/originals/cb/67/e9/cb67e94f7dc44ac7ea0c333a8e44fc1f.gif" alt="MasterHead" width="600" height="300">
 </p>
 
 <h1 align="center">PseudoCode Compiler (PCC)</h1>
