@@ -5,8 +5,8 @@
 <h1 align="center">PseudoCode Compiler (PCC)</h1>
 
 <h3 align="center">A 4. semester project by <br>
-<i>Frederik Rasmussen Woloszynski, Luca Allan Purcilly, Nicolas Øbakke</i> <br>
-<i>Donald Brinch, Alexander Svensson, and Mads Aaen Westh-Jensen</i> </h3>
+<i>Frederik Rasmussen Woloszynski, Luca Allan Purcilly, Nicolas Øbakke <br>
+Donald Brinch, Alexander Svensson, and Mads Aaen Westh-Jensen</i> </h3>
 <br>
 
 <div align="center">
