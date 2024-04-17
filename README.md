@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="[https://i.pinimg.com/originals/cb/67/e9/cb67e94f7dc44ac7ea0c333a8e44fc1f.gif](https://blog.campaignmaster.co.uk/wp-content/uploads/2019/05/giphy.gif)" alt="MasterHead">
+  <img src="https://i.pinimg.com/originals/cb/67/e9/cb67e94f7dc44ac7ea0c333a8e44fc1f.gif](https://blog.campaignmaster.co.uk/wp-content/uploads/2019/05/giphy.gif" alt="MasterHead">
 </p>
 
 <h1 align="center">PseudoCode Compiler (PCC)</h1>
