@@ -24,32 +24,68 @@ Donald Brinch, Alexander Svensson, and Mads Aaen Westh-Jensen</i> </h3>
 
 <h2 align="center">Syntax:</h2>
 <h4>Variables:</h4>
-  - Any string beginning with a character a-z | A-Z 
+<ul>
+  <li>Any string beginning with a character a-z | A-Z</li>
+</ul>
+
 <h4>Assignment:</h4>
-  - =
+<ul>
+  <li>=</li>
+</ul>
+
 <h4>Booleans:</h4>
-  - true
-  - false
+<ul>
+  <li>true</li>
+  <li>false</li>
+</ul>
+
 <h4>Logical Operators:</h4>
-  - not
-  - !=
-  - ==
-  - \< 
-  - \>
-  - <=
-  - >=
+<ul>
+  <li>not</li>
+  <li>!=</li>
+  <li>==</li>
+  <li>&lt;</li>
+  <li>&gt;</li>
+  <li>&lt;=</li>
+  <li>&gt;=</li>
+</ul>
+
 <h4>Binary Operations:</h4>
-- +
-- -
-- *
-- /
-- floor()
-- ceiling()
-. 
+<ul>
+  <li>+</li>
+  <li>-</li>
+  <li>*</li>
+  <li>/</li>
+  <li>floor()</li>
+  <li>ceiling()</li>
+</ul>
+
 <h4>Unary Operations:</h4>
-- 
+<ul>
+  <li></li>
+</ul>
+
 <h4>Iterative Statements:</h4>
+<ul>
+  <!-- Insert iterative statements here -->
+</ul>
+
 <h4>Collections:</h4>
+<ul>
+  <!-- Insert collections here -->
+</ul>
+
 <h4>Other Datastructures:</h4>
+<ul>
+  <!-- Insert other datastructures here -->
+</ul>
+
 <h4>Methods:</h4>
+<ul>
+  <!-- Insert methods here -->
+</ul>
+
 <h4>Additional characters:</h4>
+<ul>
+  <!-- Insert additional characters here -->
+</ul>
