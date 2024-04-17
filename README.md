@@ -24,20 +24,20 @@ Donald Brinch, Alexander Svensson, and Mads Aaen Westh-Jensen</i> </h3>
 
 <h2 align="center">Syntax:</h2>
 <h4>Variables:</h4>
-- Any string beginning with a character a-z | A-Z 
+  - Any string beginning with a character a-z | A-Z 
 <h4>Assignment:</h4>
-- =
+  - =
 <h4>Booleans:</h4>
-- true
-- false
+  - true
+  - false
 <h4>Logical Operators:</h4>
-- not
-- !=
-- ==
-- \< 
-- \>
-- <=
-- >=
+  - not
+  - !=
+  - ==
+  - \< 
+  - \>
+  - <=
+  - >=
 <h4>Binary Operations:</h4>
 - +
 - -
