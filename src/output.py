@@ -1,6 +1,7 @@
 import random
 from classes.binarytree import BinaryTree
 from classes.linkedlist import LinkedList
+from pseudolibrary import PseudoLibrary
 import math
 
 def minimum(A):
@@ -39,14 +40,14 @@ A = []
 B = []
 C = []
 D = {}
-list = LinkedList([1, 2, 3, 4, 5])
+list = PseudoLibrary.LinkedList([1, 2, 3, 4, 5])
 A = [1, 2, 5, 3, 7, 8, 3, 1000]
 A.sort()
-print(listInsert(list, LinkedList([6])).head.key)
+print("key: ", PseudoLibrary.head(listInsert(list, (LinkedList([6])).head)))
 def treeSearch(x, k):
-  if x == None or k == x.key:
+  if x == None or k == PseudoLibrary.key(x):
     return x
-  if k < x.key:
+  if k < PseudoLibrary.key(x):
     return treeSearch(x.left, k)
   else:
     return treeSearch(x.right, k)
