@@ -1,4 +1,5 @@
 (test
   (name test_suite)
-  (libraries pseudo_lib oUnit)
-  (modules test_suite arithmetic_parser_test))
+  ; Insert the name of the test library here:
+  (libraries pseudo_lib oUnit arithmetic_tests control_flow_tests)
+  (modules test_suite))
