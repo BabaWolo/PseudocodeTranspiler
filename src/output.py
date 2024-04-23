@@ -42,6 +42,7 @@ list = PseudoLibrary.LinkedList([1, 2, 3, 4, 5])
 A = [1, 2, 5, 3, 7, 8, 3, 1000]
 A.sort()
 print(PseudoLibrary.key(PseudoLibrary.head(listInsert(list, PseudoLibrary.LinkedList([6])))))
+print(PseudoLibrary.head([1]))
 def treeSearch(x, k):
   if x == None or k == PseudoLibrary.key(x):
     return x
