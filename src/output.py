@@ -1,6 +1,4 @@
 import random
-from classes.binarytree import BinaryTree
-from classes.linkedlist import LinkedList
 from pseudolibrary import PseudoLibrary
 import math
 
@@ -29,9 +27,9 @@ print(x)
 y = -3.4
 print(math.floor(-y))
 def listInsert(L, x):
-  x.next = L.head
-  if L.head != 0:
-    L.head.prev = x
+  x.next = PseudoLibrary.head(L)
+  if PseudoLibrary.head(L) != 0:
+    PseudoLibrary.head(L).prev = x
   L.head = x
   x.prev = 0
   return x
@@ -43,17 +41,17 @@ D = {}
 list = PseudoLibrary.LinkedList([1, 2, 3, 4, 5])
 A = [1, 2, 5, 3, 7, 8, 3, 1000]
 A.sort()
-print("key: ", PseudoLibrary.head(listInsert(list, (LinkedList([6])).head)))
+print(PseudoLibrary.key(PseudoLibrary.head(listInsert(list, PseudoLibrary.LinkedList([6])))))
 def treeSearch(x, k):
   if x == None or k == PseudoLibrary.key(x):
     return x
   if k < PseudoLibrary.key(x):
-    return treeSearch(x.left, k)
+    return treeSearch(PseudoLibrary.left(x), k)
   else:
-    return treeSearch(x.right, k)
+    return treeSearch(PseudoLibrary.right(x), k)
 
-tree = BinaryTree([3, 1, 5])
-print(treeSearch(tree.root, 2))
+tree = PseudoLibrary.BinaryTree([3, 1, 5])
+print(treeSearch(PseudoLibrary.root(tree), 2))
 def Test():
   return (1, 2, 3)
 

@@ -46,7 +46,56 @@ class PseudoLibrary:
             return object.key
         else:
             return object.key
-
+        
+    def left(object):
+        objectType = type(object)
+        if objectType == PseudoLibrary.Node:
+            return object.left
+        else:
+            return object.left
+    
+    def right(object):
+        objectType = type(object)
+        if objectType == PseudoLibrary.Node:
+            return object.right
+        else:
+            return object.right
+        
+    def p(object):
+        objectType = type(object)
+        if objectType == PseudoLibrary.Node:
+            return object.p
+        else:
+            return object.p
+    
+    def root(object):
+        objectType = type(object)
+        if objectType == PseudoLibrary.BinaryTree:
+            return object.root
+        else:
+            return object.root
+        
+    def next(object):
+        objectType = type(object)
+        if objectType == PseudoLibrary.LinkedList:
+            return object.next
+        else:
+            return object.next
+    
+    def prev(object):
+        objectType = type(object)
+        if objectType == PseudoLibrary.LinkedList:
+            return object.prev
+        else:
+            return object.prev
+    
+    def tail(object):
+        objectType = type(object)
+        if objectType == list:
+            return object[-1]
+        else:
+            return object.tail
+        
     def head(object):
         objectType = type(object)
         if objectType == PseudoLibrary.Node:
@@ -55,4 +104,10 @@ class PseudoLibrary:
             return object[0]
         else:
             return object.head
-    
+        
+    def top(object):
+        objectType = type(object)
+        if objectType == list:
+            return object[-1]
+        else:
+            return object.top
