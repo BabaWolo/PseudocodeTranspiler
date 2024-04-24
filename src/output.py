@@ -1,3 +1,5 @@
+import random
+from classes.binarytree import BinaryTree
 from classes.linkedlist import LinkedList
 import math
 
@@ -37,13 +39,31 @@ A = []
 B = []
 C = []
 D = {}
-Z = []
-Q = {i: None for i in range(5 + 7)}
+
 list = LinkedList([1, 2, 3, 4, 5])
+A = [1, 2, 5, 3, 7, 8, 3, 1000]
+A.sort()
 print(listInsert(list, LinkedList([6])).head.key)
+def treeSearch(x, k):
+  if x == None or k == x.key:
+    return x
+  if k < x.key:
+    return treeSearch(x.left, k)
+  else:
+    return treeSearch(x.right, k)
+
+tree = BinaryTree([3, 1, 5])
+print(treeSearch(tree.root, 2))
+
 def Test():
   return (1, 2, 3)
 
 (e, f, g) = Test()
 print(f)
 
+e, f = f, e
+print(e)
+print(f)
+str = "Hello World"
+print(str)
+random.randint(0, 5)
