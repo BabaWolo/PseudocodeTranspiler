@@ -28,7 +28,7 @@
 %start program
 %type <Ast.command> program
 %type <Ast.expr> expr simple_expr
-%type <Ast.stmt> stmt suite conditional iterative collections
+%type <Ast.stmt> stmt suite conditional iterative collections methods basic_stmt
 %type <Ast.ident> ident
 %type <Ast.expr list> expr_list
 
@@ -53,20 +53,27 @@ suite:
 ;
 
 stmt:
-  | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
   | e1 = expr { Seval(e1) }
   | s = stmt NEWLINE { s }
-  | id = ident LPAREN p = expr_list RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
+  | c = collections { c }
+  | c = conditional { c }
+  | i = iterative { i }
+  | b = basic_stmt { b }
+  | m = methods { m }
+;
+
+basic_stmt:
+  | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
   | RETURN e = expr { Sreturn(e) }
   | BREAK { Sbreak }
   | CONTINUE { Scontinue }
+;
+
+methods:
   | SORT id = ident { Ssort(id)}
   | EXCHANGE e1 = expr WITH e2 = expr { Sexchange(e1, e2) } (* The rule can be read as follows: When the parser encounters the EXCHANGE token, it expects to find an identifier (represented by id1 = ident). Then it expects the WITH token, followed by another identifier (id2 = ident). *)
   | RANDOM LPAREN e = expr RPAREN { Srandom(e)}
-  | c = collections { c }
-  | c = conditional { c }
-  | i = iterative { i }
 ;
 
 conditional:
@@ -83,6 +90,7 @@ iterative:
 ;
 
 collections:
+  | id = ident LPAREN p = expr_list RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
   | LET id = ident BE A NEW list = ident { Snewlist(id, Ecst(None), list) }
   | LET id = ident LBRACKET RBRACKET BE A NEW list = ident { Snewlist(id, Ecst(Cnil), list) }
   | LET id = ident LBRACKET e1 = expr RBRACKET BE A NEW list = ident { Snewlist(id, e1, list) }
