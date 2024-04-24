@@ -1,4 +1,6 @@
-open Ast
+(* Part of a transpiler - A transpiler converts source code from one programming language to another, 
+   while a compiler translates source code into machine code. *)
+open Pseudo_lib.Ast
 module StringMap = Map.Make(String)
 
   (* Convert to python *)
@@ -27,7 +29,8 @@ module StringMap = Map.Make(String)
       match x with
       | Cint(i) -> string_of_int i
       | Cfloat(f) -> string_of_float f
-      | None -> "None"
+      | Cstring(s) -> "" ^ s ^ ""
+      | Cnil -> "None"
     end
   | Eattribute(e1, attribute_name) ->
     let attribute_name = string_of_ident attribute_name in
@@ -35,6 +38,9 @@ module StringMap = Map.Make(String)
       match attribute_name with
       | "next" | "prev" | "key" | "head" -> 
         add_import "from classes.linkedlist import LinkedList";
+        string_of_expr e1 ^ "." ^ attribute_name
+      | "left" | "right" | "p" | "root" -> 
+        add_import "from classes.binarytree import BinaryTree";
         string_of_expr e1 ^ "." ^ attribute_name
       | "length" | "size" -> "len(" ^ string_of_expr e1 ^ ")"
       | "top" -> string_of_expr e1 ^ "[-1]"
@@ -59,6 +65,9 @@ module StringMap = Map.Make(String)
       | "newLinkedList" ->
         add_import "from classes.linkedlist import LinkedList";
         "LinkedList(" ^ args_str ^ ")"
+      | "newBinaryTree" ->
+        add_import "from classes.binarytree import BinaryTree";
+        "BinaryTree(" ^ args_str ^ ")"
       | _ -> 
         func_call
     end
@@ -92,6 +101,8 @@ module StringMap = Map.Make(String)
 
   (* Recursive function for translating statements into python *)
   let rec string_of_stmt indent = function
+    | Ssort(id) ->
+      String.make indent ' ' ^ string_of_ident id ^ ".sort()\n"
     | Sassign(e1, e2) ->
       let lhs = match e1 with
         | Eident(id) -> string_of_ident id
@@ -148,6 +159,11 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "break\n"
     | Scontinue ->
       String.make indent ' ' ^ "continue\n"
+    | Sexchange(e1, e2) -> 
+      String.make indent ' ' ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ " = " ^ string_of_expr e2 ^ ", " ^ string_of_expr e1 ^ "\n"
+    | Srandom(e) ->
+      add_import "import random";
+      String.make indent ' ' ^ "random.randint(0, " ^ string_of_expr e ^ ")\n"
 
   (* let string_of_program = function
     | Cstmt(stmt) -> string_of_stmt 0 stmt *)
@@ -168,9 +184,9 @@ let () =
   let lexbuf = Lexing.from_channel in_channel in
   let ast = 
     try
-      Parser.program Lexer.token lexbuf
+      Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
     with
-    | Parser.Error ->
+    | Pseudo_lib.Parser.Error ->
       let curr = lexbuf.Lexing.lex_curr_p in
       let line = curr.Lexing.pos_lnum in
       let cnum = curr.Lexing.pos_cnum - curr.Lexing.pos_bol in

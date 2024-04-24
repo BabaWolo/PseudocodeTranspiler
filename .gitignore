@@ -5,3 +5,5 @@ _build
 *.exe
 .DS_Store
 *.pyc
+.idea
+.vscode
