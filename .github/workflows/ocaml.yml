@@ -1,0 +1,32 @@
+name: OCaml CI
+
+on:
+  push:
+    branches: ['main', 'develop']
+  pull_request:
+    branches: ['main', 'develop']
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use OCaml ${{ matrix.ocaml-version }}
+      uses: avsm/setup-ocaml@v1
+      with:
+        ocaml-version: 4.12.0
+
+    - name: Pin Dune
+      run: opam pin add dune https://github.com/ocaml/dune.git
+
+    - name: Install dependencies
+      run: opam install . --deps-only --with-test
+
+    - name: Build
+      run: dune build
+
+    - name: Run tests
+      run: dune runtest
