@@ -12,9 +12,9 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
-    - name: Use OCaml ${{ matrix.ocaml-version }}
+    - name: Use OCaml 5.1
       uses: ocaml/setup-ocaml@v2
       with:
         ocaml-compiler: "5.1"
@@ -23,7 +23,7 @@ jobs:
       run: opam pin add dune https://github.com/ocaml/dune.git
 
     - name: Install dependencies
-      run: opam install . --deps-only --with-test
+      run: dune build @install
 
     - name: Build
       run: dune build
