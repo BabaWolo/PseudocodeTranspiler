@@ -15,9 +15,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Use OCaml ${{ matrix.ocaml-version }}
-      uses: avsm/setup-ocaml@v1
+      uses: ocaml/setup-ocaml@v2
       with:
-        ocaml-version: 4.12.0
+        ocaml-compiler: 5.1.1
 
     - name: Pin Dune
       run: opam pin add dune https://github.com/ocaml/dune.git
