@@ -46,17 +46,20 @@ suite:
 ;
 
 stmt:
-  | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
   | e1 = expr { Seval(e1) }
   | s = stmt NEWLINE { s }
-  | id = ident LPAREN p = expr_list RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
+  | c = collections { c }
+  | c = conditional { c }
+  | i = iterative { i }
+  | b = basicStmt { b }
+;
+
+basicStmt:
+  | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
   | RETURN e = expr { Sreturn(e) }
   | BREAK { Sbreak }
   | CONTINUE { Scontinue }
-  | c = collections { c }
-  | c = conditional { c }
-  | i = iterative { i }
 ;
 
 conditional:
@@ -73,6 +76,7 @@ iterative:
 ;
 
 collections:
+  | id = ident LPAREN p = expr_list RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
   | LET id = ident BE A NEW list = ident { Snewlist(id, Ecst(None), list) }
   | LET id = ident LBRACKET RBRACKET BE A NEW list = ident { Snewlist(id, Ecst(None), list) }
   | LET id = ident LBRACKET e1 = expr RBRACKET BE A NEW list = ident { Snewlist(id, e1, list) }
