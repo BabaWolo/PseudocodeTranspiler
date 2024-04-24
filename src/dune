@@ -3,7 +3,7 @@
  (modules ast lexer parser))
 
 (executable
- (public_name pseudo)
+ (name pseudo)
  (libraries pseudo_lib)
  (modules pseudo) 
  (promote (until-clean) (into ..)))
