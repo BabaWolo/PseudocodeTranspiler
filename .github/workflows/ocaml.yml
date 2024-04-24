@@ -19,14 +19,11 @@ jobs:
       with:
         ocaml-compiler: "5.1"
 
-    - name: Pin Dune
-      run: opam pin add dune https://github.com/ocaml/dune.git
-
     - name: Install dependencies
-      run: dune build @install
+      run: opam install . --deps-only --with-test
 
     - name: Build
-      run: dune build
-
+      run: opam exec -- dune build
+      
     - name: Run tests
-      run: dune runtest
+      run: opam exec -- dune runtest
