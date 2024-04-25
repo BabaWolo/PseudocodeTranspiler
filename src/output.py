@@ -38,7 +38,9 @@ A = []
 B = []
 C = []
 D = {}
+
 list = PseudoLibrary.LinkedList([1, 2, 3, 4, 5])
+
 A = [1, 2, 5, 3, 7, 8, 3, 1000]
 A.sort()
 print(PseudoLibrary.key(PseudoLibrary.head(listInsert(list, PseudoLibrary.LinkedList([6])))))
@@ -53,15 +55,16 @@ def treeSearch(x, k):
 
 tree = PseudoLibrary.BinaryTree([3, 1, 5])
 print(treeSearch(PseudoLibrary.root(tree), 2))
+
 def Test():
   return (1, 2, 3)
 
 (e, f, g) = Test()
 print(f)
+
 e, f = f, e
 print(e)
 print(f)
 str = "Hello World"
 print(str)
 random.randint(0, 5)
-

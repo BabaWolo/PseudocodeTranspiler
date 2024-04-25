@@ -27,8 +27,8 @@
 (* Type declarations tell the parser what type of value to produce for each non-terminal symbol in the grammar. *)
 %start program
 %type <Ast.command> program
-%type <Ast.expr> expr 
-%type <Ast.stmt> stmt suite
+%type <Ast.expr> expr simple_expr
+%type <Ast.stmt> stmt suite conditional iterative collections methods basic_stmt
 %type <Ast.ident> ident
 %type <Ast.expr list> expr_list
 
@@ -53,25 +53,47 @@ suite:
 ;
 
 stmt:
-  | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
   | e1 = expr { Seval(e1) }
   | s = stmt NEWLINE { s }
-  | IF e = expr LBRACE s = suite RBRACE { Sif(e, s, Sblock []) }
-  | IF e = expr LBRACE s = suite RBRACE ELSE LBRACE s1 = suite RBRACE { Sif(e, s, s1) }
-  | id = ident LPAREN p = expr_list RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
+  | c = collections { c }
+  | c = conditional { c }
+  | i = iterative { i }
+  | b = basic_stmt { b }
+  | m = methods { m }
+;
+
+basic_stmt:
+  | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
   | RETURN e = expr { Sreturn(e) }
-  | FOR id = ident ASSIGN e1 = expr TO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, 1) }
-  | FOR id = ident ASSIGN e1 = expr DOWNTO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, -1) }
-  | LET id = ident BE A NEW list = ident { Snewlist(id, list) }
-  | WHILE e = expr LBRACE s = suite RBRACE { Swhile(e, s) }
-  | WHILE e = expr DO LBRACE s = suite RBRACE { Sdowhile(e, s) }
-  | REPEAT LBRACE s = suite RBRACE UNTIL e = expr { Srepeat(e, s) }
   | BREAK { Sbreak }
   | CONTINUE { Scontinue }
+;
+
+methods:
   | SORT id = ident { Ssort(id)}
   | EXCHANGE e1 = expr WITH e2 = expr { Sexchange(e1, e2) } (* The rule can be read as follows: When the parser encounters the EXCHANGE token, it expects to find an identifier (represented by id1 = ident). Then it expects the WITH token, followed by another identifier (id2 = ident). *)
   | RANDOM LPAREN e = expr RPAREN { Srandom(e)}
+;
+
+conditional:
+  | IF e = expr LBRACE s = suite RBRACE { Sif(e, s, Sblock []) }
+  | IF e = expr LBRACE s = suite RBRACE ELSE LBRACE s1 = suite RBRACE { Sif(e, s, s1) }
+;
+
+iterative:
+  | FOR id = ident ASSIGN e1 = expr TO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, 1) }
+  | FOR id = ident ASSIGN e1 = expr DOWNTO e2 = expr LBRACE s = suite RBRACE { Sfor(id, e1, e2, s, -1) }
+  | WHILE e = expr LBRACE s = suite RBRACE { Swhile(e, s) }
+  | WHILE e = expr DO LBRACE s = suite RBRACE { Sdowhile(e, s) }
+  | REPEAT LBRACE s = suite RBRACE UNTIL e = expr { Srepeat(e, s) }
+;
+
+collections:
+  | id = ident LPAREN p = expr_list RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
+  | LET id = ident BE A NEW list = ident { Snewlist(id, Ecst(Cnil), list) }
+  | LET id = ident LBRACKET RBRACKET BE A NEW list = ident { Snewlist(id, Ecst(Cnil), list) }
+  | LET id = ident LBRACKET e1 = expr RBRACKET BE A NEW list = ident { Snewlist(id, e1, list) }
 ;
 
 expr_list:
@@ -81,17 +103,21 @@ expr_list:
 ;
 
 expr:
-  | e1 = INT { Ecst(Cint e1) }
-  | e1 = FLOAT { Ecst(Cfloat e1) }
   | e1 = expr o = binop e2 = expr { Ebinop(o, e1, e2) }
-  | LPAREN e = expr RPAREN { e }
   | LPAREN e1 = expr COMMA el = expr_list RPAREN { Etuple(e1 :: el) }
-  | e1 = ident { Eident(e1) }
   | id = ident LPAREN p = expr_list RPAREN { Ecall(id, p)}
   | e1 = expr DOT e2 = ident { Eattribute(e1, e2) }
   | LBRACKET e = expr_list RBRACKET { Elist(e) }
   | id = ident LBRACKET e = expr RBRACKET { Eget(id, e) }
+  | s = simple_expr { s }
+;
+
+simple_expr:
+  | e1 = INT { Ecst(Cint e1) }
+  | e1 = FLOAT { Ecst(Cfloat e1) }
   | u = unop e = expr { Eunop(u, e) }
+  | LPAREN e = expr RPAREN { e }
+  | e1 = ident { Eident(e1) }
   | NIL { Ecst(Cnil) }
   | s = STRING { Ecst(Cstring s) }
 ;
@@ -119,12 +145,3 @@ ident:
 %inline unop:
   | ADD { Uplus }
   | SUB { Uneg }
-
-(* More about parser: 
-The parser works by reading the input (source code) and trying to match it 
-against the rules defined in the grammar. Each rule corresponds to a construct in the 
-language (like an expression, a statement, a list of expressions, etc.).
-When a rule is successfully matched, the parser executes the associated 
-action (the code inside the curly braces {}). These actions typically 
-construct nodes of the Abstract Syntax Tree (AST), which is a 
-tree representation of the structure of the program. *)

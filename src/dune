@@ -1,8 +1,14 @@
+(library
+ (name pseudo_lib)
+ (modules ast lexer parser))
+
 (executable
  (name pseudo)
- (promote
-  (until-clean)
-  (into ..)))
+ (libraries pseudo_lib)
+ (modules pseudo) 
+ (promote (until-clean) (into ..)))
+
 (menhir
   (modules parser))
+
 (ocamllex lexer)

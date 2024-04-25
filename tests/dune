@@ -1,0 +1,5 @@
+(test
+  (name test_suite)
+  ; Insert the name of the test library here:
+  (libraries pseudo_lib arithmetic_tests control_flow_tests ounit2)
+  (modules test_suite))
