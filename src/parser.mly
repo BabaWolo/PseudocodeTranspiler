@@ -91,7 +91,7 @@ iterative:
 
 collections:
   | id = ident LPAREN p = expr_list RPAREN LBRACE s = suite RBRACE { Sdef(id, p, s) }
-  | LET id = ident BE A NEW list = ident { Snewlist(id, Ecst(None), list) }
+  | LET id = ident BE A NEW list = ident { Snewlist(id, Ecst(Cnil), list) }
   | LET id = ident LBRACKET RBRACKET BE A NEW list = ident { Snewlist(id, Ecst(Cnil), list) }
   | LET id = ident LBRACKET e1 = expr RBRACKET BE A NEW list = ident { Snewlist(id, e1, list) }
 ;
