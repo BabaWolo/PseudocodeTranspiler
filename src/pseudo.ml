@@ -129,12 +129,23 @@ module StringMap = Map.Make(String)
       let _ = check_expr_list args in
       Hashtbl.add functions (string_of_ident id) (args, stmt);
       String.make indent ' ' ^ "def " ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_expr args)) ^ ")" ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ "\n"
-    | Snewlist(id, list) ->
+    | Snewlist(id, expr, list) ->
       begin
-        match string_of_ident list with
-        | li when li = "hashtable" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "{}" ^ "\n"
-        | li when li = "queue" || li = "stack" || li = "array" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "[]" ^ "\n"
-        | _ -> failwith (string_of_ident id ^ " must be of array, queue, stack, or hashtable")
+        match string_of_expr expr with
+        | "None" ->
+          begin
+            match string_of_ident list with
+            | li when li = "hashtable" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "{}" ^ "\n"
+            | li when li = "queue" || li = "stack" || li = "array" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "[]" ^ "\n"
+            | _ -> failwith (string_of_ident id ^ " must be of array, queue, stack, or hashtable")
+          end
+        | _ ->
+          begin
+            match string_of_ident list with
+            | li when li = "hashtable" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "{i: None for i in range(" ^ string_of_expr expr ^ ")}" ^ "\n"
+            | li when li = "queue" || li = "stack" || li = "array" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "[None] * (" ^ string_of_expr expr ^")" ^ "\n"
+            | _ -> failwith (string_of_ident id ^ " must be of array, queue, stack, or hashtable")
+          end
       end
     | Sfor(id, e1, e2, stmt, incr) ->
       String.make indent ' ' ^ "for " ^ string_of_ident id ^ " in range(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ", " ^ string_of_int incr ^"):\n" ^ string_of_stmt (indent+2) stmt

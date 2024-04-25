@@ -39,6 +39,7 @@ A = []
 B = []
 C = []
 D = {}
+
 list = LinkedList([1, 2, 3, 4, 5])
 A = [1, 2, 5, 3, 7, 8, 3, 1000]
 A.sort()
@@ -53,15 +54,16 @@ def treeSearch(x, k):
 
 tree = BinaryTree([3, 1, 5])
 print(treeSearch(tree.root, 2))
+
 def Test():
   return (1, 2, 3)
 
 (e, f, g) = Test()
 print(f)
+
 e, f = f, e
 print(e)
 print(f)
 str = "Hello World"
 print(str)
 random.randint(0, 5)
-
