@@ -49,6 +49,7 @@ sort A
 
 print(listInsert(list, newLinkedList([6])).head.key)
 
+print([1].head)
 
 treeSearch(x, k){
     if x == NIL or k == x.key {

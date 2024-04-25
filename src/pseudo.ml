@@ -36,15 +36,10 @@ module StringMap = Map.Make(String)
     let attribute_name = string_of_ident attribute_name in
     begin
       match attribute_name with
-      | "next" | "prev" | "key" | "head" -> 
-        add_import "from classes.linkedlist import LinkedList";
-        string_of_expr e1 ^ "." ^ attribute_name
-      | "left" | "right" | "p" | "root" -> 
-        add_import "from classes.binarytree import BinaryTree";
-        string_of_expr e1 ^ "." ^ attribute_name
+      | "next" | "prev" | "key" | "head" | "left" | "right" | "p" | "root" | "top" | "tail" -> 
+        add_import "from pseudolibrary import PseudoLibrary";
+        "PseudoLibrary." ^ attribute_name ^ "(" ^ string_of_expr e1 ^ ")"
       | "length" | "size" -> "len(" ^ string_of_expr e1 ^ ")"
-      | "top" -> string_of_expr e1 ^ "[-1]"
-      | "tail" -> string_of_expr e1 ^ "[0]"
       | _ -> failwith "Attribute not supported"
     end
   | Elist(expr_list) ->
@@ -63,11 +58,11 @@ module StringMap = Map.Make(String)
         add_import "import math";
         "math." ^ func_call
       | "newLinkedList" ->
-        add_import "from classes.linkedlist import LinkedList";
-        "LinkedList(" ^ args_str ^ ")"
+        add_import "from pseudolibrary import PseudoLibrary";
+        "PseudoLibrary.LinkedList(" ^ args_str ^ ")"
       | "newBinaryTree" ->
-        add_import "from classes.binarytree import BinaryTree";
-        "BinaryTree(" ^ args_str ^ ")"
+        add_import "from pseudolibrary import PseudoLibrary";
+        "PseudoLibrary.BinaryTree(" ^ args_str ^ ")"
       | _ -> 
         func_call
     end
