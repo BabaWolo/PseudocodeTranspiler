@@ -1,26 +1,8 @@
 (* Part of a transpiler - A transpiler converts source code from one programming language to another, 
    while a compiler translates source code into machine code. *)
-open Pseudo_lib.Ast
+open Ast
+open Utils
 module StringMap = Map.Make(String)
-
-  (* Convert to python *)
-  let string_of_ident ident = ident.id
-
-  (* A hashtable of size 16, used for storing function declartions in the user-program *)
-  let functions = (Hashtbl.create 16 : (string, expr list * stmt) Hashtbl.t)
-
-  (* Recursive function checking the expressions of an expr list are equal to identifiers *)
-  let rec check_expr_list = function
-    | [] -> ()
-    | Eident _ :: tl -> check_expr_list tl
-    | _ -> raise (Failure "Arguments must be identifiers")
-
-  let required_imports = ref []
-
-  (* Add import if not already in list. The ! operator is used for dereferencing *)
-  let add_import import =
-    if not (List.mem import !required_imports) then
-      required_imports := import :: !required_imports
 
   let rec string_of_expr = function
   | Eident(id) -> string_of_ident id
@@ -37,7 +19,7 @@ module StringMap = Map.Make(String)
     begin
       match attribute_name with
       | "next" | "prev" | "key" | "head" | "left" | "right" | "p" | "root" | "top" | "tail" -> 
-        add_import "from pseudolibrary import PseudoLibrary";
+        add_import "from lib.pseudolibrary import PseudoLibrary";
         "PseudoLibrary." ^ attribute_name ^ "(" ^ string_of_expr e1 ^ ")"
       | "length" | "size" -> "len(" ^ string_of_expr e1 ^ ")"
       | _ -> failwith "Attribute not supported"
@@ -58,10 +40,10 @@ module StringMap = Map.Make(String)
         add_import "import math";
         "math." ^ func_call
       | "newLinkedList" ->
-        add_import "from pseudolibrary import PseudoLibrary";
+        add_import "from lib.pseudolibrary import PseudoLibrary";
         "PseudoLibrary.LinkedList(" ^ args_str ^ ")"
       | "newBinaryTree" ->
-        add_import "from pseudolibrary import PseudoLibrary";
+        add_import "from lib.pseudolibrary import PseudoLibrary";
         "PseudoLibrary.BinaryTree(" ^ args_str ^ ")"
       | _ -> 
         func_call
@@ -173,25 +155,4 @@ module StringMap = Map.Make(String)
     else
       code
 
-(* Main function for reading in the file and writing to a new file *)
-let () =
-  let in_channel = open_in "test.txt" in
-  let lexbuf = Lexing.from_channel in_channel in
-  let ast = 
-    try
-      Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
-    with
-    | Pseudo_lib.Parser.Error ->
-      let curr = lexbuf.Lexing.lex_curr_p in
-      let line = curr.Lexing.pos_lnum in
-      let cnum = curr.Lexing.pos_cnum - curr.Lexing.pos_bol in
-      let tok = Lexing.lexeme lexbuf in
-      Printf.eprintf "Syntax error at line %d, column %d, token %s\n" line cnum tok;
-      exit (-1) 
-  in
-  let out_channel = open_out "output.py" in
-  let code = generate_code ast in
-  Printf.fprintf out_channel "%s\n" code;
-  close_out out_channel;
-  close_in in_channel
     

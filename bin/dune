@@ -1,0 +1,5 @@
+(executable
+ (name main)
+ (libraries pseudo_lib)
+ (modules main) 
+ (promote (until-clean) (into ..)))
