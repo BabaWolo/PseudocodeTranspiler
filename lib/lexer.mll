@@ -12,6 +12,7 @@ let letter = ['a'-'z' 'A'-'Z']
 let ident = (letter | '_') (letter | digit | '_')*
 let any_char = [^'"'] (* [^ ] denotes a negated character class, meaning it matches any character not listed within the square brackets. *)
 let string = '"' any_char* '"'
+let comment = "//" [^'\n']* ('\n' | eof)
 
 (* Lexer rule named 'ident' to tokenize an input stream into a series of tokens. *)
 
@@ -19,6 +20,7 @@ let string = '"' any_char* '"'
 rule token = parse
   | "\n"    { Lexing.new_line lexbuf; NEWLINE} 
   | space { token lexbuf }
+  | comment { COMMENT(Lexing.lexeme lexbuf) }
   | '+'     { ADD }
   | '-'     { SUB }
   | '*'     { MUL }
