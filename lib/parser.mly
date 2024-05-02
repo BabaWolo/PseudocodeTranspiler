@@ -27,17 +27,18 @@
 (* Type declarations tell the parser what type of value to produce for each non-terminal symbol in the grammar. *)
 %start program
 %type <Ast.command> program
+%type <Ast.stmt> stmt suite conditional iterative collections methods jump_stmt
 %type <Ast.expr> expr simple_expr
-%type <Ast.stmt> stmt suite conditional iterative collections methods basic_stmt
-%type <Ast.ident> ident
 %type <Ast.expr list> expr_list
+%type <Ast.constant> constant
+%type <Ast.ident> ident
 
 (* Precedence and associativity declarations. Lines beneath has higher precedence level. *)
-%left AND OR (* e.g. 'a AND b AND C' is parsed as '(a AND b) AND c', as operators are grouped from the left. *)
+%left NEWLINE
 %left ADD SUB
 %left MUL DIV MOD
+%left AND OR 
 %left EQUAL NOTEQUAL LESS LESSEQUAL GREATER GREATEREQUAL
-%left NEWLINE
 %left DOT
 
 %% (* The separator marks the end of the declarations section and the beginning of the rules section. *)
@@ -53,19 +54,19 @@ suite:
 ;
 
 stmt:
+  | c = COMMENT { Scomment(c) }
+  | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
+  | PRINT LPAREN e = expr RPAREN { Sprint(e) }
   | e1 = expr { Seval(e1) }
   | s = stmt NEWLINE { s }
   | c = collections { c }
   | c = conditional { c }
   | i = iterative { i }
-  | b = basic_stmt { b }
+  | j = jump_stmt { j }
   | m = methods { m }
 ;
 
-basic_stmt:
-  | c = COMMENT { Scomment(c) }
-  | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
-  | PRINT LPAREN e = expr RPAREN { Sprint(e) }
+jump_stmt:
   | RETURN e = expr { Sreturn(e) }
   | BREAK { Sbreak }
   | CONTINUE { Scontinue }
@@ -114,14 +115,17 @@ expr:
 ;
 
 simple_expr:
-  | e1 = INT { Ecst(Cint e1) }
-  | e1 = FLOAT { Ecst(Cfloat e1) }
   | u = unop e = expr { Eunop(u, e) }
   | LPAREN e = expr RPAREN { e }
   | e1 = ident { Eident(e1) }
-  | NIL { Ecst(Cnil) }
-  | s = STRING { Ecst(Cstring s) }
+  | c = constant { Ecst(c) }
 ;
+
+constant:
+  | c = INT { Cint(c) }
+  | c = FLOAT { Cfloat(c) }
+  | c = STRING { Cstring(c) }
+  | NIL { Cnil }
 
 ident:
   id = ID { { loc = ($startpos, $endpos); id } }
