@@ -10,7 +10,7 @@
 %token <int> INT
 %token <string> ID
 %token <float> FLOAT
-%token <string> STRING
+%token <string> STRING COMMENT
 %token LPAREN RPAREN LBRACE RBRACE COMMA DOT
 %token LBRACKET RBRACKET
 %token ASSIGN
@@ -63,6 +63,7 @@ stmt:
 ;
 
 basic_stmt:
+  | c = COMMENT { Scomment(c) }
   | e1 = expr ASSIGN e2 = expr { Sassign(e1, e2)}
   | PRINT LPAREN e = expr RPAREN { Sprint(e) }
   | RETURN e = expr { Sreturn(e) }
