@@ -50,3 +50,4 @@ and stmt =
   | Ssort of ident
   | Sexchange of expr * expr
   | Srandom of expr
+  | Scomment of string

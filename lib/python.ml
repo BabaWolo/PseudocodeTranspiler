@@ -141,6 +141,8 @@ module StringMap = Map.Make(String)
     | Srandom(e) ->
       add_import "import random";
       String.make indent ' ' ^ "random.randint(0, " ^ string_of_expr e ^ ")\n"
+    | Scomment(s) ->
+      String.make indent ' ' ^ "#" ^ (String.sub s 2 ((String.length s) - 2)) ^ "\n"
 
   (* let string_of_program = function
     | Cstmt(stmt) -> string_of_stmt 0 stmt *)
