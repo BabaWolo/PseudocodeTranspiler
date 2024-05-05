@@ -7,7 +7,7 @@
 let digit = ['0'-'9']
 let float = digit+'.'digit+
 let integer = '0' | ['1'-'9'] digit*
-let space = ' ' | '\t'
+let space = ' ' | '\t' | '\r' 
 let letter = ['a'-'z' 'A'-'Z']
 let ident = (letter | '_') (letter | digit | '_')*
 let any_char = [^'"'] (* [^ ] denotes a negated character class, meaning it matches any character not listed within the square brackets. *)
