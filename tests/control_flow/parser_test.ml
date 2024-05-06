@@ -7,7 +7,7 @@ let parse_expression expr =
   Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
 
 (* Expected AST for "if (2 < 3) then 4 else 5" *)
-let expected_ast = 
+let expected_ast_if = 
   Cstmt (Sif (Ebinop (Blt, Ecst (Cint 2), Ecst (Cint 3)), 
               Seval (Ecst (Cint 4)), 
               Seval (Ecst (Cint 5))))
@@ -19,11 +19,28 @@ let test_parse_expression _ =
     4 
   } else {
     5
-  }") expected_ast
+  }") expected_ast_if
+
+(* Function to parse an expression into an AST *)
+let for_loop_statement stmt =
+  let lexbuf = Lexing.from_string stmt in
+  Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
+
+(* Expected AST for "if (2 < 3) then 4 else 5" *)
+let expected_ast_for = 
+  Cstmt (Sfor ({ loc = (Lexing.dummy_pos, Lexing.dummy_pos); id = "i" }, Ecst(Cint 1), Ecst(Cint 10), Sprint(Ecst(Cstring "hello")), 1)) 
+
+(* OUnit test *)
+let test_for_loop_statement _ =
+  assert_equal (for_loop_statement 
+  "for i = 1 to 10 { 
+    print(hello)
+  }") expected_ast_for
 
 let suite =
   "Control Flow Parser Suite" >::: [
       "test_parse_control_flow_expression" >:: test_parse_expression;
+      "test_for_loop_statement" >:: test_for_loop_statement;
     ]
 
 (*

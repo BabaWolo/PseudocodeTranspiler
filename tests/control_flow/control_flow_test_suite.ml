@@ -7,4 +7,5 @@ open OUnit2
 let suite =
   "Control Flow Suite" >::: [
       Parser_test.suite;
+      (* For_loops_test.suite; *)
     ]
