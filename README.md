@@ -19,7 +19,7 @@ On your device open your terminal and change the current directory to the locati
 ```
 git clone https://github.com/SW4-G3-AAU/pseudocode.git
 ```
-Open the project in your preferred text editor, e.g. VS Code, and expand the folder *lib*. Navigate to the file *test.txt* and provide the pseudo code that you'd like to have translated. In the editor open a new terminal and type `dune build`. This will compile the Ocaml project and generate the corresponding executable file. In the same terminal, change the current directory using the command `cd bin`. Now you can either translate your source code to Python using the command `dune exec ../main.exe python` or translate it to JavaScript using `dune exec ../main.exe JavaScript`. If you have followed the steps correctly, your terminal should look something like this
+Open the project in your preferred text editor, e.g. VS Code, and expand the folder *lib*. Navigate to the file *test.txt* and provide the pseudo code that you'd like to have translated. In the editor open a new terminal and type `dune build`. This will compile the Ocaml project and generate the corresponding executable file. In the same terminal, change the current directory using the command `cd bin`. Now you can either translate your source code to Python using the command `dune exec ../main.exe python` or translate it to Java using `dune exec ../main.exe Java`. If you have followed the steps correctly, your terminal should look something like this
 
 ```
 $ myUser pseudocode % dune build
