@@ -30,6 +30,8 @@ $ myUser bin % dune exec ../main.exe python
 ```
 The above translates the source code to Python by creating a new file *output.py*. In VS Code you can run it by navigating to the file and clicking on the **run button** or by opening a new terminal and using the command `Python output.py`. This will display your code in Python in your terminal.
 
+<br>
+
 ## Quick Guide
 1. Clone repository `git clone https://github.com/SW4-G3-AAU/pseudocode.git`
 2. In the text editor, open the folder *lib* and insert your pseudo code in to the file *test.txt*
@@ -40,70 +42,74 @@ The above translates the source code to Python by creating a new file *output.py
 
 <br>
 
-<h2 align="center">Syntax:</h2>
-<h4>Variables:</h4>
-<ul>
-  <li>Any string beginning with a character a-z | A-Z</li>
-</ul>
+## Syntax
+This section displays the valid syntax for writing code within our program. It's similar to the conventions outlined in the ALG course but replaces a few elements. The primary alteration is replacing indentation with curly brackets.
 
-<h4>Assignment:</h4>
-<ul>
-  <li>=</li>
-</ul>
+#### Variables
+- Any string that starts with a character a-z or A-Z
 
-<h4>Booleans:</h4>
-<ul>
-  <li>true</li>
-  <li>false</li>
-</ul>
+#### Assignment
+- =
 
-<h4>Logical Operators:</h4>
-<ul>
-  <li>not</li>
-  <li>!=</li>
-  <li>==</li>
-  <li>&lt;</li>
-  <li>&gt;</li>
-  <li>&lt;=</li>
-  <li>&gt;=</li>
-</ul>
+#### Booleans
+- true
+- false
 
-<h4>Binary Operations:</h4>
-<ul>
-  <li>+</li>
-  <li>-</li>
-  <li>*</li>
-  <li>/</li>
-  <li>floor()</li>
-  <li>ceiling()</li>
-</ul>
+#### Logical Operators
+- and
+- or
+- not
 
-<h4>Unary Operations:</h4>
-<ul>
-  <li></li>
-</ul>
+#### Relational Operators
+- ==
+- != *replaces* ≠
+- \<=
+- \>=
+- &lt;
+- &gt;
 
-<h4>Iterative Statements:</h4>
+#### Binary Operations
+- \+
+- \-
+- \*
+- /
+- %
+
+#### Unary Operators
+- \+
+- \-
+
+<h4>Iterative Statements</h4>
 <ul>
   <!-- Insert iterative statements here -->
 </ul>
 
-<h4>Collections:</h4>
+<h4>Collections</h4>
 <ul>
   <!-- Insert collections here -->
 </ul>
 
-<h4>Other Datastructures:</h4>
+<h4>Other Datastructures</h4>
 <ul>
   <!-- Insert other datastructures here -->
 </ul>
 
-<h4>Methods:</h4>
-<ul>
-  <!-- Insert methods here -->
-</ul>
+#### Methods
+- floor() *replaces* ⌊⌋
+- ceiling() *replaces* ⌈⌉
+- exchange with
+```
+a = 5
+b = 10
+exchange a with b
+// output: a = 10, b = 5
+```
+- random()
+```
 
-<h4>Additional characters:</h4>
+```
+
+<h4>Additional characters</h4>
 <ul>
   <!-- Insert additional characters here -->
 </ul>
