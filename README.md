@@ -96,7 +96,19 @@ This section displays the valid syntax for writing code within our program. It's
 
 #### Methods
 - floor() *replaces* ⌊⌋
+```
+floor(3.75)
+floor(-23.44)
+// output: 3, -24
+```
+
 - ceiling() *replaces* ⌈⌉
+```
+ceiling(3.14)
+ceiling(-23.65)
+// output: 4, -23
+```
+
 - exchange with
 ```
 a = 5
@@ -104,9 +116,11 @@ b = 10
 exchange a with b
 // output: a = 10, b = 5
 ```
+
 - random()
 ```
-
+random(0, 9)
+// output: random number from 0-9 (inclusive)
 ```
 
 <h4>Additional characters</h4>
