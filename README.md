@@ -24,7 +24,7 @@ On your desktop open a terminal and change the current directory to the location
 ```
 git clone https://github.com/SW4-G3-AAU/pseudocode.git
 ```
-Open the project in your preferred text editor, e.g. VS Code, and expand the folder *lib*. Navigate to the file *test.txt* and provide the pseudo code that you'd like to have translated. In the editor open a new terminal and type `make build_run`. This will compile the program with python as the default target language. If you want another language you can write `make lang=<language>` where `<language>` should be replaced with `python` or `java`.
+Open the project in your preferred text editor, e.g. VS Code, and expand the folder *lib*. Navigate to the file *test.txt* and provide the pseudo code that you'd like to have translated. In the editor open a new terminal and type `make` or `make build_run`. This will compile the program with python as the default target language. If you want another language you can write `make lang=<language>` where `<language>` should be replaced with `python` or `java`.
 
 A new file named *output.py* is generated, containing the source code translated into Python. In VS Code you can run it by navigating to the file and hitting the **run button** or by using the terminal and typing `Python output.py`. Your code is now being displayed in Python within your terminal. If you don't see any output in your terminal, make sure to include print statements into your code.
 
