@@ -149,7 +149,7 @@ module StringMap = Map.Make(String)
 
   
   let generate_code = function
-  | Cstmt(stmt) ->
+  | stmt ->
     let code = string_of_stmt 0 stmt in
     let imports = String.concat "\n" !required_imports in
     if imports <> "" then
