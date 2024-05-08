@@ -189,8 +189,9 @@ len(A)
 - error
 ```
 x = NIL
-if x == NIL
+if x == NIL {
   error "x cannot be nil"
+}
 ```
 
 - ()
