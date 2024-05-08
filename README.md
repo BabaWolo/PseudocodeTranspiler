@@ -19,7 +19,7 @@ On your device open your terminal and change the current directory to the locati
 ```
 git clone https://github.com/SW4-G3-AAU/pseudocode.git
 ```
-Open the project in your preferred text editor, e.g. VS Code, and expand the folder *lib*. Navigate to the file *test.txt* and provide the pseudo code that you'd like to have translated. In the editor open a new terminal and type `dune build`. This will compile the Ocaml project and generate the corresponding executable file. In the same terminal, change the current directory using the command `cd bin`. Now you can either translate your source code to Python using the command `dune exec ../main.exe python` or translate it to Java using `dune exec ../main.exe Java`. If you have followed the steps correctly, your terminal should look something like this
+Open the project in your preferred text editor, e.g. VS Code, and expand the folder *lib*. Navigate to the file *test.txt* and provide the pseudo code that you'd like to have translated. Remember to wrap the result within a `print` statement. In the editor open a new terminal and type `dune build`. This will compile the Ocaml project and generate the corresponding executable file. In the same terminal, change the current directory using the command `cd bin`. Now you can either translate your source code to Python using the command `dune exec ../main.exe python` or translate it to Java using `dune exec ../main.exe Java`. If you have followed the steps correctly, your terminal should look something like this
 
 ```
 $ myUser pseudocode % dune build
@@ -45,8 +45,9 @@ The above translates the source code to Python by creating a new file *output.py
 ## Syntax
 This section displays the valid syntax for writing code within our program. It's similar to the conventions outlined in the ALG course but replaces a few elements. The primary alteration is replacing indentation with curly brackets.
 
-#### Variables
+#### Variables & Data Types
 - Any string that starts with a character a-z or A-Z
+- Integer, float, string, bool
 
 #### Assignment
 - =
@@ -79,10 +80,10 @@ This section displays the valid syntax for writing code within our program. It's
 - \+
 - \-
 
-<h4>Iterative Statements</h4>
-<ul>
-  <!-- Insert iterative statements here -->
-</ul>
+#### Control flow
+- if <condition>
+- else
+- return
 
 #### Iterative Statements
 - for <initialization of guardian variable> to/downto <condition>
@@ -110,6 +111,9 @@ repeat {
 } until x == 10
 ```
 
+- continue
+- break
+
 #### Collections
 - let <var> be a new stack
 - let <var> be a new queue
@@ -130,11 +134,18 @@ floor(-23.44)
 // output: 3, -24
 ```
 
-- ceiling() *replaces* ⌈⌉
+- ceil() *replaces* ⌈⌉
 ```
-ceiling(3.14)
-ceiling(-23.65)
+ceil(3.14)
+ceil(-23.65)
 // output: 4, -23
+```
+
+- round()
+```
+round(3.5)
+round(-22.64)
+// output: 4, -22
 ```
 
 - exchange <var> with <var>
@@ -151,13 +162,44 @@ random(0, 9)
 // output: random number from 0-9 (inclusive)
 ```
 
-- sort()
+- sort
+```
+list A = [50, 2, 1, 100, 43]
+sort A
+// output: [1, 2, 43, 50, 100]
+```
+
+- len()
+```
+list A = [1, 2, 3, 4, 5]
+len(A)
+// output: 5
+```
 
 #### Attributes
-- .length
+- length
+- next
+- prev
+- key
+- head
+- left
+- right
+- p
+- root
+- top
+- tail
 
+#### Additional Characters
+- Comment `//`
+- print()
+- NIL
+- error
+```
+x = NIL
+if x == NIL
+  error "x cannot be nil"
+```
 
-<h4>Additional characters</h4>
-<ul>
-  <!-- Insert additional characters here -->
-</ul>
+- ()
+- []
+- {}
