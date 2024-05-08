@@ -34,7 +34,7 @@ A new file named *output.py* is generated, containing the source code translated
 This section displays the valid syntax for writing code within our program. It's similar to the conventions outlined in the ALG course but replaces a few elements. The primary alteration is replacing indentation with curly brackets.
 
 #### Variables, Data Types & Assignment
-- Any string that starts with a character a-z or A-Z
+- Any string that starts with a character a-z or A-Z and can't be the same as a reserved keyword
 - Integer, float, string, bool
 - =
 
