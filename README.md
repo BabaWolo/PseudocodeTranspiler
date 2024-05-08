@@ -14,31 +14,19 @@ Donald Brinch, Alexander Svensson, and Mads Aaen Westh-Jensen</i> </h3>
   <img src="https://github.com/SW4-G3-AAU/pseudocode/assets/116066516/5a8369b8-9147-4616-b675-ec9b289f0e4c" alt="smoky-neon-glow-text-effect-tutorial-removebg-preview" style="max-width: 100%;">
 </div>
 
-## Comprehensive Guide
-On your device open your terminal and change the current directory to the location where you want the cloned repository. To clone the repository, type the following
-```
-git clone https://github.com/SW4-G3-AAU/pseudocode.git
-```
-Open the project in your preferred text editor, e.g. VS Code, and expand the folder *lib*. Navigate to the file *test.txt* and provide the pseudo code that you'd like to have translated. Remember to wrap the result within a `print` statement. In the editor open a new terminal and type `dune build`. This will compile the Ocaml project and generate the corresponding executable file. In the same terminal, change the current directory using the command `cd bin`. Now you can either translate your source code to Python using the command `dune exec ../main.exe python` or translate it to Java using `dune exec ../main.exe Java`. If you have followed the steps correctly, your terminal should look something like this
-
-```
-$ myUser pseudocode % dune build
-$ myUser pseudocode % cd bin
-$ myUser bin % dune exec ../main.exe python
-  Entering directory '../../pseudocode'
-  Leaving directory '../../pseudocode'
-```
-The above translates the source code to Python by creating a new file *output.py*. In VS Code you can run it by navigating to the file and clicking on the **run button** or by opening a new terminal and using the command `Python output.py`. This will display your code in Python in your terminal.
+## Prerequisites
+You should have at least Python or Java installed on your computer in order to run the program. You can install them by following these simple guides: [Install Python](https://code.visualstudio.com/docs/languages/python) or [Install Java](https://code.visualstudio.com/docs/languages/java).
 
 <br>
 
-## Quick Guide
-1. Clone repository `git clone https://github.com/SW4-G3-AAU/pseudocode.git`
-2. In the text editor, open the folder *lib* and insert your pseudo code in to the file *test.txt*
-3. Open a new terminal and run `dune build`
-4. In the same terminal, change directory using `cd bin`
-5. To translate code to Python run `dune exec ../main.exe python`, and to translate code to Java run `dune exec ../main.exe java` (TO BE UPDATED)
-7. Depending on the selected language, either an *output.py* or *output.java* file will be created with the translated source code (TO BE UPDATED). Run the file by hitting the **run button** or by using `Python output.py` in a new terminal.
+## Guide
+Open your terminal and change the current directory to the location where you want the cloned repository. To clone the repository, type the following
+```
+git clone https://github.com/SW4-G3-AAU/pseudocode.git
+```
+Open the project in your preferred text editor, e.g. VS Code, and expand the folder *lib*. Navigate to the file *test.txt* and provide the pseudo code that you'd like to have translated. In the editor open a new terminal and type `make build_run`. This will compile the program with python as the default target language. If you want another language you can write `make lang=<language>` where `<language>` should be replaced with `python` or `java`.
+
+A new file named *output.py* is generated, containing the source code translated into Python. In VS Code you can run it by navigating to the file and hitting the **run button** or by using the terminal and typing `Python output.py`. Your code is now being displayed in Python within your terminal. If you don't see any output in your terminal, make sure to include print statements into your code.
 
 <br>
 
@@ -93,14 +81,22 @@ for i = 1 to A.length - 1 {
   }
 }
 ```
-
 - while \<*condition*> \<*code*>
+```
+i = 1
+while i < 10 {
+  i = i + 1
+}
+```
+
+- while \<*condition*> do \<*code*>
 ```
 Sum(A, n)
 i = 0
 sum = 0
 while i <= n do {
   sum = sum + A[i]
+  break
 }
 ```
 
@@ -154,7 +150,7 @@ round(-22.64)
 // output: 4, -22
 ```
 
-- exchange <var> with <var>
+- exchange \<*var*> with \<*var*>
 ```
 x = 5
 y = 10
