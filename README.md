@@ -45,11 +45,9 @@ The above translates the source code to Python by creating a new file *output.py
 ## Syntax
 This section displays the valid syntax for writing code within our program. It's similar to the conventions outlined in the ALG course but replaces a few elements. The primary alteration is replacing indentation with curly brackets.
 
-#### Variables & Data Types
+#### Variables, Data Types & Assignment
 - Any string that starts with a character a-z or A-Z
 - Integer, float, string, bool
-
-#### Assignment
 - =
 
 #### Booleans
@@ -81,29 +79,32 @@ This section displays the valid syntax for writing code within our program. It's
 - \-
 
 #### Control flow
-- if <condition>
+- if <*condition*>
 - else
 - return
 
 #### Iterative Statements
-- for <initialization of guardian variable> to/downto <condition>
+- for \<*initialization of guardian variable*> to/downto \<*condition*>
 ```
 Bubblesort(A)
-for i = 1 to A.length - 1
-  for j = A.length downto i + 1
+for i = 1 to A.length - 1 {
+  for j = A.length downto i + 1 {
     ...
+  }
+}
 ```
 
-- while \<condition> \<code>
+- while \<*condition*> \<*code*>
 ```
 Sum(A, n)
 i = 0
 sum = 0
-while i <= n do
+while i <= n do {
   sum = sum + A[i]
+}
 ```
 
-- repeat \<code> until \<condition>
+- repeat \<*code*> until \<*condition*>
 ```
 x = 0
 repeat {
@@ -114,17 +115,22 @@ repeat {
 - continue
 - break
 
-#### Collections
-- let <var> be a new stack
-- let <var> be a new queue
-- let <var> be a new array
-- let <var> be a new hashtable
-- 
-
-<h4>Other Datastructures</h4>
-<ul>
-  <!-- Insert other datastructures here -->
-</ul>
+#### Collections, Data Structures & Attributes
+- let \<*var*> be a new stack
+- let \<*var*> be a new queue
+- let \<*var*> be a new array
+- let \<*var*> be a new hashtable
+- length
+- next
+- prev
+- key
+- head
+- left
+- right
+- p
+- root
+- top
+- tail
 
 #### Methods
 - floor() *replaces* ⌊⌋
@@ -175,19 +181,6 @@ list A = [1, 2, 3, 4, 5]
 len(A)
 // output: 5
 ```
-
-#### Attributes
-- length
-- next
-- prev
-- key
-- head
-- left
-- right
-- p
-- root
-- top
-- tail
 
 #### Additional Characters
 - Comment `//`
