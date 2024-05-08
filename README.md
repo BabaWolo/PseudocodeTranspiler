@@ -20,7 +20,7 @@ You should have at least Python or Java installed on your computer in order to r
 <br>
 
 ## Guide
-Open your terminal and change the current directory to the location where you want the cloned repository. To clone the repository, type the following
+On your desktop open a terminal and change the current directory to the location where you want the cloned repository. To clone the repository, type the following
 ```
 git clone https://github.com/SW4-G3-AAU/pseudocode.git
 ```
