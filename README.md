@@ -84,10 +84,38 @@ This section displays the valid syntax for writing code within our program. It's
   <!-- Insert iterative statements here -->
 </ul>
 
-<h4>Collections</h4>
-<ul>
-  <!-- Insert collections here -->
-</ul>
+#### Iterative Statements
+- for <initialization of guardian variable> to/downto <condition>
+```
+Bubblesort(A)
+for i = 1 to A.length - 1
+  for j = A.length downto i + 1
+    ...
+```
+
+- while \<condition> \<code>
+```
+Sum(A, n)
+i = 0
+sum = 0
+while i <= n do
+  sum = sum + A[i]
+```
+
+- repeat \<code> until \<condition>
+```
+x = 0
+repeat {
+  x = x + 2
+} until x == 10
+```
+
+#### Collections
+- let <var> be a new stack
+- let <var> be a new queue
+- let <var> be a new array
+- let <var> be a new hashtable
+- 
 
 <h4>Other Datastructures</h4>
 <ul>
@@ -109,12 +137,12 @@ ceiling(-23.65)
 // output: 4, -23
 ```
 
-- exchange with
+- exchange <var> with <var>
 ```
-a = 5
-b = 10
-exchange a with b
-// output: a = 10, b = 5
+x = 5
+y = 10
+exchange x with y
+// output: x = 10, y = 5
 ```
 
 - random()
@@ -122,6 +150,12 @@ exchange a with b
 random(0, 9)
 // output: random number from 0-9 (inclusive)
 ```
+
+- sort()
+
+#### Attributes
+- .length
+
 
 <h4>Additional characters</h4>
 <ul>
