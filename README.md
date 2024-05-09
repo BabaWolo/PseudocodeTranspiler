@@ -181,6 +181,7 @@ len(A)
 #### Additional Characters
 - Comment `//`
 - print()
+- infinity
 - NIL
 - error
 ```
