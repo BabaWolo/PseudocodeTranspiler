@@ -15,7 +15,7 @@ Donald Brinch, Alexander Svensson, and Mads Aaen Westh-Jensen</i> </h3>
 </div>
 
 ## Prerequisites
-You should have at least Python or Java installed on your computer in order to run the program. You can install them by following these simple guides: [Install Python](https://code.visualstudio.com/docs/languages/python) or [Install Java](https://code.visualstudio.com/docs/languages/java).
+You should have at least Python or Java installed on your computer in order to run the program. You can install them by following these simple guides: [Install Python](https://code.visualstudio.com/docs/languages/python) 🐍 or [Install Java](https://code.visualstudio.com/docs/languages/java) ☕️.
 
 <br>
 
@@ -31,7 +31,7 @@ A new file named *output.py* is generated, containing the source code translated
 <br>
 
 ## Syntax
-This section displays the valid syntax for writing code within our program. It's similar to the conventions outlined in the ALG course but replaces a few elements. The primary alteration is replacing indentation with curly brackets.
+This section displays the valid syntax for writing code within our program. It's similar to the conventions outlined in the ALG course but replaces a few elements. The primary alteration is replacing indentation with curly brackets `{}`.
 
 #### Variables, Data Types & Assignment
 - Any string that starts with a character a-z or A-Z and can't be the same as a reserved keyword
@@ -112,21 +112,29 @@ repeat {
 - break
 
 #### Collections, Data Structures & Attributes
-- let \<*var*> be a new stack
-- let \<*var*> be a new queue
 - let \<*var*> be a new array
+```
+let A be a new array
+A = [7, 2, 100, -55]
+// optionally create a range
+let R[1..n + 1] be a new array
+```
 - let \<*var*> be a new hashtable
-- length
-- next
-- prev
-- key
-- head
-- left
-- right
-- p
-- root
-- top
-- tail
+- let \<*var*> be a new queue
+- let \<*var*> be a new stack
+- \<*var*> = newLinkedList([<*elements*>])
+- \<*var*> = newBinaryTree
+- .length
+- .next
+- .prev
+- .key
+- .head
+- .left
+- .right
+- .p
+- .root
+- .top
+- .tail
 
 #### Methods
 - floor() *replaces* ⌊⌋
