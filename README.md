@@ -68,6 +68,7 @@ This section displays the valid syntax for writing code within our program. It's
 
 #### Control flow
 - if <*condition*>
+- elseif <*condition*>
 - else
 - return
 
