@@ -68,6 +68,16 @@ This section displays the valid syntax for writing code within our program. It's
 
 #### Control flow
 - if <*condition*>
+```
+number = 10
+if number == 5 {
+    print("Five")
+} elseif number == 10 {
+    print("Ten")
+} else {
+    print("Wrong number")
+}
+```
 - elseif <*condition*>
 - else
 - return
