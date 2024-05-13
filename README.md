@@ -83,7 +83,7 @@ if number == 5 {
 - return
 
 #### Iterative Statements
-- for \<*initialization of guardian variable*> to/downto \<*condition*>
+- for \<*initialization*> to/downto \<*condition*>
 ```
 Bubblesort(A)
 for i = 1 to A.length - 1 {
@@ -92,7 +92,7 @@ for i = 1 to A.length - 1 {
   }
 }
 ```
-- while \<*condition*> \<*code*>
+- while \<*condition*>
 ```
 i = 1
 while i < 10 {
@@ -100,7 +100,7 @@ while i < 10 {
 }
 ```
 
-- while \<*condition*> do \<*code*>
+- while \<*condition*> do
 ```
 Sum(A, n)
 i = 0
@@ -111,7 +111,7 @@ while i <= n do {
 }
 ```
 
-- repeat \<*code*> until \<*condition*>
+- repeat \<*statement*> until \<*condition*>
 ```
 x = 0
 repeat {
