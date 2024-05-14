@@ -1,0 +1,3 @@
+(library
+ (name lexer_tests)
+ (libraries pseudo_lib ounit2))

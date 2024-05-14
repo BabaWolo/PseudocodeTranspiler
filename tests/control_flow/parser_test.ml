@@ -2,12 +2,12 @@ open OUnit2
 open Pseudo_lib.Ast
 
 (* Function to parse an expression into an AST *)
-let parse_expression expr =
-  let lexbuf = Lexing.from_string expr in
+let parse_expression stmt =
+  let lexbuf = Lexing.from_string stmt in
   Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
 
 (* Expected AST for "if (2 < 3) then 4 else 5" *)
-let expected_ast = 
+let expected_ast_if = 
   Cstmt (Sif (Ebinop (Blt, Ecst (Cint 2), Ecst (Cint 3)), 
               Seval (Ecst (Cint 4)), 
               Seval (Ecst (Cint 5))))
@@ -19,11 +19,87 @@ let test_parse_expression _ =
     4 
   } else {
     5
-  }") expected_ast
+  }") expected_ast_if
+
+(* Function to parse a statement into an AST *)
+let parse_statement stmt =
+  let lexbuf = Lexing.from_string stmt in
+  Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
+
+(* Lexing.position * Lexing.position as a default value equal ident "i" in the input*)
+let position = {
+  Lexing.pos_fname = "";
+  Lexing.pos_lnum = 1;
+  Lexing.pos_bol = 0;
+  Lexing.pos_cnum = 4;
+}, {
+  Lexing.pos_fname = "";
+  Lexing.pos_lnum = 1;
+  Lexing.pos_bol = 0;
+  Lexing.pos_cnum = 5;
+}
+
+(* Function to convert an AST into a string *)
+(* Expected AST for "if (2 < 3) then 4 else 5" *)
+let expected_ast_for = 
+  Cstmt (
+    Sfor ({ loc = position; id = "i" }, 
+    Ecst(Cint 1), Ecst(Cint 10), Sblock [Sprint(Ecst(Cstring "\"hello\"")); 
+    Sprint(Ecst(Cstring "\"hello\""))], 1)
+  ) 
+
+(* OUnit test for for-loops*)
+let test_for_loop_statement _ =
+  let parsed_ast = parse_statement "for i = 1 to 10 { 
+    print(\"hello\") 
+    print(\"hello\") 
+  }" in
+  assert_equal (parsed_ast) expected_ast_for
+
+(* Function to parse an expression into an AST *)
+let parse_expression stmt =
+  let lexbuf = Lexing.from_string stmt in
+  Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
+
+(* Expected AST for "if (2 < 3) then 4 else 5" *)
+let expected_ast_while = 
+  Cstmt (Swhile (Ebinop (Blt, Ecst (Cint 2), Ecst (Cint 3)), 
+              Sblock (Sprint (Ecst (Cint 1)) :: [Scontinue])))
+
+(* OUnit test for while statement *)
+let test_while_statement _ =
+  assert_equal (parse_expression 
+  "while 2 < 3 {
+    print(1)
+    continue
+  }") expected_ast_while
+
+(* Test suite *)
+
+(* Function to parse an expression into an AST *)
+let parse_expression stmt =
+  let lexbuf = Lexing.from_string stmt in
+  Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
+
+(* Expected AST for "if (2 < 3) then 4 else 5" *)
+let expected_ast_repeat = 
+  Cstmt (Srepeat (Ecst(Cint 1), 
+        Sblock (Sprint (Ecst (Cint 1)) :: [Seval(Ebinop(Badd, Ecst(Cint 1), Ecst(Cint 1)))])))
+
+(* OUnit test for while statement *)
+let test_repeat_statement _ =
+  assert_equal (parse_expression 
+  "repeat {
+    print(1)
+    1 + 1
+  } until 1") expected_ast_repeat
 
 let suite =
   "Control Flow Parser Suite" >::: [
       "test_parse_control_flow_expression" >:: test_parse_expression;
+      "test_for_loop_statement" >:: test_for_loop_statement;
+      "test_while_statement" >:: test_while_statement;
+      "test_repeat_statement" >:: test_repeat_statement;
     ]
 
 (*
