@@ -136,6 +136,7 @@ let R[1..n + 1] be a new array
 - \<*var*> = newLinkedList([<*elements*>])
 - \<*var*> = newBinaryTree([<*elements*>])
 - .length
+- .size
 - .next
 - .prev
 - .key
