@@ -92,6 +92,10 @@ module StringMap = Map.Make(String)
         | _ -> failwith "Left-hand side of assignment must be an identifier or attribute"
       in
       String.make indent ' ' ^ lhs ^ " = " ^ string_of_expr e2 ^ "\n"
+    | Sif(e, stmt, Sif(e2, stmt2, Sblock [])) ->
+      String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "elif " ^ string_of_expr e2 ^ ":\n" ^ string_of_stmt (indent+2) stmt2
+    | Sif(e, stmt, Sif(e2, stmt2, else_stmts)) ->
+      String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "elif " ^ string_of_expr e2 ^ ":\n" ^ string_of_stmt (indent+2) stmt2 ^ String.make indent ' ' ^ "else:\n" ^ string_of_stmt (indent+2) else_stmts
     | Sif(e, stmt, Sblock []) ->
       String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt
     | Sif(e, stmt, else_stmts) ->
