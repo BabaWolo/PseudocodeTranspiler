@@ -80,6 +80,25 @@ if number == 5 {
 ```
 - elseif <*condition*>
 - else
+
+#### Functions
+- \<*funcName*>(<*optional parameters*>)
+```
+// Function declaration
+minimum(A){
+    min = A[0]
+    for i = 1 to A.length {
+        if min > A[i] {
+            min = A[i]
+        }
+    }
+    return min
+}
+
+// Call function
+minimum([5, 2, 9])
+```
+
 - return
 
 #### Iterative Statements
@@ -127,6 +146,7 @@ repeat {
 ```
 let A be a new array
 A = [7, 2, 100, -55]
+
 // optionally create a range
 let R[1..n + 1] be a new array
 ```
