@@ -135,6 +135,7 @@ let R[1..n + 1] be a new array
 - let \<*var*> be a new stack
 - \<*var*> = newLinkedList([<*elements*>])
 - \<*var*> = newBinaryTree([<*elements*>])
+- Tuple ???
 - .length
 - .size
 - .next
