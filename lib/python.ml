@@ -1,24 +1,8 @@
+(* Part of a transpiler - A transpiler converts source code from one programming language to another, 
+   while a compiler translates source code into machine code. *)
 open Ast
+open Utils
 module StringMap = Map.Make(String)
-
-  (* Convert to python *)
-  let string_of_ident ident = ident.id
-
-  (* A hashtable of size 16, used for storing function declartions in the user-program *)
-  let functions = (Hashtbl.create 16 : (string, expr list * stmt) Hashtbl.t)
-
-  (* Recursive function checking the expressions of an expr list are equal to identifiers *)
-  let rec check_expr_list = function
-    | [] -> ()
-    | Eident _ :: tl -> check_expr_list tl
-    | _ -> raise (Failure "Arguments must be identifiers")
-
-  let required_imports = ref []
-
-  (* Add import if not already in list. The ! operator is used for dereferencing *)
-  let add_import import =
-    if not (List.mem import !required_imports) then
-      required_imports := import :: !required_imports
 
   let rec string_of_expr = function
   | Eident(id) -> string_of_ident id
@@ -27,17 +11,18 @@ module StringMap = Map.Make(String)
       match x with
       | Cint(i) -> string_of_int i
       | Cfloat(f) -> string_of_float f
+      | Cstring(s) -> "" ^ s ^ ""
+      | Cnil -> "None"
+      | Cinfinity -> "float('inf')"
     end
   | Eattribute(e1, attribute_name) ->
     let attribute_name = string_of_ident attribute_name in
     begin
       match attribute_name with
-      | "next" | "prev" | "key" | "head" -> 
-        add_import "from classes.linkedlist import LinkedList";
-        string_of_expr e1 ^ "." ^ attribute_name
+      | "next" | "prev" | "key" | "head" | "left" | "right" | "p" | "root" | "top" | "tail" -> 
+        add_import "from lib.pseudolibrary import PseudoLibrary";
+        "PseudoLibrary." ^ attribute_name ^ "(" ^ string_of_expr e1 ^ ")"
       | "length" | "size" -> "len(" ^ string_of_expr e1 ^ ")"
-      | "top" -> string_of_expr e1 ^ "[-1]"
-      | "tail" -> string_of_expr e1 ^ "[0]"
       | _ -> failwith "Attribute not supported"
     end
   | Elist(expr_list) ->
@@ -56,8 +41,11 @@ module StringMap = Map.Make(String)
         add_import "import math";
         "math." ^ func_call
       | "newLinkedList" ->
-        add_import "from classes.linkedlist import LinkedList";
-        "LinkedList(" ^ args_str ^ ")"
+        add_import "from lib.pseudolibrary import PseudoLibrary";
+        "PseudoLibrary.LinkedList(" ^ args_str ^ ")"
+      | "newBinaryTree" ->
+        add_import "from lib.pseudolibrary import PseudoLibrary";
+        "PseudoLibrary.BinaryTree(" ^ args_str ^ ")"
       | _ -> 
         func_call
     end
@@ -91,6 +79,10 @@ module StringMap = Map.Make(String)
 
   (* Recursive function for translating statements into python *)
   let rec string_of_stmt indent = function
+    | Serror(s) -> 
+      String.make indent ' ' ^ "raise Exception(" ^ s ^ ")\n"
+    | Ssort(id) ->
+      String.make indent ' ' ^ string_of_ident id ^ ".sort()\n"
     | Sassign(e1, e2) ->
       let lhs = match e1 with
         | Eident(id) -> string_of_ident id
@@ -117,12 +109,23 @@ module StringMap = Map.Make(String)
       let _ = check_expr_list args in
       Hashtbl.add functions (string_of_ident id) (args, stmt);
       String.make indent ' ' ^ "def " ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_expr args)) ^ ")" ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ "\n"
-    | Snewlist(id, list) ->
+    | Snewlist(id, expr, list) ->
       begin
-        match string_of_ident list with
-        | li when li = "hashtable" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "{}" ^ "\n"
-        | li when li = "queue" || li = "stack" || li = "array" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "[]" ^ "\n"
-        | _ -> failwith (string_of_ident id ^ " must be of array, queue, stack, or hashtable")
+        match string_of_expr expr with
+        | "None" ->
+          begin
+            match string_of_ident list with
+            | li when li = "hashtable" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "{}" ^ "\n"
+            | li when li = "queue" || li = "stack" || li = "array" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "[]" ^ "\n"
+            | _ -> failwith (string_of_ident id ^ " must be of array, queue, stack, or hashtable")
+          end
+        | _ ->
+          begin
+            match string_of_ident list with
+            | li when li = "hashtable" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "{i: None for i in range(" ^ string_of_expr expr ^ ")}" ^ "\n"
+            | li when li = "queue" || li = "stack" || li = "array" -> String.make indent ' ' ^ string_of_ident id ^ " = " ^ "[None] * (" ^ string_of_expr expr ^")" ^ "\n"
+            | _ -> failwith (string_of_ident id ^ " must be of array, queue, stack, or hashtable")
+          end
       end
     | Sfor(id, e1, e2, stmt, incr) ->
       String.make indent ' ' ^ "for " ^ string_of_ident id ^ " in range(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ", " ^ string_of_int incr ^"):\n" ^ string_of_stmt (indent+2) stmt
@@ -136,13 +139,20 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "break\n"
     | Scontinue ->
       String.make indent ' ' ^ "continue\n"
+    | Sexchange(e1, e2) -> 
+      String.make indent ' ' ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ " = " ^ string_of_expr e2 ^ ", " ^ string_of_expr e1 ^ "\n"
+    | Srandom(e) ->
+      add_import "import random";
+      String.make indent ' ' ^ "random.randint(0, " ^ string_of_expr e ^ ")\n"
+    | Scomment(s) ->
+      String.make indent ' ' ^ "#" ^ (String.sub s 2 ((String.length s) - 2)) ^ "\n"
 
   (* let string_of_program = function
     | Cstmt(stmt) -> string_of_stmt 0 stmt *)
 
   
   let generate_code = function
-  | Cstmt(stmt) ->
+  | stmt ->
     let code = string_of_stmt 0 stmt in
     let imports = String.concat "\n" !required_imports in
     if imports <> "" then
@@ -150,25 +160,4 @@ module StringMap = Map.Make(String)
     else
       code
 
-(* Main function for reading in the file and writing to a new file *)
-let () =
-  let in_channel = open_in "test.txt" in
-  let lexbuf = Lexing.from_channel in_channel in
-  let ast = 
-    try
-      Parser.program Lexer.token lexbuf
-    with
-    | Parser.Error ->
-      let curr = lexbuf.Lexing.lex_curr_p in
-      let line = curr.Lexing.pos_lnum in
-      let cnum = curr.Lexing.pos_cnum - curr.Lexing.pos_bol in
-      let tok = Lexing.lexeme lexbuf in
-      Printf.eprintf "Syntax error at line %d, column %d, token %s\n" line cnum tok;
-      exit (-1) 
-  in
-  let out_channel = open_out "output.py" in
-  let code = generate_code ast in
-  Printf.fprintf out_channel "%s\n" code;
-  close_out out_channel;
-  close_in in_channel
     

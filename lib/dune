@@ -1,0 +1,8 @@
+(library
+ (name pseudo_lib)
+ (modules ast lexer parser python utils))
+
+(menhir
+  (modules parser))
+
+(ocamllex lexer)
