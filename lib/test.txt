@@ -83,3 +83,5 @@ str = "Hello World"
 print(str)
 
 random(5)
+
+error "This is an error message"

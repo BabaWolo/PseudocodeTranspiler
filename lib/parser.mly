@@ -23,6 +23,7 @@
 %token EXCHANGE WITH
 %token RANDOM
 %token NIL
+%token ERROR
 
 (* Type declarations tell the parser what type of value to produce for each non-terminal symbol in the grammar. *)
 %start program
@@ -70,6 +71,7 @@ jump_stmt:
   | RETURN e = expr { Sreturn(e) }
   | BREAK { Sbreak }
   | CONTINUE { Scontinue }
+  | ERROR s = STRING { Serror(s) }
 ;
 
 methods:
