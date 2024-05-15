@@ -200,6 +200,8 @@ len(A)
 
 #### Additional Characters
 - Comment `//`
+- New line `\n`
+- Tab `\t`
 - print()
 - infinity
 - NIL
