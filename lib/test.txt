@@ -84,4 +84,8 @@ print(str)
 
 random(5)
 
+infPos = infinity
+infNeg = -infinity
+print(infPos)
+print(infNeg)
 error "This is an error message"

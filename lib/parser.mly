@@ -23,6 +23,7 @@
 %token EXCHANGE WITH
 %token RANDOM
 %token NIL
+%token INFINITY
 %token ERROR
 
 (* Type declarations tell the parser what type of value to produce for each non-terminal symbol in the grammar. *)
@@ -128,6 +129,7 @@ constant:
   | c = FLOAT { Cfloat(c) }
   | c = STRING { Cstring(c) }
   | NIL { Cnil }
+  | INFINITY { Cinfinity }
 
 ident:
   id = ID { { loc = ($startpos, $endpos); id } }

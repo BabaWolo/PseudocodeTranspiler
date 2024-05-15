@@ -21,6 +21,7 @@ and constant =
   | Cfloat of float
   | Cstring of string
   | Cnil
+  | Cinfinity
 
 
 (* Define the types for binary operators *)

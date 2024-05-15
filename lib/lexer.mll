@@ -65,6 +65,7 @@ rule token = parse
   | "with" { WITH }
   | "random" { RANDOM }
   | "NIL" { NIL }
+  | "infinity" { INFINITY }
   | "error" { ERROR }
   | digit+  { INT(int_of_string (Lexing.lexeme lexbuf)) } (* lexbuf contains the current state of the lexer, including current position in input stream and matched string. *)
   | float+  { FLOAT(float_of_string (Lexing.lexeme lexbuf)) }

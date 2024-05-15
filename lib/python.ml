@@ -13,6 +13,7 @@ module StringMap = Map.Make(String)
       | Cfloat(f) -> string_of_float f
       | Cstring(s) -> "" ^ s ^ ""
       | Cnil -> "None"
+      | Cinfinity -> "float('inf')"
     end
   | Eattribute(e1, attribute_name) ->
     let attribute_name = string_of_ident attribute_name in
