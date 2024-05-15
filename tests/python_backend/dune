@@ -1,0 +1,7 @@
+(library
+ (name python_backend_tests)
+ (libraries pseudo_lib ounit2))
+
+; This dune file should be copied to any other folder in the tests directory.
+; Just remember to change the name of the library and then import the library
+; in the dune file of the parent directory.
