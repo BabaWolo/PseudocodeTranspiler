@@ -78,7 +78,7 @@ jump_stmt:
 methods:
   | SORT id = ident { Ssort(id)}
   | EXCHANGE e1 = expr WITH e2 = expr { Sexchange(e1, e2) } (* The rule can be read as follows: When the parser encounters the EXCHANGE token, it expects to find an identifier (represented by id1 = ident). Then it expects the WITH token, followed by another identifier (id2 = ident). *)
-  | RANDOM LPAREN e = expr RPAREN { Srandom(e)}
+  | RANDOM LPAREN e1 = expr COMMA e2 = expr RPAREN { Srandom(e1, e2)}
 ;
 
 conditional:

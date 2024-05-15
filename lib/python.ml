@@ -145,9 +145,9 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "continue\n"
     | Sexchange(e1, e2) -> 
       String.make indent ' ' ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ " = " ^ string_of_expr e2 ^ ", " ^ string_of_expr e1 ^ "\n"
-    | Srandom(e) ->
+    | Srandom(e1, e2) ->
       add_import "import random";
-      String.make indent ' ' ^ "random.randint(0, " ^ string_of_expr e ^ ")\n"
+      String.make indent ' ' ^ "random.randint(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ")\n"
     | Scomment(s) ->
       String.make indent ' ' ^ "#" ^ (String.sub s 2 ((String.length s) - 2)) ^ "\n"
 
