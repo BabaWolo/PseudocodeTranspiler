@@ -60,6 +60,7 @@ and string_of_constant = function
 | Cfloat f -> string_of_float f
 | Cstring s -> s
 | Cnil -> "nil"
+| Cinfinity -> "infinity"
 
 let rec string_of_stmt = function
 | Sassign (expr1, expr2) ->
@@ -92,10 +93,12 @@ let rec string_of_stmt = function
     Printf.sprintf "sort %s;" ident.id
 | Sexchange (expr1, expr2) ->
     Printf.sprintf "exchange %s, %s;" (string_of_expr expr1) (string_of_expr expr2)
-| Srandom expr ->
-    Printf.sprintf "random %s;" (string_of_expr expr)
+| Srandom (expr1, expr2) ->
+    Printf.sprintf "random %s %s;" (string_of_expr expr1) (string_of_expr expr2)
 | Scomment str ->
     "// " ^ str
+| Serror str ->
+    Printf.sprintf "error %s;" str
 
 and string_of_ast = function
 | Cstmt stmt -> string_of_stmt stmt

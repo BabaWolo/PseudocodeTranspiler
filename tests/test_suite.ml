@@ -13,7 +13,7 @@ let () =
     "All Tests">:::
       [ Arithmetic_test_suite.suite;
         Control_flow_test_suite.suite;
-        Python_backend_test_suite.suite
+        Python_backend_test_suite.suite;
         Lexer_test_suite.suite;
         (* Add other test suites here *)
       ]
