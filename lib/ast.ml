@@ -50,6 +50,6 @@ and stmt =
   | Scontinue
   | Ssort of ident
   | Sexchange of expr * expr
-  | Srandom of expr
+  | Srandom of expr * expr
   | Serror of string
   | Scomment of string

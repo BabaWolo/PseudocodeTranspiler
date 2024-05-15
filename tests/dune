@@ -1,5 +1,5 @@
 (test
   (name test_suite)
   ; Insert the name of the test library here:
-  (libraries pseudo_lib arithmetic_tests control_flow_tests lexer_tests ounit2)
+  (libraries pseudo_lib arithmetic_tests control_flow_tests python_backend_tests lexer_tests ounit2)
   (modules test_suite))

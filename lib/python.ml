@@ -92,6 +92,10 @@ module StringMap = Map.Make(String)
         | _ -> failwith "Left-hand side of assignment must be an identifier or attribute"
       in
       String.make indent ' ' ^ lhs ^ " = " ^ string_of_expr e2 ^ "\n"
+    | Sif(e, stmt, Sif(e2, stmt2, Sblock [])) ->
+      String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "elif " ^ string_of_expr e2 ^ ":\n" ^ string_of_stmt (indent+2) stmt2
+    | Sif(e, stmt, Sif(e2, stmt2, else_stmts)) ->
+      String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "elif " ^ string_of_expr e2 ^ ":\n" ^ string_of_stmt (indent+2) stmt2 ^ String.make indent ' ' ^ "else:\n" ^ string_of_stmt (indent+2) else_stmts
     | Sif(e, stmt, Sblock []) ->
       String.make indent ' ' ^ "if " ^ string_of_expr e ^ ":\n" ^ string_of_stmt (indent+2) stmt
     | Sif(e, stmt, else_stmts) ->
@@ -141,9 +145,9 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "continue\n"
     | Sexchange(e1, e2) -> 
       String.make indent ' ' ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ " = " ^ string_of_expr e2 ^ ", " ^ string_of_expr e1 ^ "\n"
-    | Srandom(e) ->
+    | Srandom(e1, e2) ->
       add_import "import random";
-      String.make indent ' ' ^ "random.randint(0, " ^ string_of_expr e ^ ")\n"
+      String.make indent ' ' ^ "random.randint(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ")\n"
     | Scomment(s) ->
       String.make indent ' ' ^ "#" ^ (String.sub s 2 ((String.length s) - 2)) ^ "\n"
 

@@ -16,7 +16,7 @@
 %token ASSIGN
 %token NEWLINE
 %token LET BE A NEW
-%token IF ELSE PRINT FOR TO DOWNTO WHILE DO REPEAT UNTIL
+%token IF ELSEIF ELSE PRINT FOR TO DOWNTO WHILE DO REPEAT UNTIL
 %token BREAK CONTINUE
 %token RETURN
 %token SORT
@@ -78,12 +78,14 @@ jump_stmt:
 methods:
   | SORT id = ident { Ssort(id)}
   | EXCHANGE e1 = expr WITH e2 = expr { Sexchange(e1, e2) } (* The rule can be read as follows: When the parser encounters the EXCHANGE token, it expects to find an identifier (represented by id1 = ident). Then it expects the WITH token, followed by another identifier (id2 = ident). *)
-  | RANDOM LPAREN e = expr RPAREN { Srandom(e)}
+  | RANDOM LPAREN e1 = expr COMMA e2 = expr RPAREN { Srandom(e1, e2)}
 ;
 
 conditional:
   | IF e = expr LBRACE s = suite RBRACE { Sif(e, s, Sblock []) }
   | IF e = expr LBRACE s = suite RBRACE ELSE LBRACE s1 = suite RBRACE { Sif(e, s, s1) }
+  | IF e = expr LBRACE s = suite RBRACE ELSEIF e1 = expr LBRACE s1 = suite RBRACE { Sif(e, s, Sif(e1, s1, Sblock [])) }
+  | IF e = expr LBRACE s = suite RBRACE ELSEIF e1 = expr LBRACE s1 = suite RBRACE ELSE LBRACE s2 = suite RBRACE { Sif(e, s, Sif(e1, s1, s2)) }
 ;
 
 iterative:

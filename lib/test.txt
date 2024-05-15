@@ -82,8 +82,16 @@ print(f)
 str = "Hello World"
 print(str)
 
-random(5)
+random(5, 10)
 
+ten = 10
+if ten == 5 {
+    print("Five")
+} elseif ten == 10 {
+    print("Ten")
+} else {
+    print("Not ten")
+}
 infPos = infinity
 infNeg = -infinity
 print(infPos)

@@ -53,6 +53,9 @@ let string_of_token = function
   | A -> "A"
   | FLOAT f -> "FLOAT " ^ string_of_float f
   | COMMENT s -> "COMMENT " ^ s
+  | INFINITY -> "INFINITY"
+  | ERROR -> "ERROR"
+  | ELSEIF -> "ELSEIF"
 
 let string_of_token_list tokens =
   tokens |> List.map string_of_token |> String.concat "; "

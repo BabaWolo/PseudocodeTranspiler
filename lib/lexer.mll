@@ -40,6 +40,7 @@ rule token = parse
   | ">="    { GREATEREQUAL }
   | '='     { ASSIGN }
   | "if"    { IF }
+  | "elseif" { ELSEIF}
   | "else"  { ELSE }
   | '{'     { LBRACE }
   | '}'     { RBRACE }
