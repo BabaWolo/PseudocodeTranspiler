@@ -15,7 +15,7 @@ Donald Brinch, Alexander Svensson, and Mads Aaen Westh-Jensen</i> </h3>
 </div>
 
 ## Prerequisites
-You should have at least Python or Java installed on your computer in order to run the program. You can install them by following these simple guides: [Install Python](https://code.visualstudio.com/docs/languages/python) 🐍 or [Install Java](https://code.visualstudio.com/docs/languages/java) ☕️.
+You should have at least Python or Java installed on your computer in order to run the program. You can install them by following these simple guides: [Install Python](https://code.visualstudio.com/docs/languages/python) 🐍 or [Install Java](https://code.visualstudio.com/docs/languages/java) ☕️
 
 <br>
 
