@@ -4,16 +4,16 @@ init:
 	@opam install . --deps-only --with-test
 
 build:
-	@dune build
+	@opam exec -- dune build
 
 test: 
-	@dune runtest
+	@opam exec -- dune runtest
 
 build_test: build test
 
 lang ?= python
 run:
-	@dune exec ./main.exe $(lang)
+	@opam exec -- dune exec ./main.exe $(lang)
 
 build_run: build run
 
