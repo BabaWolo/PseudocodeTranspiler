@@ -8,9 +8,9 @@ let parse_expression stmt =
 
 (* Expected AST for "if (2 < 3) then 4 else 5" *)
 let expected_ast_if = 
-  Cstmt (Sif (Ebinop (Blt, Ecst (Cint 2), Ecst (Cint 3)), 
-              Seval (Ecst (Cint 4)), 
-              Seval (Ecst (Cint 5))))
+  Cstmt (Sif (Ebinop (Blt, Ecst (Cint 2, None), Ecst (Cint 3, None), None), 
+              Seval (Ecst (Cint 4, None)), 
+              Seval (Ecst (Cint 5, None))))
 
 (* OUnit test *)
 let test_parse_expression _ =
@@ -43,9 +43,9 @@ let position = {
 (* Expected AST for "if (2 < 3) then 4 else 5" *)
 let expected_ast_for = 
   Cstmt (
-    Sfor ({ loc = position; id = "i" }, 
-    Ecst(Cint 1), Ecst(Cint 10), Sblock [Sprint(Ecst(Cstring "\"hello\"")); 
-    Sprint(Ecst(Cstring "\"hello\""))], 1)
+    Sfor ({ loc = position; id = "i"; typ = None }, 
+    Ecst(Cint 1, None), Ecst(Cint 10, None), Sblock [Sprint(Ecst(Cstring "\"hello\"", None)); 
+    Sprint(Ecst(Cstring "\"hello\"", None))], 1)
   ) 
 
 (* OUnit test for for-loops*)
@@ -63,8 +63,8 @@ let parse_expression stmt =
 
 (* Expected AST for "if (2 < 3) then 4 else 5" *)
 let expected_ast_while = 
-  Cstmt (Swhile (Ebinop (Blt, Ecst (Cint 2), Ecst (Cint 3)), 
-              Sblock (Sprint (Ecst (Cint 1)) :: [Scontinue])))
+  Cstmt (Swhile (Ebinop (Blt, Ecst (Cint 2, None), Ecst (Cint 3, None), None), 
+              Sblock (Sprint (Ecst (Cint 1, None)) :: [Scontinue])))
 
 (* OUnit test for while statement *)
 let test_while_statement _ =
@@ -83,8 +83,8 @@ let parse_expression stmt =
 
 (* Expected AST for "if (2 < 3) then 4 else 5" *)
 let expected_ast_repeat = 
-  Cstmt (Srepeat (Ecst(Cint 1), 
-        Sblock (Sprint (Ecst (Cint 1)) :: [Seval(Ebinop(Badd, Ecst(Cint 1), Ecst(Cint 1)))])))
+  Cstmt (Srepeat (Ecst(Cint 1, None), 
+        Sblock (Sprint (Ecst (Cint 1, None)) :: [Seval(Ebinop(Badd, Ecst(Cint 1, None), Ecst(Cint 1, None), None))])))
 
 (* OUnit test for while statement *)
 let test_repeat_statement _ =

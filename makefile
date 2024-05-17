@@ -11,9 +11,10 @@ test:
 
 build_test: build test
 
+file ?= test.txt
 lang ?= python
 run:
-	@opam exec -- dune exec ./main.exe $(lang)
+	@opam exec -- dune exec ./main.exe $(lang) $(file)
 
 build_run: build run
 

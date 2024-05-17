@@ -21,10 +21,10 @@ let test_position = {
   Lexing.pos_cnum = 5;
 }
 
-let test_variable = { loc = test_position; id = "x"}
+let test_variable = { loc = test_position; id = "x"; typ = None }
 
 (* assignment *)
-let assignment_ast_input = Sassign(Eident(test_variable), Ecst(Cint 1))
+let assignment_ast_input = Cstmt(Sassign(Eident(test_variable), Ecst(Cint 1, None), None))
 let assignment_expected_output = "x = 1\n"
 
 let test_assignment_codegen _ =
@@ -32,7 +32,7 @@ let test_assignment_codegen _ =
 
 
 (* return *)
-let return_ast_input = Sreturn(Ecst(Cfloat 1.2))
+let return_ast_input = Cstmt(Sreturn(Ecst(Cfloat 1.2, None)))
 let return_expected_output = "return 1.2\n"
 
 let test_return_codegen _ =
@@ -40,11 +40,11 @@ let test_return_codegen _ =
 
 
 (* if *)
-let if_ast_input = Sif(
-  Ebinop(Bneq, Ecst(Cint 1), Ecst(Cint 2)),
-  Sblock([Sprint(Ecst(Cint 1))]),
-  Sblock([Sprint(Ecst(Cint 2))])
-  )
+let if_ast_input = Cstmt(Sif(
+  Ebinop(Bneq, Ecst(Cint 1, None), Ecst(Cint 2, None), None),
+  Sblock([Sprint(Ecst(Cint 1, None))]),
+  Sblock([Sprint(Ecst(Cint 2, None))])
+  ))
 let if_expected_output = 
 "if 1 != 2:
   print(1)
@@ -56,12 +56,12 @@ let test_if_codegen _ =
 
 
 (* for *)
-let for_ast_input = Sfor(
+let for_ast_input = Cstmt(Sfor(
   test_variable,
-  Ecst(Cint 1),
-  Ecst(Cint 10),
-  Sblock[Seval(Ebinop(Badd, Eident(test_variable), Ecst(Cint 1)))],
-  1)
+  Ecst(Cint 1, None),
+  Ecst(Cint 10, None),
+  Sblock[Seval(Ebinop(Badd, Eident(test_variable), Ecst(Cint 1, None), None))],
+  1))
 let for_expected_output = 
 "for x in range(1, 10, 1):
   x + 1\n"
