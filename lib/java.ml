@@ -12,7 +12,18 @@ let rec get_java_type = function
   | Some Tfloat -> "float "
   | Some Tstring -> "String "
   | Some Tnil -> "None "
-  | Some Tlist typ -> "Arraylist<" ^ get_java_type (Some typ) ^ "> "
+  | Some Tlist typ -> 
+    add_import "import java.util.ArrayList;";
+    "ArrayList<" ^ get_java_wrapper_type (Some typ) ^ "> "
+  | None -> failwith "Type not inferred"
+  | _ -> failwith "Unsupported type"
+
+and get_java_wrapper_type = function
+  | Some Tint -> "Integer "
+  | Some Tfloat -> "Float "
+  | Some Tstring -> "String "
+  | Some Tnil -> "None "
+  | Some Tlist typ -> "ArrayList<" ^ get_java_wrapper_type (Some typ) ^ "> "
   | None -> failwith "Type not inferred"
   | _ -> failwith "Unsupported type"
 
@@ -34,15 +45,17 @@ let rec string_of_expr = function
     (* | "next" | "prev" | "key" | "head" | "left" | "right" | "p" | "root" | "top" | "tail" -> 
       add_import "from lib.pseudolibrary import PseudoLibrary";
       "PseudoLibrary." ^ attribute_name ^ "(" ^ string_of_expr e1 ^ ")" *)
-    | "length" | "size" -> string_of_expr e1 ^ ".length()"
+    | "length" | "size" -> string_of_expr e1 ^ ".size()"
     | _ -> failwith "Attribute not supported"
   end
 | Elist(expr_list,_) ->
-  "[" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ "]"
+  add_import "import java.util.ArrayList;";
+  add_import "import java.util.Arrays;";
+  "new ArrayList<>(Arrays.asList(" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ "))"
 | Etuple(expr_list,_) ->
   "(" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ ")"
 | Eget(id, index,_) ->
-  string_of_ident id ^ "[" ^ string_of_expr index ^ "]"
+  string_of_ident id ^ ".get(" ^ string_of_expr index ^ ")"
 | Ecall(id, args,_) -> 
   let func_name = string_of_ident id in
   let args_str = String.concat ", " (List.map string_of_expr args) in
@@ -90,14 +103,14 @@ let rec string_of_expr = function
 
 
 and string_of_arg = function
-  | Eident(id) -> get_java_type id.typ ^ string_of_ident id
+  | Eident(id) -> get_java_wrapper_type id.typ ^ string_of_ident id
   | _ -> failwith "Unsupported argument"
 
 (* Recursive function for translating statements into java *)
 let [@warning "-8"] rec string_of_stmt indent = function
-  | Sassign(e1, e2, _) ->
+  | Sassign(e1, e2, Some is_new) ->
     let lhs = match e1 with
-    | Eident(id) -> get_java_type id.typ ^ string_of_ident id
+    | Eident(id) -> if is_new then get_java_type id.typ ^ string_of_ident id else string_of_ident id
     (* | Eattribute(e, id,_) -> string_of_expr e ^ "." ^ string_of_ident id
     | Eget(id, index,_) -> string_of_ident id ^ "[" ^ string_of_expr index ^ "]"
     | Etuple(expr_list,_) -> "(" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ ")" *)
@@ -151,7 +164,7 @@ and add_function id args stmt =
   if Hashtbl.mem function_defs id_string then
     ()
   else
-    Hashtbl.add function_defs id_string ("  static " ^ get_java_type id.typ ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_arg args)) ^ ")" ^ "{\n" ^ string_of_stmt 4 stmt ^ "  }\n")
+    Hashtbl.add function_defs id_string ("  static " ^ get_java_wrapper_type id.typ ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_arg args)) ^ ")" ^ "{\n" ^ string_of_stmt 4 stmt ^ "  }\n")
 (* 
 TODO:
   | Snewlist(id, expr, list) ->
