@@ -6,7 +6,7 @@ module StringMap = Map.Make(String)
 
   let rec string_of_expr = function
   | Eident(id) -> string_of_ident id
-  | Ecst(x) ->
+  | Ecst(x,_) ->
     begin
       match x with
       | Cint(i) -> string_of_int i
@@ -15,7 +15,7 @@ module StringMap = Map.Make(String)
       | Cnil -> "None"
       | Cinfinity -> "float('inf')"
     end
-  | Eattribute(e1, attribute_name) ->
+  | Eattribute(e1, attribute_name,_) ->
     let attribute_name = string_of_ident attribute_name in
     begin
       match attribute_name with
@@ -25,13 +25,13 @@ module StringMap = Map.Make(String)
       | "length" | "size" -> "len(" ^ string_of_expr e1 ^ ")"
       | _ -> failwith "Attribute not supported"
     end
-  | Elist(expr_list) ->
+  | Elist(expr_list,_) ->
     "[" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ "]"
-  | Etuple(expr_list) ->
+  | Etuple(expr_list,_) ->
     "(" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ ")"
-  | Eget(id, index) ->
+  | Eget(id, index,_) ->
     string_of_ident id ^ "[" ^ string_of_expr index ^ "]"
-  | Ecall(id, args) -> 
+  | Ecall(id, args,_) -> 
     let func_name = string_of_ident id in
     let args_str = String.concat ", " (List.map string_of_expr args) in
     let func_call = func_name ^ "(" ^ args_str ^ ")" in
@@ -49,7 +49,7 @@ module StringMap = Map.Make(String)
       | _ -> 
         func_call
     end
-  | Ebinop(binop, e1, e2) -> 
+  | Ebinop(binop, e1, e2,_) -> 
     let x = string_of_expr e1 in
     let y = string_of_expr e2 in
     begin
@@ -68,7 +68,7 @@ module StringMap = Map.Make(String)
       | Bgt -> x ^ " > " ^ y
       | Bge -> x ^ " >= " ^ y
     end
-  | Eunop(unop, e) ->
+  | Eunop(unop, e,_) ->
     let x = string_of_expr e in
     begin
       match unop with
@@ -83,12 +83,12 @@ module StringMap = Map.Make(String)
       String.make indent ' ' ^ "raise Exception(" ^ s ^ ")\n"
     | Ssort(id) ->
       String.make indent ' ' ^ string_of_ident id ^ ".sort()\n"
-    | Sassign(e1, e2) ->
+    | Sassign(e1, e2, _) ->
       let lhs = match e1 with
         | Eident(id) -> string_of_ident id
-        | Eattribute(e, id) -> string_of_expr e ^ "." ^ string_of_ident id
-        | Eget(id, index) -> string_of_ident id ^ "[" ^ string_of_expr index ^ "]"
-        | Etuple(expr_list) -> "(" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ ")"
+        | Eattribute(e, id,_) -> string_of_expr e ^ "." ^ string_of_ident id
+        | Eget(id, index,_) -> string_of_ident id ^ "[" ^ string_of_expr index ^ "]"
+        | Etuple(expr_list,_) -> "(" ^ (String.concat ", " (List.map string_of_expr expr_list)) ^ ")"
         | _ -> failwith "Left-hand side of assignment must be an identifier or attribute"
       in
       String.make indent ' ' ^ lhs ^ " = " ^ string_of_expr e2 ^ "\n"
@@ -110,8 +110,7 @@ module StringMap = Map.Make(String)
       String.concat "" (List.map (string_of_stmt (indent)) stmts)
     | Sdef(id, args, stmt) ->
       (* Calling function which checks parameters are equal to identifiers *)
-      let _ = check_expr_list args in
-      Hashtbl.add functions (string_of_ident id) (args, stmt);
+      (* let _ = check_expr_list args in *)
       String.make indent ' ' ^ "def " ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_expr args)) ^ ")" ^ ":\n" ^ string_of_stmt (indent+2) stmt ^ "\n"
     | Snewlist(id, expr, list) ->
       begin
@@ -156,7 +155,7 @@ module StringMap = Map.Make(String)
 
   
   let generate_code = function
-  | stmt ->
+  | Cstmt(stmt) ->
     let code = string_of_stmt 0 stmt in
     let imports = String.concat "\n" !required_imports in
     if imports <> "" then

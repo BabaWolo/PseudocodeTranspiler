@@ -7,7 +7,7 @@ let parse_expression expr =
   Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
 
 (* Expected AST for "2 + 3" *)
-let expected_ast = Cstmt (Seval (Ebinop (Badd, Ecst (Cint 2), Ecst (Cint 3))))
+let expected_ast = Cstmt (Seval (Ebinop (Badd, Ecst (Cint 2, None), Ecst (Cint 3, None), None)))
 
 (* OUnit test *)
 let test_parse_expression _ =

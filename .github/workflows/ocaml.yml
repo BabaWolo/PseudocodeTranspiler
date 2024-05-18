@@ -20,10 +20,10 @@ jobs:
         ocaml-compiler: "5.1"
 
     - name: Install dependencies
-      run: opam install . --deps-only --with-test
+      run: make init
 
     - name: Build
-      run: opam exec -- dune build
+      run: make build
       
     - name: Run tests
-      run: opam exec -- dune runtest
+      run: make test

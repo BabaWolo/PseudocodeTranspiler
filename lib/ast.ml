@@ -1,16 +1,26 @@
 type location = Lexing.position * Lexing.position
-type ident = { loc: location; id: string; }
+
+type typ =
+  | Tint
+  | Tfloat
+  | Tstring
+  | Tnil
+  | Tlist of typ
+  | Ttuple of typ list
+  | Tfunction of typ list option * typ
+
+type ident = { loc: location; id: string; typ: typ option }
 
 type expr =
-  | Ecst of constant               (* Constant *)
-  | Ebinop of binop * expr * expr  (* Binary operation *)
-  | Eunop of unop * expr  (* Unary operation *)
+  | Ecst of constant * typ option               (* Constant *)
+  | Ebinop of binop * expr * expr * typ option  (* Binary operation *)
+  | Eunop of unop * expr * typ option  (* Unary operation *)
   | Eident of ident       (* Identifier *)
-  | Ecall of ident * expr list
-  | Elist of expr list (* [e1,e2,...] *)
-  | Eget of ident * expr (* e1[e2] *)
-  | Eattribute of expr * ident (* e1.e2 *)
-  | Etuple of expr list (* (e1,e2,...) *)
+  | Ecall of ident * expr list * typ option
+  | Elist of expr list * typ option (* [e1,e2,...] *)
+  | Eget of ident * expr * typ option (* e1[e2] *)
+  | Eattribute of expr * ident * typ option (* e1.e2 *)
+  | Etuple of expr list * typ option (* (e1,e2,...) *)
 
 
 and command = 
@@ -34,7 +44,7 @@ and unop =
   | Uneg | Uplus
 
 and stmt =
-  | Sassign of expr * expr
+  | Sassign of expr * expr * bool option
   | Seval of expr
   | Sif of expr * stmt * stmt
   | Sprint of expr
