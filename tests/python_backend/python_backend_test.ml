@@ -2,11 +2,6 @@ open OUnit2
 open Pseudo_lib.Ast
 open Pseudo_lib.Python
 
-(* Function to parse an expression into an AST *)
-let parse_expression expr =
-  let lexbuf = Lexing.from_string expr in
-  Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
-
 
 (* tests *)
 let test_position = {
