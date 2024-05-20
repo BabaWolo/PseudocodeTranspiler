@@ -140,6 +140,7 @@ let [@warning "-8"] rec string_of_stmt indent = function
   | Scomment s ->
     String.make indent ' ' ^ "//" ^ (String.sub s 2 ((String.length s) - 2)) ^ "\n"
   | Ssort id ->
+    add_import "import java.util.Arrays";
     String.make indent ' ' ^ "Arrays.sort(" ^ string_of_ident id ^ ");\n"
   | Sexchange (e1, e2) ->
     (* Currently set type to int, but need to be changed to get the type of the expr *)
@@ -162,7 +163,7 @@ and add_function id args stmt =
   (* Hashtable *)
   let id_string = string_of_ident id in
   if Hashtbl.mem function_defs id_string then
-    ()
+    failwith ("Function '" ^ id_string ^ "' already defined")
   else
     Hashtbl.add function_defs id_string ("  static " ^ get_java_wrapper_type id.typ ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_arg args)) ^ ")" ^ "{\n" ^ string_of_stmt 4 stmt ^ "  }\n")
 (* 
