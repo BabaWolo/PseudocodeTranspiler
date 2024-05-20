@@ -126,7 +126,12 @@ let [@warning "-8"] rec string_of_stmt indent = function
   | Sreturn e ->
     String.make indent ' ' ^ "return " ^ string_of_expr e ^ ";\n"
   | Sfor (id, e1, e2, stmt, incr) ->
-    String.make indent ' ' ^ "for (" ^ get_java_type id.typ ^ string_of_ident id ^ " = " ^ string_of_expr e1 ^ "; " ^ string_of_ident id ^ " < " ^ string_of_expr e2 ^ "; " ^ string_of_ident id ^ " += " ^ string_of_int incr ^ ") {\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "}\n"
+    begin
+      if incr = 1 then
+        String.make indent ' ' ^ "for (" ^ get_java_type id.typ ^ string_of_ident id ^ " = " ^ string_of_expr e1 ^ "; " ^ string_of_ident id ^ " < " ^ string_of_expr e2 ^ "; " ^ string_of_ident id ^ " += " ^ string_of_int incr ^ ") {\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "}\n"
+      else 
+        String.make indent ' ' ^ "for (" ^ get_java_type id.typ ^ string_of_ident id ^ " = " ^ string_of_expr e1 ^ "; " ^ string_of_ident id ^ " > " ^ string_of_expr e2 ^ "; " ^ string_of_ident id ^ " += " ^ string_of_int incr ^ ") {\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "}\n"
+    end;
   | Swhile (e, stmt) ->
     String.make indent ' ' ^ "while (" ^ string_of_expr e ^ ") {\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "}\n"
   | Sdowhile (e, stmt) ->
