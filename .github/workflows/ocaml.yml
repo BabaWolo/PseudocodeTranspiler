@@ -8,30 +8,22 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up OCaml
+    - name: Use OCaml 5.1
       uses: ocaml/setup-ocaml@v2
       with:
-        ocaml-compiler: "5"
-
-    - name: Install make on Windows
-      if: runner.os == 'Windows'
-      run: choco install make
+        ocaml-compiler: "5.1"
 
     - name: Install dependencies
       run: make init
 
     - name: Build
       run: make build
-
+      
     - name: Run tests
       run: make test
