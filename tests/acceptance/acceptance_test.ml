@@ -11,13 +11,7 @@ let generate_code target_language = function
     | _ -> failwith "Unsupported target language"
 
 let get_in_channel file_name =
-  (* when running test working dir is _build/default/tests which does not include the mock files *)
-  (* therefore the path is manipulated to be in the source dir *)
-  let cwd = Sys.getcwd () in
-  let cwd_length = String.length cwd in
-  let source_dir_path = String.sub cwd 0 (cwd_length - 20) in
-
-  let file = Filename.concat source_dir_path ("tests/acceptance/" ^ file_name) in
+  let file = Filename.concat (Sys.getcwd () ^ "/acceptance/") file_name in
   open_in file
 
 
