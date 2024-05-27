@@ -2,6 +2,7 @@ open OUnit2
 open Arithmetic_tests
 open Control_flow_tests
 open Python_backend_tests
+open Acceptance_tests
 open Lexer_tests
 
 
@@ -15,6 +16,7 @@ let () =
         Control_flow_test_suite.suite;
         Python_backend_test_suite.suite;
         Lexer_test_suite.suite;
+        Acceptance_test_suite.suite;
         (* Add other test suites here *)
       ]
   in

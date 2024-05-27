@@ -103,11 +103,11 @@ let rec string_of_expr = function
 
 
 and string_of_arg = function
-  | Eident(id) -> get_java_wrapper_type id.typ ^ string_of_ident id
+  | Eident(id) -> get_java_type id.typ ^ string_of_ident id
   | _ -> failwith "Unsupported argument"
 
 (* Recursive function for translating statements into java *)
-let [@warning "-8"] rec string_of_stmt indent = function
+let rec string_of_stmt indent = function
   | Sassign(e1, e2, Some is_new) ->
     let lhs = match e1 with
     | Eident(id) -> if is_new then get_java_type id.typ ^ string_of_ident id else string_of_ident id
@@ -126,7 +126,12 @@ let [@warning "-8"] rec string_of_stmt indent = function
   | Sreturn e ->
     String.make indent ' ' ^ "return " ^ string_of_expr e ^ ";\n"
   | Sfor (id, e1, e2, stmt, incr) ->
-    String.make indent ' ' ^ "for (" ^ get_java_type id.typ ^ string_of_ident id ^ " = " ^ string_of_expr e1 ^ "; " ^ string_of_ident id ^ " < " ^ string_of_expr e2 ^ "; " ^ string_of_ident id ^ " += " ^ string_of_int incr ^ ") {\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "}\n"
+    begin
+      if incr = 1 then
+        String.make indent ' ' ^ "for (" ^ get_java_type id.typ ^ string_of_ident id ^ " = " ^ string_of_expr e1 ^ "; " ^ string_of_ident id ^ " < " ^ string_of_expr e2 ^ "; " ^ string_of_ident id ^ " += " ^ string_of_int incr ^ ") {\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "}\n"
+      else 
+        String.make indent ' ' ^ "for (" ^ get_java_type id.typ ^ string_of_ident id ^ " = " ^ string_of_expr e1 ^ "; " ^ string_of_ident id ^ " > " ^ string_of_expr e2 ^ "; " ^ string_of_ident id ^ " += " ^ string_of_int incr ^ ") {\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "}\n"
+    end;
   | Swhile (e, stmt) ->
     String.make indent ' ' ^ "while (" ^ string_of_expr e ^ ") {\n" ^ string_of_stmt (indent+2) stmt ^ String.make indent ' ' ^ "}\n"
   | Sdowhile (e, stmt) ->
@@ -140,6 +145,7 @@ let [@warning "-8"] rec string_of_stmt indent = function
   | Scomment s ->
     String.make indent ' ' ^ "//" ^ (String.sub s 2 ((String.length s) - 2)) ^ "\n"
   | Ssort id ->
+    add_import "import java.util.Arrays";
     String.make indent ' ' ^ "Arrays.sort(" ^ string_of_ident id ^ ");\n"
   | Sexchange (e1, e2) ->
     (* Currently set type to int, but need to be changed to get the type of the expr *)
@@ -159,12 +165,11 @@ let [@warning "-8"] rec string_of_stmt indent = function
 
 (* Add import if not already in list. The ! operator is used for dereferencing *)
 and add_function id args stmt =
-  (* Hashtable *)
   let id_string = string_of_ident id in
   if Hashtbl.mem function_defs id_string then
-    ()
+    failwith ("Function '" ^ id_string ^ "' already defined")
   else
-    Hashtbl.add function_defs id_string ("  static " ^ get_java_wrapper_type id.typ ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_arg args)) ^ ")" ^ "{\n" ^ string_of_stmt 4 stmt ^ "  }\n")
+    Hashtbl.add function_defs id_string ("  static " ^ get_java_type id.typ ^ string_of_ident id ^ "(" ^ (String.concat ", " (List.map string_of_arg args)) ^ ")" ^ "{\n" ^ string_of_stmt 4 stmt ^ "  }\n")
 (* 
 TODO:
   | Snewlist(id, expr, list) ->
