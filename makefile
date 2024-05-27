@@ -7,7 +7,7 @@ build:
 	@opam exec -- dune build
 
 test: 
-	@opam exec -- dune runtest
+	@opam exec -- dune runtest --force
 
 build_test: build test
 

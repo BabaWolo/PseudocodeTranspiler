@@ -2,11 +2,6 @@ open OUnit2
 open Pseudo_lib.Ast
 open Pseudo_lib.Python
 
-(* Function to parse an expression into an AST *)
-let parse_expression expr =
-  let lexbuf = Lexing.from_string expr in
-  Pseudo_lib.Parser.program Pseudo_lib.Lexer.token lexbuf
-
 
 (* tests *)
 let test_position = {
@@ -46,13 +41,19 @@ let if_ast_input = Cstmt(Sif(
   Sblock([Sprint(Ecst(Cint 2, None))])
   ))
 let if_expected_output = 
-"if 1 != 2:
-  print(1)
-else:
-  print(2)\n"
+"if 1 != 2:\n  print(1)\nelse:\n  print(2)\n"
 
+(* let test_if_codegen _ =
+  assert_equal (generate_code if_ast_input) if_expected_output *)
+
+(*Added debugging functions. Generates ASCII value for each character in the code and prints *)
 let test_if_codegen _ =
-  assert_equal (generate_code if_ast_input) if_expected_output
+  let generated_code = generate_code if_ast_input in
+  let ascii_generated_code = generated_code |> String.to_seq |> List.of_seq |> List.map Char.code |> List.map string_of_int |> String.concat ", " in
+  let ascii_expected_output = if_expected_output |> String.to_seq |> List.of_seq |> List.map Char.code |> List.map string_of_int |> String.concat ", " in
+  print_endline ("ASCII values of generated code: " ^ ascii_generated_code);
+  print_endline ("ASCII values of expected output: " ^ ascii_expected_output);
+  assert_equal generated_code if_expected_output
 
 
 (* for *)
@@ -63,8 +64,7 @@ let for_ast_input = Cstmt(Sfor(
   Sblock[Seval(Ebinop(Badd, Eident(test_variable), Ecst(Cint 1, None), None))],
   1))
 let for_expected_output = 
-"for x in range(1, 10, 1):
-  x + 1\n"
+"for x in range(1, 10, 1):\n  x + 1\n"
 
 let test_for_codegen _ =
   assert_equal (generate_code for_ast_input) for_expected_output
