@@ -45,7 +45,6 @@ This section displays the valid syntax for writing code within our program. It's
 #### Logical Operators
 - and
 - or
-- not
 
 #### Relational Operators
 - ==
