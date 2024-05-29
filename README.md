@@ -147,6 +147,9 @@ repeat {
 let A be a new array
 A = [7, 2, 100, -55]
 
+// Tuple
+A = (7,2, 100, -55)
+
 // optionally create a range
 let R[1..n + 1] be a new array
 ```
@@ -155,7 +158,6 @@ let R[1..n + 1] be a new array
 - let \<*var*> be a new stack
 - \<*var*> = newLinkedList([<*elements*>])
 - \<*var*> = newBinaryTree([<*elements*>])
-- Tuple ???
 - .length
 - .size
 - .next
