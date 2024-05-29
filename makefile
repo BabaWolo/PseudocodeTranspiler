@@ -13,8 +13,9 @@ build_test: build test
 
 file ?= test.txt
 lang ?= python
+debug ?= false
 run:
-	@opam exec -- dune exec ./main.exe $(lang) $(file)
+	@opam exec -- dune exec ./main.exe $(lang) $(file) $(debug)
 
 build_run: build run
 

@@ -1,5 +1,11 @@
 open Ast
 
+let debug = ref false
+
+let debug_print str =
+  if !debug then
+    print_endline str
+
 let rec string_of_type = function
   | Tint -> "int "
   | Tfloat -> "float "
@@ -38,21 +44,12 @@ let increment_scope_id_counter () =
 (* Create a new scope and return its id *)
 let enter_scope () =
   incr scope_id_counter;
-  if Hashtbl.mem scope_map !scope_id_counter then
-    begin
-      print_endline ("Entering scope " ^ string_of_int !scope_id_counter);
-      current_scope_id := !scope_id_counter;
-      !scope_id_counter
-    end
-  else
-    begin
-      print_endline ("Creating new scope " ^ string_of_int !scope_id_counter);
-      let new_scope = Hashtbl.create 16 in
-      Hashtbl.add new_scope "parent_scope_id" (Parent_scope_id !current_scope_id);
-      Hashtbl.add scope_map !scope_id_counter new_scope;
-      current_scope_id := !scope_id_counter;  (* Update the current scope ID *)
-      !scope_id_counter
-    end
+  debug_print ("Creating new scope " ^ string_of_int !scope_id_counter);
+  let new_scope = Hashtbl.create 16 in
+  Hashtbl.add new_scope "parent_scope_id" (Parent_scope_id !current_scope_id);
+  Hashtbl.add scope_map !scope_id_counter new_scope;
+  current_scope_id := !scope_id_counter;  (* Update the current scope ID *)
+  !scope_id_counter
 
 let leave_scope () = 
   match Hashtbl.find_opt scope_map !current_scope_id with
@@ -65,7 +62,7 @@ let leave_scope () =
   | None -> 0
 
 let rec lookup_ident id scope_id =
-  print_endline ("Looking up " ^ id ^ " in scope " ^ string_of_int scope_id);
+  debug_print ("Looking up " ^ id ^ " in scope " ^ string_of_int scope_id);
   match Hashtbl.find_opt scope_map scope_id with
   | Some scope ->
     (match Hashtbl.find_opt scope id with
@@ -73,21 +70,21 @@ let rec lookup_ident id scope_id =
       begin
       match value with
       | Expr Eident ident ->
-        print_endline ("-> found " ^ id ^ " in scope " ^ string_of_int scope_id);
-        print_endline (id ^ " type = " ^ string_of_type_opt ident.typ);
+        debug_print ("-> found " ^ id ^ " in scope " ^ string_of_int scope_id);
+        debug_print (id ^ " type = " ^ string_of_type_opt ident.typ);
         Some value
       | _ -> Some value
       end
     | None ->
-        print_endline ("-> not found " ^ id ^ " in scope " ^ string_of_int scope_id);
+        debug_print ("-> not found " ^ id ^ " in scope " ^ string_of_int scope_id);
        (match Hashtbl.find_opt scope "parent_scope_id" with
         | Some (Parent_scope_id parent_scope_id) -> lookup_ident id parent_scope_id
         | _ -> None))
-  | None -> print_endline ("Scope " ^ string_of_int scope_id ^ " not found");
+  | None -> debug_print ("Scope " ^ string_of_int scope_id ^ " not found");
     None
 
 let add_ident id scope_val scope_id =
-  print_endline ("Adding " ^ id ^ " to scope " ^ string_of_int scope_id);
+  debug_print ("Adding " ^ id ^ " to scope " ^ string_of_int scope_id);
   match Hashtbl.find_opt scope_map scope_id with
   | Some scope -> Hashtbl.add scope id scope_val
   | None -> ()
@@ -95,34 +92,15 @@ let add_ident id scope_val scope_id =
 let update_ident id new_val scope_id =
   match Hashtbl.find_opt scope_map scope_id with
   | Some scope ->
-    print_endline ("Updating " ^ id ^ " in scope " ^ string_of_int scope_id);
+    debug_print ("Updating " ^ id ^ " in scope " ^ string_of_int scope_id);
     Hashtbl.replace scope id new_val
   | None -> 
-    print_endline ("Scope " ^ string_of_int scope_id ^ " not found");
+    debug_print ("Scope " ^ string_of_int scope_id ^ " not found");
     ()
 
-let () = initialize_global_scope ()
-
-let func_calls = (Hashtbl.create 16 : (string, expr list) Hashtbl.t)
-
-let raise_if_key_exist tbl key ?(msg="Key already exists in hashtable") () =
-  print_endline "raise_if_key_exist called";
-  print_endline key;
-  flush stdout;
-  if Hashtbl.mem tbl key then
-    raise (Invalid_argument msg)
-  else
-    ()
-
-let raise_if_key_not_exist tbl key ?(msg="Key does not exist in hashtable") () =
-  if not (Hashtbl.mem tbl key) then
-    raise (Invalid_argument msg)
-
-let add_unique tbl key value ?(msg="Key already exists in hashtable") () =
-  if Hashtbl.mem tbl key then
-    raise (Invalid_argument msg)
-  else
-    Hashtbl.add tbl key value
+let () = 
+  initialize_global_scope ();
+  if Array.length Sys.argv > 3 && Sys.argv.(3) = "true" then debug := true
 
 (* Recursive function checking the expressions of an expr list are equal to identifiers *)
 let rec check_expr_list = function

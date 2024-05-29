@@ -49,10 +49,10 @@ let if_expected_output =
 (*Added debugging functions. Generates ASCII value for each character in the code and prints *)
 let test_if_codegen _ =
   let generated_code = generate_code if_ast_input in
-  let ascii_generated_code = generated_code |> String.to_seq |> List.of_seq |> List.map Char.code |> List.map string_of_int |> String.concat ", " in
+  (* let ascii_generated_code = generated_code |> String.to_seq |> List.of_seq |> List.map Char.code |> List.map string_of_int |> String.concat ", " in
   let ascii_expected_output = if_expected_output |> String.to_seq |> List.of_seq |> List.map Char.code |> List.map string_of_int |> String.concat ", " in
   print_endline ("ASCII values of generated code: " ^ ascii_generated_code);
-  print_endline ("ASCII values of expected output: " ^ ascii_expected_output);
+  print_endline ("ASCII values of expected output: " ^ ascii_expected_output); *)
   assert_equal generated_code if_expected_output
 
 

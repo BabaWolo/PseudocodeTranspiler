@@ -29,13 +29,9 @@ let get_out_file_suffix lang =
 (* Main function for reading in the file and writing to a new file *)
 let () =
   (* Checks if command-line argument has been provided before accessing *)
-  if Array.length Sys.argv < 2 then begin
-    Printf.eprintf "Error: No target language provided\n";
-    exit 1
-  end;
+
   if Array.length Sys.argv < 3 then begin
-    Printf.eprintf "Error: No file provided\n";
-    exit 1
+    Printf.eprintf "Error: %s\n" (if Array.length Sys.argv < 2 then "No target language provided" else "No file provided");
   end;
   let target_language = Sys.argv.(1) in
   let file = Sys.argv.(2) in

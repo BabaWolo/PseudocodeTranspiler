@@ -74,7 +74,7 @@ let rec infer_expr = function
             Eget (f, e', Some typ)
           | _ -> failwith "Type error in get operation"
           end
-        | _ -> print_endline("Typ: " ^ string_of_type_opt f.typ);
+        | _ -> debug_print("Typ: " ^ string_of_type_opt f.typ);
           failwith "Type error in get operation"
       end
   | Eattribute (e, a, _) -> 
@@ -133,7 +133,7 @@ let rec infer_stmt = function
       match param with
       | Eident param_ident -> 
         let inferred_type = get_type arg in
-        print_endline("Param: " ^ string_of_ident param_ident ^ " Type: " ^ string_of_type_opt inferred_type);
+        debug_print("Param: " ^ string_of_ident param_ident ^ " Type: " ^ string_of_type_opt inferred_type);
         let updated_ident = { param_ident with typ = inferred_type } in
         add_ident (string_of_ident param_ident) (Expr (Eident updated_ident)) !current_scope_id;
         Eident updated_ident
@@ -147,7 +147,7 @@ let rec infer_stmt = function
     | Some (Expr return_expr) -> 
       let return_type = get_type return_expr in
       let ident = { ident with typ = return_type } in
-      print_endline ("\027[92mFunction " ^ string_of_ident ident ^ "\027[0m \n\027[92m|\027[0m  Param types: " ^ (String.concat ", " (List.map string_of_type arg_types)) ^ "\n\027[92m|\027[0m  Return type: " ^ (string_of_type_opt return_type));
+      debug_print ("\027[92mFunction " ^ string_of_ident ident ^ "\027[0m \n\027[92m|\027[0m  Param types: " ^ (String.concat ", " (List.map string_of_type arg_types)) ^ "\n\027[92m|\027[0m  Return type: " ^ (string_of_type_opt return_type));
       Sdef (ident, updated_params, stmt)
     | _ -> failwith "Return type not found in scope"
     end
@@ -161,7 +161,7 @@ let rec infer_stmt = function
       let ident = { ident with typ = typ } in
       add_ident (string_of_ident ident) (Expr (Eident(ident))) !current_scope_id;
       let stmt = infer_stmt stmt in
-      print_endline("Typ: " ^ string_of_type_opt typ);
+      debug_print("Typ: " ^ string_of_type_opt typ);
       ignore(leave_scope());
       Sfor (ident, expr1, expr2, stmt, i)
   | Snewlist (ident, expr, _) ->
