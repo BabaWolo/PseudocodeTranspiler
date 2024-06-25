@@ -49,8 +49,8 @@ This section displays the valid syntax for writing code within our program. It's
 #### Relational Operators
 - ==
 - != *replaces* ≠
-- \<=
-- \>=
+- \<= *replaces* ≤
+- \>= *replaces* ≥
 - &lt;
 - &gt;
 
